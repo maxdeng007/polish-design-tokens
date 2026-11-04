@@ -271,9 +271,9 @@ The `page-polish` SKILL.md orchestrates the full pipeline for agent-driven use. 
 
 ---
 
-## 9. Open Questions
+## 9. Resolved Questions
 
-1. **Naming:** Is "polish" the right name? Alternatives: `token-polish`, `refine`, `design-loop`.
-2. **Scope of `polish_apply`:** Should it also handle judgmental items by invoking the calling agent, or should judgmental items always be separate agent steps?
-3. **Runtime measurement:** Should polish include token-audit's `measure.js` (runtime drift detection) or keep it static-only for v1?
-4. **Skill packaging:** Should the `page-polish` SKILL.md be a standalone skill file, or should polish also include wrapper skills for taste/awesome-design-md/impeccable that add polish-specific context?
+1. **Naming:** "polish" confirmed.
+2. **`polish_apply` scope:** Judgmental items are separate agent steps. `polish_apply` handles only mechanical patches. This keeps each step reviewable and avoids asking the tool to do creative work it can't do deterministically.
+3. **Runtime measurement:** Include `measure.js` from token-audit. Runtime drift detection is necessary for a complete audit — static-only misses computed-vs-declared discrepancies that users can actually see. Cost: ~5-13s per page (browser launch).
+4. **Skill packaging:** Ship four skills — `page-polish` (orchestration) plus three wrapper skills that add polish-specific context to `taste`, `awesome-design-md`, and `impeccable`. Each wrapper injects polish's workflow context (e.g., "you are running inside polish, here's what the audit found, here's what to fix") into the upstream skill's instructions.
