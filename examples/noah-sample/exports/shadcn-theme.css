@@ -1,0 +1,40 @@
+/**
+ * shadcn/ui-compatible theme
+ * Source: token-audit audit #38b37969-a72c-3183-525e-98ca63ea743f3fe15777184e72a4d33d0b2c1e825579
+ */
+:root {
+  --background: #102a43;
+  --foreground: #f7fbff;
+  --card: #1b456a;
+  --card-foreground: #f7fbff;
+  --popover: #1b456a;
+  --popover-foreground: #f7fbff;
+  --primary: hsl(14.8,55%,48%);
+  --primary-foreground: #faf9f6;
+  --secondary: #a9bdd3;
+  --secondary-foreground: #f7fbff;
+  --muted: #a9bdd3;
+  --muted-foreground: hsl(40,5%,52%);
+  --accent: #e05800;
+  --accent-foreground: #faf9f6;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(41, 168, 255, 0.28);
+  --input: hsl(42,12%,85%);
+  --ring: hsl(14.8,55%,48%);
+  --radius: 0.5rem;
+  --chart-1: #f25e00;
+  --chart-2: #e05800;
+  --chart-3: #22c55e;
+  --chart-4: #3b82f6;
+  --chart-5: #f59e0b;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

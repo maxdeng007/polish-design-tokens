@@ -1,0 +1,37 @@
+{
+  "job_id": "bc8800fc-709b-d607-0374-c6eca9b5f2ec8dbd11afd9bdd7d46b04ef7b7e432e7c",
+  "target": {
+    "kind": "path",
+    "value": "/tmp/anthropic-fetched"
+  },
+  "status": "complete",
+  "summary": {
+    "declarations": 7008,
+    "uniqueTokens": 573,
+    "runtimeVariables": 0,
+    "runtimeDocuments": 0,
+    "findings": 278,
+    "bySeverity": {
+      "error": 144,
+      "warn": 101,
+      "info": 33
+    }
+  },
+  "findings_by_severity": {
+    "error": 144,
+    "warn": 101,
+    "info": 33
+  },
+  "findings_by_rule": {
+    "conflict": 136,
+    "dangling": 107,
+    "duplicate-value": 1,
+    "orphan": 1,
+    "cascade-override": 1,
+    "dynamic-variable": 2,
+    "namespace": 1,
+    "theme-variation": 29
+  },
+  "declarations_total": 7008,
+  "generated_at": "2026-10-30"
+}

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>设计令牌体检报告 · /Users/dengzhou/Desktop/08-Noah-Project/03-AI AI/page-enhanced/Noah mind 2.0/anthropic-design-system.html</title>
+<style>
+:root{--bg:#f8f7f4;--surface:#ffffff;--ink:#141413;--muted:#8b877e;--line:#eae6df;--accent:#f25e00}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px 80px}
+header{background:var(--ink);color:#fff;padding:40px 0 34px;margin-bottom:34px}
+header .wrap{padding-bottom:0}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:30px;line-height:1.25;margin:10px 0 8px;font-weight:800;letter-spacing:-.01em}
+.sub{color:#b9c2cd;font-size:14px;max-width:70ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+.stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:13px 15px}
+.sv{font-size:22px;font-weight:800;line-height:1.3}
+.sl{font-size:12px;color:#98a4b3;margin-top:2px}
+.sn{font-size:11px;color:#6f7d8c;margin-top:3px}
+.note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:12px 15px;font-size:13px;margin:0 0 26px;color:var(--ink)}
+.note b{font-weight:700}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em;background:rgba(0,0,0,.05);padding:1px 5px;border-radius:4px}
+h2.grp{font-size:18px;font-weight:800;margin:38px 0 4px;display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
+h2.grp i{width:9px;height:9px;border-radius:50%;display:inline-block}
+h2.grp b{font-size:12px;font-weight:700;color:var(--muted);background:rgba(0,0,0,.05);padding:2px 8px;border-radius:99px}
+.gd{font-size:13.5px;color:var(--muted);margin:0 0 14px;max-width:74ch}
+ul.fs{list-style:none;margin:0;padding:0}
+li.f{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin-bottom:9px}
+li.f.error{border-left:3px solid #b84038}
+li.f.warn{border-left:3px solid #b4720e}
+li.f.info{border-left:3px solid var(--line)}
+.fh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.tag.error{background:#fcedea;color:#b84038}
+.tag.warn{background:#fbf3e4;color:#b4720e}
+.tag.info{background:rgba(0,0,0,.05);color:var(--muted)}
+.id{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--muted)}
+.t{font-size:14.5px;font-weight:700}
+.d{font-size:13.5px;color:var(--ink);margin:8px 0 0;word-break:break-word}
+.s{font-size:13px;color:var(--muted);margin:6px 0 0}
+.evs{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.ev{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;background:rgba(0,0,0,.045);color:var(--ink);padding:2px 7px;border-radius:4px}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);line-height:1.9}
+</style></head><body>
+<header><div class="wrap">
+  <div class="eyebrow">Design token audit</div>
+  <h1>1 个问题 · 14 个令牌</h1>
+  <p class="sub">扫描 <code>1</code> 个源文件得到全量声明，与浏览器实测值交叉比对。红色是确凿的问题，黄色是体系分叉，灰色是结构性观察。</p>
+  <div class="stats">
+    <div class="stat"><div class="sv">0</div><div class="sl">错误</div><div class="sn">同一个令牌解析出不同值</div></div>
+    <div class="stat"><div class="sv">0</div><div class="sl">警告</div><div class="sn">命名分叉 / 大量孤儿</div></div>
+    <div class="stat"><div class="sv">1</div><div class="sl">提示</div><div class="sn">结构性观察</div></div>
+    <div class="stat"><div class="sv">14</div><div class="sl">声明总数</div><div class="sn">同一令牌可有多处声明</div></div>
+  </div>
+</div></header>
+<div class="wrap">
+  <section class="grp">
+      <h2><i style="background:#8b877e"></i>结构性观察 <b>1</b></h2>
+      <p class="gd">不算错，但理清之后整个体系会好维护很多。</p>
+      <ul class="fs"><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">namespace</span><span class="t">并存 9 个命名族</span></div>
+      <p class="d">--ink-*（4），--rule-*（3），--paper-*（1），--band-*（1），--card-*（1），--sans-*（1），--serif-*（1），--mono-*（1），--shadow-*（1）</p><p class="s">→ 选定一到两个命名族作为主体系，其余降级为别名或逐步废弃。</p><div class="evs"><span class="ev">--paper-*（1）</span><span class="ev">--band-*（1）</span><span class="ev">--card-*（1）</span><span class="ev">--ink-*（4）</span><span class="ev">--rule-*（3）</span><span class="ev">--sans-*（1）</span></div>
+    </li></ul>
+    </section>
+  <footer>
+    生成于 2026-10-30 05:46:54 · token-audit<br>
+    静态来源 /Users/dengzhou/Desktop/08-Noah-Project/03-AI AI/page-enhanced/Noah mind 2.0 · 1 个文件<br>
+    未做运行时实测（纯静态）
+  </footer>
+</div>
+</body></html>

@@ -1,0 +1,820 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>设计令牌体检报告 · /Users/dengzhou/Desktop/08-Noah-Project/03-AI AI/page-enhanced/Noah mind 2.0/src/pages</title>
+<style>
+:root{--bg:#F8F7F4;--surface:#FFFFFF;--ink:#2B2620;--muted:#8F8A80;--line:#EAE6DF;--accent:#F25E00}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px 80px}
+header{background:var(--ink);color:#fff;padding:40px 0 34px;margin-bottom:34px}
+header .wrap{padding-bottom:0}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:30px;line-height:1.25;margin:10px 0 8px;font-weight:800;letter-spacing:-.01em}
+.sub{color:#b9c2cd;font-size:14px;max-width:70ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+.stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:13px 15px}
+.sv{font-size:22px;font-weight:800;line-height:1.3}
+.sl{font-size:12px;color:#98a4b3;margin-top:2px}
+.sn{font-size:11px;color:#6f7d8c;margin-top:3px}
+.note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:12px 15px;font-size:13px;margin:0 0 26px;color:var(--ink)}
+.note b{font-weight:700}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em;background:rgba(0,0,0,.05);padding:1px 5px;border-radius:4px}
+h2.grp{font-size:18px;font-weight:800;margin:38px 0 4px;display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
+h2.grp i{width:9px;height:9px;border-radius:50%;display:inline-block}
+h2.grp b{font-size:12px;font-weight:700;color:var(--muted);background:rgba(0,0,0,.05);padding:2px 8px;border-radius:99px}
+.gd{font-size:13.5px;color:var(--muted);margin:0 0 14px;max-width:74ch}
+ul.fs{list-style:none;margin:0;padding:0}
+li.f{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin-bottom:9px}
+li.f.error{border-left:3px solid #b84038}
+li.f.warn{border-left:3px solid #b4720e}
+li.f.info{border-left:3px solid var(--line)}
+.fh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.tag.error{background:#fcedea;color:#b84038}
+.tag.warn{background:#fbf3e4;color:#b4720e}
+.tag.info{background:rgba(0,0,0,.05);color:var(--muted)}
+.id{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--muted)}
+.t{font-size:14.5px;font-weight:700}
+.d{font-size:13.5px;color:var(--ink);margin:8px 0 0;word-break:break-word}
+.s{font-size:13px;color:var(--muted);margin:6px 0 0}
+.evs{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.ev{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;background:rgba(0,0,0,.045);color:var(--ink);padding:2px 7px;border-radius:4px}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);line-height:1.9}
+</style></head><body>
+<header><div class="wrap">
+  <div class="eyebrow">Design token audit</div>
+  <h1>186 个问题 · 290 个令牌</h1>
+  <p class="sub">扫描 <code>9</code> 个源文件得到全量声明，与浏览器实测值交叉比对。红色是确凿的问题，黄色是体系分叉，灰色是结构性观察。</p>
+  <div class="stats">
+    <div class="stat"><div class="sv">65</div><div class="sl">错误</div><div class="sn">同一个令牌解析出不同值</div></div>
+    <div class="stat"><div class="sv">32</div><div class="sl">警告</div><div class="sn">命名分叉 / 大量孤儿</div></div>
+    <div class="stat"><div class="sv">89</div><div class="sl">提示</div><div class="sn">结构性观察</div></div>
+    <div class="stat"><div class="sv">1101</div><div class="sl">声明总数</div><div class="sn">同一令牌可有多处声明</div></div>
+  </div>
+</div></header>
+<div class="wrap">
+  <section class="grp">
+      <h2><i style="background:#F25E00"></i>必须处理 <b>65</b></h2>
+      <p class="gd">这些是确凿的问题：同一个令牌在不同地方解析出不同的值，或者引用了根本不存在的令牌。</p>
+      <ul class="fs"><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--bg 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">#f3f5f8（2 处，如 _services-v3.css:25）；#f8f7f4（8 处，如 cockpit.html:4）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">_services-v3.css:25</span><span class="ev">dashboard.html:6</span><span class="ev">cockpit.html:4</span><span class="ev">cockpit.html:4</span><span class="ev">cockpit.html:740</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--ink 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">#16202b（2 处，如 _services-v3.css:29）；#2b2620（8 处，如 cockpit.html:5）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">_services-v3.css:29</span><span class="ev">dashboard.html:6</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:741</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--line 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">#e6eaf0（2 处，如 _services-v3.css:31）；#eae6df（8 处，如 cockpit.html:5）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">_services-v3.css:31</span><span class="ev">dashboard.html:6</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:741</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--green 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">#12945f（2 处，如 _services-v3.css:35）；#2e7d5b（4 处，如 cockpit.html:5）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">_services-v3.css:35</span><span class="ev">dashboard.html:6</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:2621</span><span class="ev">services.html:5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--green-soft 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">#e6f6ee（2 处，如 _services-v3.css:36）；#eaf4ef（4 处，如 cockpit.html:5）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">_services-v3.css:36</span><span class="ev">dashboard.html:6</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:2622</span><span class="ev">services.html:5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--red 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">#e02b2b（2 处，如 _services-v3.css:37）；#b84038（6 处，如 cockpit.html:5）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">_services-v3.css:37</span><span class="ev">dashboard.html:6</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:741</span><span class="ev">cockpit.html:2622</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--red-soft 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">#fdecec（2 处，如 _services-v3.css:38）；#fcedea（4 处，如 cockpit.html:5）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">_services-v3.css:38</span><span class="ev">dashboard.html:6</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:2623</span><span class="ev">services.html:5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--amber 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">#c27a10（2 处，如 _services-v3.css:39）；#b4720e（4 处，如 cockpit.html:5）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">_services-v3.css:39</span><span class="ev">dashboard.html:6</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:2623</span><span class="ev">services.html:5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--amber-soft 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">#fff5e1（2 处，如 _services-v3.css:40）；#fbf3e4（4 处，如 cockpit.html:5）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">_services-v3.css:40</span><span class="ev">dashboard.html:6</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:2624</span><span class="ev">services.html:5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-canvas 被引用了 6 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-canvas ×6</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-navy-line-2 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-navy-line-2 ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-r-lg 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-r-lg ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-navy-line 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-navy-line ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-fs-h3 被引用了 6 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-fs-h3 ×6</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-fs-caption 被引用了 9 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-fs-caption ×9</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-navy-text-dim 被引用了 6 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-navy-text-dim ×6</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-brand-2 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-brand-2 ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-r-pill 被引用了 8 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-r-pill ×8</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-ease 被引用了 8 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-ease ×8</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-fs-micro 被引用了 10 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-fs-micro ×10</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-surface 被引用了 6 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-surface ×6</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-line 被引用了 23 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-line ×23</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-surface-2 被引用了 17 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-surface-2 ×17</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-ink 被引用了 32 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-ink ×32</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-ink-4 被引用了 23 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-ink-4 ×23</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-r-md 被引用了 8 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-r-md ×8</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-ink-2 被引用了 8 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-ink-2 ×8</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-fs-label 被引用了 12 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-fs-label ×12</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-dur 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-dur ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-brand-soft 被引用了 11 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-brand-soft ×11</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-line-2 被引用了 12 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-line-2 ×12</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-fs-body 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-fs-body ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-r-sm 被引用了 12 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-r-sm ×12</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-pos-soft 被引用了 6 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-pos-soft ×6</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-pos 被引用了 5 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-pos ×5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-surface-3 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-surface-3 ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-ink-3 被引用了 19 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-ink-3 ×19</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-brand-solid 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-brand-solid ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-brand-line 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-brand-line ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-brand-ink 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-brand-ink ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-neg-soft 被引用了 8 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-neg-soft ×8</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-warn-soft 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-warn-soft ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-brand 被引用了 11 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-brand ×11</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-font 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-font ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-warn 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-warn ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-neg 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-neg ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--paper 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--paper ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--ev-seat-progress 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--ev-seat-progress ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-sk-delay 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-sk-delay ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--info-text 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--info-text ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--return-intensity 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--return-intensity ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--product-index 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--product-index ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--tc 被引用了 12 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--tc ×12</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--c 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--c ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nm-tooltip-y 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nm-tooltip-y ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--hr-faint 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--hr-faint ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--np-accent 被引用了 26 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--np-accent ×26</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--np-text 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--np-text ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--np-accent-soft 被引用了 8 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--np-accent-soft ×8</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--np-soft 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--np-soft ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--pc 被引用了 12 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--pc ×12</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--w 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--w ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--event-arrow-y 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--event-arrow-y ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--event-arrow-x 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--event-arrow-x ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--eff-accent 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--eff-accent ×4</span></div>
+    </li></ul>
+    </section><section class="grp">
+      <h2><i style="background:#b4720e"></i>值得处理 <b>32</b></h2>
+      <p class="gd">体系已经开始分叉：多套命名指向同一个颜色、大量令牌无人使用。</p>
+      <ul class="fs"><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--nm-gut 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">clamp(20px,4.6vw,72px)（2 处，如 _cockpit-v3.css:13）；clamp(20px,4.6vw,64px)（2 处，如 _cockpit-v3.css:188）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_cockpit-v3.css:13</span><span class="ev">cockpit.html:1573</span><span class="ev">_cockpit-v3.css:188</span><span class="ev">cockpit.html:1748</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--bg-2 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">#f7f9fb（1 处，如 _services-v3.css:26）；#f3f0eb（2 处，如 cockpit.html:2627）；#fcfbf9（2 处，如 cockpit.html:3095）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:26</span><span class="ev">cockpit.html:2627</span><span class="ev">services.html:2176</span><span class="ev">cockpit.html:3095</span><span class="ev">services.html:2644</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--bg-3 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">#eff2f6（1 处，如 _services-v3.css:27）；#ede9e2（2 处，如 cockpit.html:2628）；#f6f4f0（2 处，如 cockpit.html:3095）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:27</span><span class="ev">cockpit.html:2628</span><span class="ev">services.html:2177</span><span class="ev">cockpit.html:3095</span><span class="ev">services.html:2644</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--muted 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#6b7685（1 处，如 _services-v3.css:30）；#a7bbc9（4 处，如 cockpit.html:5）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:30</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--wine 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#e4762f（1 处，如 _services-v3.css:32）；#f47a38（2 处，如 cockpit.html:5）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:32</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--wine-soft 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#fff1e8（1 处，如 _services-v3.css:33）；#f47a38/.14（4 处，如 cockpit.html:5）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:33</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--gold 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#e4762f（1 处，如 _services-v3.css:34）；#f47a38（4 处，如 cockpit.html:5）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:34</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--blue 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#28618f（2 处，如 cockpit.html:2624）；#3d6b8e（2 处，如 cockpit.html:3095）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:2624</span><span class="ev">services.html:2173</span><span class="ev">cockpit.html:3095</span><span class="ev">services.html:2644</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--blue-soft 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#eaf2fa（2 处，如 cockpit.html:2625）；#edf3f8（2 处，如 cockpit.html:3095）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:2625</span><span class="ev">services.html:2174</span><span class="ev">cockpit.html:3095</span><span class="ev">services.html:2644</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--purple 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#7b4fe0（1 处，如 _services-v3.css:43）；#6a4f92（2 处，如 cockpit.html:2625）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:43</span><span class="ev">cockpit.html:2625</span><span class="ev">services.html:2174</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--purple-soft 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#f2edff（1 处，如 _services-v3.css:44）；#f2edfa（2 处，如 cockpit.html:2626）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:44</span><span class="ev">cockpit.html:2626</span><span class="ev">services.html:2175</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--radius 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">14px（1 处，如 _services-v3.css:45）；11px（2 处，如 cockpit.html:3149）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:45</span><span class="ev">cockpit.html:3149</span><span class="ev">services.html:2698</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--sh 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">0 1px 2px rgba(11,23,36,.05),0 2px 8px rgba(11,23,36,.05)（1 处，如 _services-v3.css:46）；0 12px 32px rgba(2,16,31,.18)（2 处，如 cockpit.html:11）；0 2px 5px rgba(30,37,47,.025)（2 处，如 cockpit.html:2629）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:46</span><span class="ev">cockpit.html:11</span><span class="ev">services.html:11</span><span class="ev">cockpit.html:2629</span><span class="ev">services.html:2178</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--sans 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">-apple-system,blinkmacsystemfont,&quot;pingfang sc&quot;,&quot;microsoft yahei&quot;,&quot;noto sans cjk sc&quot;,&quot;segoe ui&quot;,sans-serif（1 处，如 _services-v3.css:47）；&quot;harmonyos sans sc&quot;,&quot;pingfang sc&quot;,&quot;microsoft yahei&quot;,&quot;manropefont&quot;,&quot;manropefont fallback&quot;,-apple-system,sans-serif（2 处，如 cockpit.html:11）；-apple-system,blinkmacsystemfont,&quot;pingfang sc&quot;,&quot;hiragino sans gb&quot;,&quot;microsoft yahei&quot;,&quot;segoe ui&quot;,sans-serif（2 处，如 cockpit.html:2628）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">_services-v3.css:47</span><span class="ev">cockpit.html:11</span><span class="ev">services.html:11</span><span class="ev">cockpit.html:2628</span><span class="ev">services.html:2177</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--ev-seat-color 在 theme:dark 作用域内有 6 个不同的值</span></div>
+      <p class="d">#5bd9a0（2 处，如 cockpit.html:4）；#ffcc7a（2 处，如 cockpit.html:4）；#ff8f87（2 处，如 cockpit.html:4）；#10b981（2 处，如 cockpit.html:6）；#f59e0b（2 处，如 cockpit.html:6）；#ef4444（2 处，如 cockpit.html:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:4</span><span class="ev">services.html:4</span><span class="ev">cockpit.html:4</span><span class="ev">services.html:4</span><span class="ev">cockpit.html:4</span><span class="ev">services.html:4</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--ev-seat-track 在 theme:dark 作用域内有 6 个不同的值</span></div>
+      <p class="d">#2b5269（2 处，如 cockpit.html:5）；#574d3b（2 处，如 cockpit.html:5）；#5a4147（2 处，如 cockpit.html:5）；#10b981/.18（2 处，如 cockpit.html:7）；#f59e0b/.18（2 处，如 cockpit.html:7）；#ef4444/.18（2 处，如 cockpit.html:7）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--ch-space-lg 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">32px（2 处，如 cockpit.html:5）；26px（2 处，如 cockpit.html:4）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span><span class="ev">cockpit.html:4</span><span class="ev">services.html:4</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--ch-space-xl 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">52px（2 处，如 cockpit.html:5）；40px（2 处，如 cockpit.html:5）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--orange 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#e05800（2 处，如 cockpit.html:5）；#f47a38（2 处，如 cockpit.html:5）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--csm-tone 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">#8f8a80（8 处，如 cockpit.html:4）；#1f5bff（2 处，如 cockpit.html:4）；#b4720e（4 处，如 cockpit.html:4）；#2e7d5b（6 处，如 cockpit.html:4）；#f6c453（6 处，如 cockpit.html:4）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:4</span><span class="ev">cockpit.html:4</span><span class="ev">cockpit.html:4</span><span class="ev">cockpit.html:4</span><span class="ev">services.html:4</span><span class="ev">cockpit.html:4</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--csm-tone-soft 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">#12345c（2 处，如 cockpit.html:5）；#10b981/.14（2 处，如 cockpit.html:5）；#f6c453/.14（2 处，如 cockpit.html:5）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">services.html:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--card2 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#12345c（2 处，如 cockpit.html:11）；#ffffff（2 处，如 cockpit.html:741）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">services.html:11</span><span class="ev">cockpit.html:741</span><span class="ev">services.html:741</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--task-border-strong 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#ded8cc（4 处，如 cockpit.html:123）；#efcfb8（2 处，如 cockpit.html:457）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:123</span><span class="ev">cockpit.html:258</span><span class="ev">services.html:123</span><span class="ev">cockpit.html:457</span><span class="ev">services.html:457</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--task-orange 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#a94f24（4 处，如 cockpit.html:125）；#ff6900（2 处，如 cockpit.html:455）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:125</span><span class="ev">cockpit.html:260</span><span class="ev">services.html:125</span><span class="ev">cockpit.html:455</span><span class="ev">services.html:455</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--task-orange-soft 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#fbefe6（4 处，如 cockpit.html:125）；#fff1e6（2 处，如 cockpit.html:456）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:125</span><span class="ev">cockpit.html:260</span><span class="ev">services.html:125</span><span class="ev">cockpit.html:456</span><span class="ev">services.html:456</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--stack-pad 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">18px（2 处，如 cockpit.html:276）；30px（2 处，如 cockpit.html:277）；0px（4 处，如 cockpit.html:278）；10px（2 处，如 cockpit.html:528）；16px（2 处，如 cockpit.html:531）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:276</span><span class="ev">services.html:276</span><span class="ev">cockpit.html:277</span><span class="ev">services.html:277</span><span class="ev">cockpit.html:278</span><span class="ev">cockpit.html:534</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--nm-background-button 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">linear-gradient(165deg,#ff8a2e 0%,#f96a00 52%,#e85800 100%)（2 处，如 cockpit.html:3019）；linear-gradient(165deg,#ff8a2e,#f96a00 52%,#e85800)（2 处，如 cockpit.html:3967）；#ef6815（2 处，如 cockpit.html:4058）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:3019</span><span class="ev">services.html:2568</span><span class="ev">cockpit.html:3967</span><span class="ev">services.html:3516</span><span class="ev">cockpit.html:4058</span><span class="ev">services.html:3607</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--nm-radius-lg 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">16px（2 处，如 cockpit.html:3025）；18px（2 处，如 cockpit.html:3967）；11px（2 处，如 cockpit.html:4058）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:3025</span><span class="ev">services.html:2574</span><span class="ev">cockpit.html:3967</span><span class="ev">services.html:3516</span><span class="ev">cockpit.html:4058</span><span class="ev">services.html:3607</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--nm-font-sans 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">&#39;manrope&#39;,ui-sans-serif,system-ui,&#39;pingfang sc&#39;,&#39;microsoft yahei&#39;,&#39;hiragino sans gb&#39;,sans-serif,&#39;apple color emoji&#39;,&#39;segoe ui emoji&#39;,&#39;segoe ui symbol&#39;,&#39;noto color emoji&#39;（2 处，如 cockpit.html:3039）；&#39;manrope&#39;,&#39;pingfang sc&#39;,&#39;microsoft yahei&#39;,sans-serif（2 处，如 cockpit.html:3967）；-apple-system,&quot;pingfang sc&quot;,&quot;microsoft yahei&quot;,sans-serif（2 处，如 cockpit.html:4057）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:3039</span><span class="ev">services.html:2588</span><span class="ev">cockpit.html:3967</span><span class="ev">services.html:3516</span><span class="ev">cockpit.html:4057</span><span class="ev">services.html:3606</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--sidebar 在 selector 作用域内有 4 个不同的值</span></div>
+      <p class="d">212px（2 处，如 cockpit.html:3967）；72px（2 处，如 cockpit.html:3969）；180px（2 处，如 cockpit.html:3974）；64px（2 处，如 cockpit.html:3975）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">cockpit.html:3967</span><span class="ev">services.html:3516</span><span class="ev">cockpit.html:3969</span><span class="ev">services.html:3518</span><span class="ev">cockpit.html:3974</span><span class="ev">services.html:3523</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">duplicate-value</span><span class="t">68 组颜色被多个令牌名重复表达</span></div>
+      <p class="d">#f7f9fb = --bg-2 = --v2-soft = --soft；#ffffff = --card = --panel = --csm-field = --bg-input = --task-panel = --card2 = --hr-panel = --hr-nested = --nm-color-surface = --nm-color-on-brand = --np-card；#16202b = --ink = --v2-ink；#6b7685 = --muted = --v2-sub = --sub；#e6eaf0 = --line = --v2-line；#e4762f = --wine = --gold = --v2-or = --or；#fff1e8 = --wine-soft = --v2-or-soft = --or-soft；#12945f = --green = --v2-green</p><p class="s">→ 同一颜色保留一个主名，其余改成别名引用，减少&quot;该用哪个&quot;的猜测。</p><div class="evs"><span class="ev">#f7f9fb</span><span class="ev">#ffffff</span><span class="ev">#16202b</span><span class="ev">#6b7685</span><span class="ev">#e6eaf0</span><span class="ev">#e4762f</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">orphan</span><span class="t">58 个令牌声明了却从未被引用</span></div>
+      <p class="d">按作用域分布：selector 45 个，root/theme 1 个，selector/theme 9 个，root 3 个。典型来源是共享样式表被另一个页面的变量体系取代了。</p><p class="s">→ 逐个确认：删掉，或让真正的消费方引用它。</p><div class="evs"><span class="ev">--purple</span><span class="ev">--purple-soft</span><span class="ev">--side</span><span class="ev">--a3</span><span class="ev">--s1</span><span class="ev">--s2</span></div>
+    </li></ul>
+    </section><section class="grp">
+      <h2><i style="background:#8F8A80"></i>结构性观察 <b>89</b></h2>
+      <p class="gd">不算错，但理清之后整个体系会好维护很多。</p>
+      <ul class="fs"><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">cascade-override</span><span class="t">--soft 被 selector 与 root 作用域分别定义</span></div>
+      <p class="d">#fff1e6 @ selector；#f7f9fb @ root</p><p class="s">→ CSS 级联下的正常覆盖。若覆盖频繁，可提升为独立令牌减少隐性依赖。</p><div class="evs"><span class="ev">cockpit.html:3967</span><span class="ev">dashboard.html:6</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">namespace</span><span class="t">并存 93 个命名族</span></div>
+      <p class="d">--nm-*（48），--csm-*（44），--v2-*（18），--hr-*（14），--np-*（14），--task-*（11），--product-*（10），--ch-*（9），--bg-*（7），--font-*（5），--skeleton-*（5），--text-*（5），--compact-*（4），--grad-*（3），--muted-*（2），--line-*（2），--wine-*（2），--green-*（2），--red-*（2），--amber-*（2），--blue-*（2），--purple-*（2），--ev-*（2），--glow-*（2），--sidebar-*（2），--holding-*（2），--or-*（2），--violet-*（2），--card-*（1），--ink-*（1），--gold-*（1），--radius-*（1），--sh-*（1），--sans-*（1），--side-*（1），--me-*（1），--persona-*（1），--bg2-*（1），--orange-*（1），--panel-*（1），--accent-*（1），--crec-*（1），--surface-*（1），--card2-*（1），--ink2-*（1），--ink3-*（1），--goldline-*（1），--goldbg-*（1），--ok-*（1），--warn-*（1），--crit-*（1），--lock-*（1），--a1-*（1），--a2-*（1），--a3-*（1），--p0-*（1），--p1-*（1），--p2-*（1），--p3-*（1），--p4-*（1），--s1-*（1），--s2-*（1），--s3-*（1），--s4-*（1），--s5-*（1），--s6-*（1），--s7-*（1），--lineink-*（1），--serif-*（1），--mono-*（1），--r-*（1），--rs-*（1），--toolbar-*（1），--tag-*（1），--brand-*（1），--border-*（1），--stack-*（1），--line2-*（1），--mut-*（1），--dim-*（1），--org-*（1），--blu-*（1），--pur-*（1），--grn-*（1），--yel-*（1），--pnk-*（1），--cyn-*（1），--btn-*（1），--soft-*（1），--nb-*（1），--navy-*（1），--or2-*（1），--sub-*（1）</p><p class="s">→ 选定一到两个命名族作为主体系，其余降级为别名或逐步废弃。</p><div class="evs"><span class="ev">--nm-*（48）</span><span class="ev">--bg-*（7）</span><span class="ev">--card-*（1）</span><span class="ev">--ink-*（1）</span><span class="ev">--muted-*（2）</span><span class="ev">--line-*（2）</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">state-variation</span><span class="t">--ev-seat-color 按状态类切换 3 个值</span></div>
+      <p class="d">选择器差异只来自状态修饰类（.ev-seat / .ev-seat.is-tight / .ev-seat.is-full），是状态色语义，不是令牌冲突。</p><p class="s">→ 建议为每种状态建独立令牌（--seat-color-ok / --seat-color-warn / --seat-color-busy），而不是让同一个变量承担多态。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:4</span><span class="ev">cockpit.html:4</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">state-variation</span><span class="t">--ev-seat-track 按状态类切换 3 个值</span></div>
+      <p class="d">选择器差异只来自状态修饰类（.ev-seat / .ev-seat.is-tight / .ev-seat.is-full），是状态色语义，不是令牌冲突。</p><p class="s">→ 建议为每种状态建独立令牌（--seat-color-ok / --seat-color-warn / --seat-color-busy），而不是让同一个变量承担多态。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:5</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--card 在不同作用域/主题下有 3 个值</span></div>
+      <p class="d">#ffffff @ selector/root；#173f60 @ selector；#1b456a @ theme/selector[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">_services-v3.css:28</span><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--side 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#282420 @ root；#0d253d @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--me 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#95ec69 @ root；#ff6900 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--bg2 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f8f7f4 @ selector/theme[light]；#102f49 @ selector</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:5</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--text 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#2b2620 @ selector/theme[light]；#f3f6f8 @ selector</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:5</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--product-inset-surface 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">color-mix(in srgb,#f8f7f4 48%,#ffffff) @ selector；color-mix(in srgb,#12345c 54%,#0d253d) @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:4</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-red 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#b42318 @ selector；#ff7b72 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:4</span><span class="ev">cockpit.html:6</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-red-soft 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#fdecec @ selector；#ff7b72/.14 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-neutral-soft 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f1ece3 @ selector；#12345c @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-lead 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#3d6b8e @ selector；#1f5bff @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-lead-soft 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#edf3f8 @ selector；#eaf0ff @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-active-soft 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#eaf4ef @ selector；#10b981/.14 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-high 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f25e00 @ selector；#f6c453 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-high-soft 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#fff0e4 @ selector；#f6c453/.14 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-text-2 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#75706a @ selector；#a9bdd3 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-accent-ink 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#c05a0e @ selector；#f25e00 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f6f4f0 @ selector；#12345c @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-th 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#fcfbf9 @ selector；#0d253d @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-row-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#fcfaf7 @ selector；#12345c @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-track 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f1ece3 @ selector；#12345c @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-line-2 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#ddd6ca @ selector；#eae6df @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-stripe 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#faf8f4 @ selector；#12345c @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-hover-border 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#e4dacb @ selector；#1f5bff @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-hover-shadow 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">0 2px 5px -2px rgba(90,70,45,.06),0 26px 50px -30px rgba(90,70,45,.3) @ selector；0 0 28px rgba(41,168,255,.18) @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-active-shadow 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">0 0 0 1px #8f8a80,0 18px 38px -26px rgba(90,70,45,.35) @ selector；0 0 0 2px #fff0e4,0 0 32px rgba(255,105,0,.14) @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-pick-shadow 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">0 0 0 2px #fff0e4,0 18px 38px -26px rgba(90,70,45,.35) @ selector；0 0 0 2px #fff0e4,0 0 32px rgba(255,105,0,.14) @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-act-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#d95400 @ selector；#f25e00 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-warn-border 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f2d9c4 @ selector；#f25e00 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-family 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#8a6fb0 @ selector；#b79be0 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-family-bg 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f2eef8 @ selector；#b79be0/.14 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-family-ink 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#6b4e96 @ selector；#b79be0 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-black 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#3a3a3a @ selector；#8f8a80 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-black-bg 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f2f1ef @ selector；#12345c @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-black-ink 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#2a2a2a @ selector；#2b2620 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-diamond 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#a8c2d6 @ selector；#eae6df @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-diamond-bg 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#edf3f8 @ selector；#eaf0ff @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-diamond-ink 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#3d6b8e @ selector；#1f5bff @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-gold 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#dcc48a @ selector；#f6c453 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-gold-bg 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#fbf3e4 @ selector；#f6c453/.14 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-gold-ink 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#b4720e @ selector；#f6c453 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-ivory 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#ded6c6 @ selector；#eae6df @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-ivory-bg 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f8f5ee @ selector；#0d253d @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--csm-tier-ivory-ink 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#93856a @ selector；#a9bdd3 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:5</span><span class="ev">cockpit.html:7</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--surface 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#0d253d @ selector；#f7f3ed @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:10</span><span class="ev">cockpit.html:10</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--ink2 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#d7e5f2 @ selector；#5c5c5c @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--crit 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#ff6b6b @ selector；#e04545 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--a1 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#29a8ff @ selector；#5b6fa8 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--a2 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#a855f7 @ selector；#805ad5 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--p0 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#ff6b6b @ selector；#e04545 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--p1 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#ff9b54 @ selector；#e87050 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--p2 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f5c451 @ selector；#d4a537 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--p3 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#29a8ff @ selector；#5b6fa8 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--ch-whatsapp 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#2e7d5b @ selector；#5b8a55 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--ch-email 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#29a8ff @ selector；#5b6fa8 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--ch-wechat 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#a855f7 @ selector；#805ad5 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--ch-sms 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f5c451 @ selector；#d4a537 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--s1 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#3987e5 @ selector；#2a78d6 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--s2 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#d95926 @ selector；#eb6834 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--s3 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#199e70 @ selector；#1baf7a @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--s4 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#c98500 @ selector；#eda100 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--s5 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#d55181 @ selector；#e87ba4 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--s7 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#9085e9 @ selector；#4a3aa7 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--lineink 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#29a8ff @ selector；#5b6fa8 @ theme[light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:11</span><span class="ev">cockpit.html:11</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-bg 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f8f7f4 @ selector；#102a43 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2986</span><span class="ev">cockpit.html:3059</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-surface 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#ffffff @ selector；#1b456a @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2987</span><span class="ev">cockpit.html:3060</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-text 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#2b2620 @ selector；#f7fbff @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2988</span><span class="ev">cockpit.html:3061</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-text-secondary 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#8f8a80 @ selector；#a9bdd3 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2989</span><span class="ev">cockpit.html:3062</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-border 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#eae6df @ selector；#29a8ff/.28 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2990</span><span class="ev">cockpit.html:3063</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-brand-fill 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f25e00 @ selector；#ff6900 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2991</span><span class="ev">cockpit.html:3064</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-brand-accent 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#e05800 @ selector；#ff6900 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2992</span><span class="ev">cockpit.html:3065</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-success 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#2e7d5b @ selector；#10b981 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2994</span><span class="ev">cockpit.html:3067</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-success-soft 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#eaf4ef @ selector；#10b981/.1 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2995</span><span class="ev">cockpit.html:3068</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-warning 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#b4720e @ selector；#f59e0b @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2996</span><span class="ev">cockpit.html:3069</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-warning-soft 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#fbf3e4 @ selector；#f59e0b/.12 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2997</span><span class="ev">cockpit.html:3070</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-danger 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#b84038 @ selector；#f87171 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2998</span><span class="ev">cockpit.html:3071</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-danger-soft 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#fcedea @ selector；#f87171/.12 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:2999</span><span class="ev">cockpit.html:3072</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-color-brand-fill-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#ee6000 @ selector；#ff6900 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:3002</span><span class="ev">cockpit.html:3075</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-shadow-brand 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">0 12px 28px -14px rgba(242,94,0,.55) @ selector；0 4px 16px -4px rgba(255,105,0,.3) @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:3004</span><span class="ev">cockpit.html:3076</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-shadow-brand-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">0 16px 34px -14px rgba(242,94,0,.6) @ selector；0 6px 24px -4px rgba(255,105,0,.45) @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:3005</span><span class="ev">cockpit.html:3077</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-shadow-card 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">0 1px 1px rgba(90,70,45,.03),0 3px 8px -4px rgba(90,70,45,.05),0 26px 54px -40px rgba(90,70,45,.22) @ selector；0 1px 2px rgba(0,0,0,.2) @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:3006</span><span class="ev">cockpit.html:3078</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-opacity-disabled 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">0.35 @ selector；0.4 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:3010</span><span class="ev">cockpit.html:3079</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-background-button-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">linear-gradient(165deg,#ff7e1b 0%,#ee6000 55%,#db5300 100%) @ selector；#ff6900 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:3020</span><span class="ev">cockpit.html:3083</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-radius-sm 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">8px @ selector；4px @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:3023</span><span class="ev">cockpit.html:3086</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-radius-md 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">12px @ selector；6px @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:3024</span><span class="ev">cockpit.html:3087</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--nm-radius-modal 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">16px @ selector；10px @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">cockpit.html:3026</span><span class="ev">cockpit.html:3089</span></div>
+    </li></ul>
+    </section>
+  <footer>
+    生成于 2026-10-30 03:51:52 · token-audit<br>
+    静态来源 /Users/dengzhou/Desktop/08-Noah-Project/03-AI AI/page-enhanced/Noah mind 2.0/src/pages · 9 个文件<br>
+    未做运行时实测（纯静态）
+  </footer>
+</div>
+</body></html>

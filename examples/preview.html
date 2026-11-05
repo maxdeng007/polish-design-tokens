@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计令牌体检报告 · Design Token Health Report</title>
+<style>
+  :root {
+    --bg: #F8F7F4;
+    --bg-2: #F3F1EC;
+    --card: #FFFFFF;
+    --ink: #2B2620;
+    --muted: #8F8A80;
+    --line: #EAE6DF;
+    --wine: #F25E00;
+    --wine-soft: #FFF0E4;
+    --green: #2E7D5B;
+    --green-soft: #EAF4EF;
+    --red: #B84038;
+    --red-soft: #FCEDEA;
+    --amber: #B4720E;
+    --amber-soft: #FBF3E4;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(43,38,32,.04), 0 8px 24px rgba(43,38,32,.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* header */
+  header { margin-bottom: 36px; }
+  .eyebrow {
+    display: inline-block; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--wine); font-weight: 600; margin-bottom: 14px;
+  }
+  h1 { font-size: 34px; line-height: 1.2; margin: 0 0 8px; letter-spacing: -.01em; }
+  h1 em { font-style: normal; color: var(--wine); }
+  .sub { color: var(--muted); font-size: 15px; max-width: 60ch; }
+  .sub .en { display: block; margin-top: 4px; font-size: 13.5px; }
+
+  /* stats */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 32px 0;
+  }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 16px; box-shadow: var(--shadow);
+  }
+  .stat b { display: block; font-size: 28px; letter-spacing: -.02em; }
+  .stat span { font-size: 12.5px; color: var(--muted); }
+  .stat.err b { color: var(--red); }
+  .stat.warn b { color: var(--amber); }
+  .stat.info b { color: var(--green); }
+
+  /* section */
+  section { margin-top: 56px; }
+  .shead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+  .shead h2 { font-size: 20px; margin: 0; }
+  .shead .en { color: var(--muted); font-size: 13px; }
+  .shead .n { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+  /* finding cards */
+  .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filters button {
+    border: 1px solid var(--line); background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: 7px 14px; font-size: 13px; cursor: pointer;
+    transition: all .15s;
+  }
+  .filters button:hover { border-color: var(--ink); }
+  .filters button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  .fcard {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 20px; margin-bottom: 12px; box-shadow: var(--shadow); cursor: pointer;
+    transition: border-color .15s;
+  }
+  .fcard:hover { border-color: var(--muted); }
+  .fcard[hidden] { display: none; }
+  .frow { display: flex; align-items: flex-start; gap: 12px; }
+  .tag {
+    flex: none; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px;
+    margin-top: 2px;
+  }
+  .tag.error { background: var(--red-soft); color: var(--red); }
+  .tag.warn  { background: var(--amber-soft); color: var(--amber); }
+  .tag.info  { background: var(--green-soft); color: var(--green); }
+  .fbody { flex: 1; min-width: 0; }
+  .ftitle { font-weight: 600; font-size: 15px; }
+  .ftype { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+  .fdetail { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .fcard.open .fdetail { display: block; }
+  .fdetail p { margin: 0 0 8px; font-size: 13.5px; color: var(--ink); }
+  .fdetail .ev { font-size: 12.5px; color: var(--muted); background: var(--bg-2); border-radius: 8px; padding: 10px 12px; font-family: ui-monospace, "SF Mono", Menlo, monospace; overflow-x: auto; }
+  .chev { flex: none; color: var(--muted); transition: transform .2s; margin-top: 4px; }
+  .fcard.open .chev { transform: rotate(90deg); }
+
+  /* palette */
+  .palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .swatch { background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .chip { height: 56px; }
+  .smeta { padding: 9px 11px; }
+  .sname { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; }
+  .sval { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .sdup { font-size: 10.5px; color: var(--red); margin-top: 3px; }
+
+  /* exports */
+  .exports { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .ecard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow); }
+  .ecard .fn { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; color: var(--wine); font-weight: 600; word-break: break-all; }
+  .ecard p { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+  .ecard .use { font-size: 13.5px; margin-top: 6px; }
+
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12.5px; }
+  footer .en { display: block; margin-top: 4px; }
+
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    h1 { font-size: 26px; }
+    .wrap { padding: 32px 18px 60px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">Noah Mind 2.0 · 真实体检结果 / Real audit output</span>
+    <h1>设计令牌<em>体检报告</em></h1>
+    <p class="sub">
+      这份页面展示的是 <code>token-audit</code> 对 Noah Mind 项目 <code>src/pages</code> 的真实体检结果。点开每一条结论，看看设计系统里到底发生了什么。
+      <span class="en">This page shows a real token-audit result from Noah Mind's <code>src/pages</code>. Click any finding to see the evidence.</span>
+    </p>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <section>
+    <div class="shead">
+      <h2>四类体检结论</h2><span class="en">Four finding types</span><span class="n" id="fcount"></span>
+    </div>
+    <div class="filters" id="filters">
+      <button data-s="all" class="on">全部 All</button>
+      <button data-s="error">错误 Error</button>
+      <button data-s="warn">警告 Warn</button>
+      <button data-s="info">提示 Info</button>
+    </div>
+    <div id="findings"></div>
+  </section>
+
+  <section>
+    <div class="shead">
+      <h2>令牌色板</h2><span class="en">Token palette</span><span class="n">颜色令牌 / color tokens</span>
+    </div>
+    <p class="sub" style="margin-top:-8px">同一个名字在不同文件里被定义成不同的值，就是「冲突」——色板里带红色标记的就是。
+      <span class="en">Same name, different values in different files = a conflict. Marked in red below.</span></p>
+    <div class="palette" id="palette"></div>
+  </section>
+
+  <section>
+    <div class="shead"><h2>导出给开发</h2><span class="en">Exports for developers</span></div>
+    <div class="exports" id="exports"></div>
+  </section>
+
+  <footer>
+    数据来源 / Source: <code>examples/noah-sample/</code> · 由 token-audit 自动生成 · 2026-10-30
+    <span class="en">Generated by token-audit from a real run against Noah Mind src/pages.</span>
+  </footer>
+</div>
+
+<script>
+const DATA = {
+  summary: { declarations: 1101, uniqueTokens: 290, findings: 186, error: 65, warn: 32, info: 89 },
+  findings: [
+    {
+      type: 'conflict', sev: 'error',
+      title: '--bg 在 root 作用域内有 2 个不同的值',
+      en: '--bg has 2 different values in root scope',
+      detail: '同一个令牌被定义了两个不同的值。渲染结果取决于加载顺序，属于不确定状态。',
+      detailEn: 'One token, two values. The rendered result depends on load order — undefined behaviour.',
+      ev: '#f3f5f8  @ _services-v3.css:25\n#f8f7f4  @ cockpit.html:4',
+      evEn: '#f3f5f8 at _services-v3.css:25\n#f8f7f4 at cockpit.html:4'
+    },
+    {
+      type: 'dangling', sev: 'error',
+      title: '--nm-canvas 被引用了 6 次，但没有任何声明',
+      en: '--nm-canvas referenced 6 times, never declared',
+      detail: '代码里用了这个令牌，但没人定义它。引用处会拿到无效值，浏览器多数会回退成初始值或继承值。',
+      detailEn: 'Referenced but never declared. Every use resolves to an invalid value; browsers fall back to inherited/initial values.',
+      ev: 'referenced in: cockpit.html, dashboard.html, services.html\ndeclared in: (nothing)',
+      evEn: 'referenced in: cockpit.html, dashboard.html, services.html\ndeclared in: (nothing)'
+    },
+    {
+      type: 'duplicate-value', sev: 'warn',
+      title: '68 组颜色被多个令牌名重复表达',
+      en: '68 color groups expressed under multiple names',
+      detail: '不同名字，值却一模一样。说明命名体系还没统一——同一个颜色散落在多个名字下。',
+      detailEn: 'Different names, identical values. The naming scheme hasn\'t converged — one color scattered across many names.',
+      ev: '#f7f9fb = --bg-2 = --v2-soft = --soft\n#ffffff = --card = --panel = --csm-field = --bg-input\n#f25e00 = --wine = --gold = --brand-primary',
+      evEn: '#f7f9fb = --bg-2 = --v2-soft = --soft\n#ffffff = --card = --panel = --csm-field = --bg-input\n#f25e00 = --wine = --gold = --brand-primary'
+    },
+    {
+      type: 'orphan', sev: 'warn',
+      title: '58 个令牌声明了却从未被引用',
+      en: '58 tokens declared but never referenced',
+      detail: '定义了却没人用。典型来源是共享样式表被另一个页面的变量体系取代了。',
+      detailEn: 'Declared but unused. Typically a shared stylesheet superseded by another page\'s variable scheme.',
+      ev: 'selector scope: 45\nroot/theme scope: 1\nselector/theme scope: 9\nroot scope: 3',
+      evEn: 'selector scope: 45\nroot/theme scope: 1\nselector/theme scope: 9\nroot scope: 3'
+    },
+    {
+      type: 'cascade-override', sev: 'info',
+      title: '--soft 被 selector 与 root 作用域分别定义',
+      en: '--soft defined in both selector and root scope',
+      detail: '后面的定义悄悄盖住了前面的。不一定错，但要确认是有意为之。',
+      detailEn: 'A later definition silently overrides an earlier one. Not necessarily wrong — but confirm it\'s intentional.',
+      ev: '#fff1e6 @ selector\n#f7f9fb @ root',
+      evEn: '#fff1e6 at selector\n#f7f9fb at root'
+    },
+    {
+      type: 'theme-variation', sev: 'info',
+      title: '--card 在不同作用域/主题下有 3 个值',
+      en: '--card has 3 values across scopes/themes',
+      detail: '亮色/暗色或不同作用域下值不同。如果差异来自主题，通常是正常的。',
+      detailEn: 'Differs across themes/scopes. If the difference is theme-driven, this is usually fine.',
+      ev: '#ffffff @ selector/root\n#173f60 @ selector\n#1b456a @ theme/selector[dark]',
+      evEn: '#ffffff at selector/root\n#173f60 at selector\n#1b456a at theme/selector[dark]'
+    }
+  ],
+  palette: [
+    { name: '--bg', v: '#F3F5F8', f: '_services-v3.css', dup: 'vs --bg #F8F7F4' },
+    { name: '--bg', v: '#F8F7F4', f: 'cockpit.html', dup: true },
+    { name: '--card', v: '#FFFFFF', f: 'cockpit.html' },
+    { name: '--ink', v: '#2B2620', f: 'cockpit.html' },
+    { name: '--ink', v: '#16202B', f: '_services-v3.css', dup: true },
+    { name: '--muted', v: '#8F8A80', f: 'cockpit.html' },
+    { name: '--line', v: '#EAE6DF', f: 'cockpit.html' },
+    { name: '--wine', v: '#F25E00', f: 'cockpit.html' },
+    { name: '--wine', v: '#E4762F', f: '_services-v3.css', dup: true },
+    { name: '--gold', v: '#E05800', f: 'cockpit.html' },
+    { name: '--green', v: '#2E7D5B', f: 'cockpit.html' },
+    { name: '--green', v: '#12945F', f: '_services-v3.css', dup: true },
+    { name: '--red', v: '#B84038', f: 'cockpit.html' },
+    { name: '--red', v: '#E02B2B', f: '_services-v3.css', dup: true },
+    { name: '--amber', v: '#B4720E', f: 'cockpit.html' },
+    { name: '--amber', v: '#C27A10', f: '_services-v3.css', dup: true },
+    { name: '--blue', v: '#1F5BFF', f: '_services-v3.css' },
+    { name: '--purple', v: '#7B4FE0', f: '_services-v3.css' },
+    { name: '--side', v: '#282420', f: 'cockpit.html' },
+    { name: '--me', v: '#95EC69', f: 'cockpit.html' }
+  ],
+  exports: [
+    { fn: 'tokens-studio.json', use: '导入 Figma 插件，设计稿与代码同步', en: 'Import into Figma Tokens Studio plugin' },
+    { fn: 'dtcg.json', use: 'W3C 标准格式，任何工具都能读', en: 'W3C DTCG standard, tool-agnostic' },
+    { fn: 'tailwind.config.js', use: 'Tailwind 项目直接用', en: 'Drop into a Tailwind project' },
+    { fn: 'shadcn-theme.css', use: 'shadcn/ui 项目直接用', en: 'Drop into a shadcn/ui project' },
+    { fn: 'style-dictionary/', use: '一套令牌，多平台（Web/iOS/Android）', en: 'One source, multi-platform output' }
+  ]
+};
+
+// stats
+const s = DATA.summary;
+const stat = (b, l, c = '') => `<div class="stat ${c}"><b>${b}</b><span>${l}</span></div>`;
+document.getElementById('stats').innerHTML =
+  stat(s.declarations, '声明 declarations') +
+  stat(s.uniqueTokens, '唯一令牌 unique') +
+  stat(s.findings, '结论 findings') +
+  stat('0.5s', '耗时 duration') +
+  stat(s.error, '错误 error', 'err') +
+  stat(s.warn, '警告 warn', 'warn') +
+  stat(s.info, '提示 info', 'info') +
+  stat(9, '文件 files');
+
+// findings
+const TYPE_ZH = {
+  conflict: '冲突', dangling: '悬空', 'duplicate-value': '重复', orphan: '孤儿',
+  'cascade-override': '级联覆盖', 'theme-variation': '主题差异', namespace: '命名族', 'state-variation': '状态差异'
+};
+const fbox = document.getElementById('findings');
+fbox.innerHTML = DATA.findings.map((f, i) => `
+  <div class="fcard" data-s="${f.sev}" data-i="${i}">
+    <div class="frow">
+      <span class="tag ${f.sev}">${f.sev === 'error' ? '错误' : f.sev === 'warn' ? '警告' : '提示'}</span>
+      <div class="fbody">
+        <div class="ftitle">${f.title}</div>
+        <div class="ftype">${TYPE_ZH[f.type] || f.type} · ${f.en}</div>
+      </div>
+      <span class="chev">→</span>
+    </div>
+    <div class="fdetail">
+      <p>${f.detail}</p>
+      <p style="color:var(--muted);font-size:12.5px">${f.detailEn}</p>
+      <div class="ev">${f.ev}</div>
+      <p style="margin-top:8px;color:var(--muted);font-size:12px">${f.evEn}</p>
+    </div>
+  </div>`).join('');
+
+document.getElementById('fcount').textContent = DATA.findings.length + ' 条 · ' + DATA.findings.length + ' findings';
+
+fbox.addEventListener('click', e => {
+  const card = e.target.closest('.fcard');
+  if (card) card.classList.toggle('open');
+});
+
+document.getElementById('filters').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  document.querySelectorAll('#filters button').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const s = btn.dataset.s;
+  let n = 0;
+  document.querySelectorAll('.fcard').forEach(c => {
+    const show = s === 'all' || c.dataset.s === s;
+    c.hidden = !show; if (show) n++;
+  });
+  document.getElementById('fcount').textContent = n + ' 条 · ' + n + ' findings';
+});
+
+// palette
+document.getElementById('palette').innerHTML = DATA.palette.map(p => `
+  <div class="swatch">
+    <div class="chip" style="background:${p.v}"></div>
+    <div class="smeta">
+      <div class="sname">${p.name}</div>
+      <div class="sval">${p.v} · ${p.f}</div>
+      ${p.dup ? `<div class="sdup">冲突 conflict${p.dup !== true ? ' · ' + p.dup : ''}</div>` : ''}
+    </div>
+  </div>`).join('');
+
+// exports
+document.getElementById('exports').innerHTML = DATA.exports.map(e => `
+  <div class="ecard">
+    <div class="fn">${e.fn}</div>
+    <p class="use">${e.use}</p>
+    <p class="use" style="color:var(--muted)">${e.en}</p>
+  </div>`).join('');
+</script>
+</body>
+</html>

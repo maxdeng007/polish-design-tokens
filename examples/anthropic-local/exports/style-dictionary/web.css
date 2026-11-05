@@ -1,0 +1,38 @@
+/**
+ * Generated Style Dictionary - web
+ * Source: token-audit audit #306a3075-770f-c924-434b-bf40aee442b29cd2b0d24c8be44bd760fde69630ce90
+ */
+:root {
+  --paper: #faf9f5;
+  --band: #f5f4ed;
+  --card: #ffffff;
+  --ink: #141413;
+  --ink-2: #30302e;
+  --ink-3: #5e5d59;
+  --ink-4: #87867f;
+  --rule: #e8e6dc;
+  --rule-2: #dedcd1;
+  --rule-3: #c2c0b6;
+  --sans: 'Anthropic Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
+  --serif: 'Anthropic Serif','Iowan Old Style',Palatino,Georgia,serif;
+  --mono: 'Anthropic Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  --shadow: 0 1px 2px rgba(20,20,19,.04),0 8px 24px rgba(20,20,19,.05);
+}
+
+/** TypeScript module */
+export const designTokens = {
+  'paper': '#faf9f5',
+  'band': '#f5f4ed',
+  'card': '#ffffff',
+  'ink': '#141413',
+  'ink-2': '#30302e',
+  'ink-3': '#5e5d59',
+  'ink-4': '#87867f',
+  'rule': '#e8e6dc',
+  'rule-2': '#dedcd1',
+  'rule-3': '#c2c0b6',
+  'sans': ''Anthropic Sans','Helvetica Neue',Helvetica,Arial,sans-serif',
+  'serif': ''Anthropic Serif','Iowan Old Style',Palatino,Georgia,serif',
+  'mono': ''Anthropic Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace',
+  'shadow': '0 1px 2px rgba(20,20,19,.04),0 8px 24px rgba(20,20,19,.05)'
+};

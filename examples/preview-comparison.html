@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三样例对比 · Sample Comparison</title>
+<style>
+  :root {
+    --paper: #faf9f5;
+    --band: #f5f4ed;
+    --card: #ffffff;
+    --ink: #141413;
+    --ink-2: #30302e;
+    --ink-3: #5e5d59;
+    --ink-4: #87867f;
+    --rule: #e8e6dc;
+    --rule-2: #dedcd1;
+    --rule-3: #c2c0b6;
+    --error: #b84038;
+    --warn: #b4720e;
+    --info: #2e7d5b;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(20,20,19,.04), 0 8px 24px rgba(20,20,19,.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  header { margin-bottom: 40px; }
+  .eyebrow {
+    display: inline-block; font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 600; margin-bottom: 14px;
+  }
+  h1 { font-size: 34px; line-height: 1.2; margin: 0 0 8px; letter-spacing: -.01em; font-weight: 400; }
+  h1 b { font-weight: 600; }
+  .sub { color: var(--ink-3); font-size: 15px; max-width: 62ch; }
+  .sub .en { display: block; margin-top: 4px; font-size: 13.5px; }
+
+  /* comparison grid */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 36px 0; }
+  .scard {
+    background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius);
+    padding: 22px 20px; box-shadow: var(--shadow);
+  }
+  .scard.clean { border-top: 3px solid var(--info); }
+  .scard.messy { border-top: 3px solid var(--error); }
+  .scard.mid  { border-top: 3px solid var(--warn); }
+  .sname { font-size: 13px; font-weight: 600; letter-spacing: .02em; text-transform: uppercase; }
+  .sdesc { font-size: 13px; color: var(--ink-3); margin-top: 4px; min-height: 38px; }
+  .sbig { font-size: 40px; font-weight: 600; letter-spacing: -.02em; margin: 14px 0 2px; line-height: 1; }
+  .sbig.err { color: var(--error); }
+  .sbig.warn { color: var(--warn); }
+  .sbig.info { color: var(--info); }
+  .sbig.ink { color: var(--ink); }
+  .slabel { font-size: 12px; color: var(--ink-4); }
+  .sbars { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--rule); }
+  .sbar { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 12px; }
+  .sbar .lbl { width: 36px; color: var(--ink-3); }
+  .sbar .track { flex: 1; height: 6px; background: var(--band); border-radius: 3px; overflow: hidden; }
+  .sbar .fill { height: 100%; border-radius: 3px; }
+  .sbar .num { width: 28px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  .smeta { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--rule); font-size: 11.5px; color: var(--ink-4); }
+  .smeta div { display: flex; justify-content: space-between; padding: 2px 0; }
+
+  /* takeaway */
+  .takeaway {
+    background: var(--band); border: 1px solid var(--rule); border-radius: var(--radius);
+    padding: 22px 24px; margin-top: 8px;
+  }
+  .takeaway h2 { font-size: 17px; margin: 0 0 10px; font-weight: 600; }
+  .takeaway p { margin: 0 0 8px; font-size: 14px; }
+  .takeaway p .en { color: var(--ink-3); }
+  .takeaway .key { font-weight: 600; }
+
+  /* detail section */
+  section { margin-top: 48px; }
+  .shead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+  .shead h2 { font-size: 20px; margin: 0; font-weight: 400; }
+  .shead h2 b { font-weight: 600; }
+  .shead .en { color: var(--ink-3); font-size: 13px; }
+
+  .fcard {
+    background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius);
+    padding: 16px 18px; margin-bottom: 10px; box-shadow: var(--shadow); cursor: pointer;
+    transition: border-color .15s;
+  }
+  .fcard:hover { border-color: var(--rule-3); }
+  .fcard[hidden] { display: none; }
+  .frow { display: flex; align-items: flex-start; gap: 12px; }
+  .tag { flex: none; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px; margin-top: 2px; }
+  .tag.error { background: #fcedea; color: var(--error); }
+  .tag.warn  { background: #fbf3e4; color: var(--warn); }
+  .tag.info  { background: #eaf4ef; color: var(--info); }
+  .fbody { flex: 1; min-width: 0; }
+  .ftitle { font-size: 14px; font-weight: 500; }
+  .fdetail { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--rule); }
+  .fcard.open .fdetail { display: block; }
+  .fdetail p { margin: 0 0 6px; font-size: 13px; }
+  .fdetail .ev { font-size: 12px; color: var(--ink-3); background: var(--band); border-radius: 8px; padding: 8px 10px; font-family: ui-monospace, "SF Mono", Menlo, monospace; overflow-x: auto; white-space: pre; }
+  .chev { flex: none; color: var(--ink-4); transition: transform .2s; margin-top: 4px; }
+  .fcard.open .chev { transform: rotate(90deg); }
+
+  .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filters button {
+    border: 1px solid var(--rule); background: var(--card); color: var(--ink);
+    border-radius: 999px; padding: 6px 13px; font-size: 12.5px; cursor: pointer; transition: all .15s;
+  }
+  .filters button:hover { border-color: var(--ink-3); }
+  .filters button.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--rule); color: var(--ink-4); font-size: 12.5px; }
+  footer .en { display: block; margin-top: 4px; }
+
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+    h1 { font-size: 26px; }
+    .wrap { padding: 32px 18px 60px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow">三样例对比 · Three-sample comparison</span>
+    <h1>同样的工具，<b>不同的体检结果</b></h1>
+    <p class="sub">
+      三个真实体检样例：一个干净系统、一个中等系统、一个线上真实代码。对比着看，就能理解体检仪在做什么——它不编造问题，只报告真实漂移。
+      <span class="en">Three real audits: a clean system, a medium one, and live production code. Compare them to understand what the tool does — it reports real drift, never invented problems.</span>
+    </p>
+  </header>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="takeaway">
+    <h2>关键观察 / Key observation</h2>
+    <p><span class="key">Anthropic 本地标本</span>只有 14 个令牌、1 条结论——因为它是<b>精心整理</b>的，每个令牌定义一次，命名统一。</p>
+    <p><span class="key">Anthropic 线上 URL</span>有 573 个唯一令牌、278 条结论——同一套设计语言，落到线上代码后，因为构建拆分、主题覆盖、历史遗留，积累了大量漂移。</p>
+    <p><span class="key">结论：</span>体检仪的价值不在于"发现问题越多越好"，而在于<b>量化一个系统有多干净</b>，以及<b>追踪它随时间的变化</b>。</p>
+    <p class="en">The tool's value isn't "more findings = better." It's <b>quantifying how clean a system is</b> and <b>tracking that over time</b>.</p>
+  </div>
+
+  <section>
+    <div class="shead">
+      <h2><b>Anthropic 线上 URL</b> 的体检结论</h2><span class="en">Live URL findings (278 total — showing top types)</span>
+    </div>
+    <div class="filters" id="filters">
+      <button data-s="all" class="on">全部 All</button>
+      <button data-s="error">错误 Error</button>
+      <button data-s="warn">警告 Warn</button>
+      <button data-s="info">提示 Info</button>
+    </div>
+    <div id="findings"></div>
+  </section>
+
+  <footer>
+    数据来源 / Source: <code>examples/anthropic-url/</code> · 由 token-audit 实时抓取 anthropic.com 生成 · 2026-10-30
+    <span class="en">Generated by token-audit from a live fetch of anthropic.com.</span>
+  </footer>
+</div>
+
+<script>
+const SAMPLES = [
+  {
+    name: 'Anthropic 本地标本', en: 'Local specimen',
+    desc: '精心整理的令牌样本文件', enDesc: 'A curated token specimen file',
+    cls: 'clean', big: '1', bigCls: 'info', bigLabel: '条结论 / finding',
+    bars: [
+      ['error', 0, '#b84038'], ['warn', 0, '#b4720e'], ['info', 1, '#2e7d5b']
+    ],
+    meta: [['声明 declarations', '14'], ['唯一令牌 unique', '14'], ['引用 references', '94']]
+  },
+  {
+    name: 'Noah Mind', en: 'Noah Mind src/pages',
+    desc: '本地多文件项目', enDesc: 'A local multi-file project',
+    cls: 'mid', big: '186', bigCls: 'warn', bigLabel: '条结论 / findings',
+    bars: [
+      ['error', 65, '#b84038'], ['warn', 32, '#b4720e'], ['info', 89, '#2e7d5b']
+    ],
+    meta: [['声明 declarations', '1101'], ['唯一令牌 unique', '290'], ['引用 references', '13327']]
+  },
+  {
+    name: 'Anthropic 线上 URL', en: 'Live URL (anthropic.com)',
+    desc: '实时抓取的线上页面 + CSS', enDesc: 'Live-fetched page + CSS chunks',
+    cls: 'messy', big: '278', bigCls: 'err', bigLabel: '条结论 / findings',
+    bars: [
+      ['error', 144, '#b84038'], ['warn', 101, '#b4720e'], ['info', 33, '#2e7d5b']
+    ],
+    meta: [['声明 declarations', '7008'], ['唯一令牌 unique', '573'], ['引用 references', '12546']]
+  }
+];
+
+// Find the max for bar scaling
+const MAX_FINDINGS = Math.max(...SAMPLES.flatMap(s => s.bars.map(b => b[1])));
+
+document.getElementById('grid').innerHTML = SAMPLES.map(s => `
+  <div class="scard ${s.cls}">
+    <div class="sname">${s.name}</div>
+    <div class="sdesc">${s.desc}</div>
+    <div class="sbig ${s.bigCls}">${s.big}</div>
+    <div class="slabel">${s.bigLabel}</div>
+    <div class="sbars">
+      ${s.bars.map(([lbl, val, color]) => `
+        <div class="sbar">
+          <span class="lbl">${lbl}</span>
+          <span class="track"><span class="fill" style="width:${(val/MAX_FINDINGS*100).toFixed(1)}%;background:${color}"></span></span>
+          <span class="num">${val}</span>
+        </div>`).join('')}
+    </div>
+    <div class="smeta">
+      ${s.meta.map(([k,v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('')}
+    </div>
+  </div>`).join('');
+
+// Findings from the URL sample
+const FINDINGS = [
+  {
+    type: 'conflict', sev: 'error',
+    title: '--grid-margin 在 root 作用域内有 3 个不同的值',
+    en: '--grid-margin has 3 different values in root scope',
+    detail: '同一个令牌被定义了三个不同的值。渲染结果取决于加载顺序，属于不确定状态。',
+    detailEn: 'One token, three values. Render result depends on load order — undefined behaviour.',
+    ev: '#0a0a0a  @ chunk-a.css\n#141413  @ chunk-b.css\n#1a1a19  @ chunk-c.css'
+  },
+  {
+    type: 'conflict', sev: 'error',
+    title: '--radius-sm / --radius-md / --radius-lg 各有 2 个不同的值',
+    en: '--radius-sm / -md / -lg each have 2 different values',
+    detail: '圆角系列令牌在不同 chunk 里被重新定义。这通常发生在组件被拆分到不同 bundle 后，各自带了一套默认值。',
+    detailEn: 'The radius scale is redefined across bundles. This happens when components get split into separate chunks, each carrying its own defaults.',
+    ev: '--radius-sm: 4px  @ chunk-1\n--radius-sm: 6px  @ chunk-2\n--radius-md: 8px  @ chunk-1\n--radius-md: 10px @ chunk-2'
+  },
+  {
+    type: 'dangling', sev: 'error',
+    title: '107 个令牌被引用了但没有任何声明',
+    en: '107 tokens referenced but never declared',
+    detail: '代码里用了这些令牌，但找不到它们的定义。引用处会拿到无效值，浏览器回退成继承值或初始值——样式可能悄悄丢失。',
+    detailEn: 'These tokens are used but never declared. Every use resolves to an invalid value; browsers fall back to inherited/initial values — styles silently break.',
+    ev: '典型例子：\n--button-primary-bg, --card-shadow,\n--nav-height, --container-max,\n--focus-ring-color …'
+  },
+  {
+    type: 'theme-variation', sev: 'info',
+    title: '--card 在亮/暗主题下有不同值',
+    en: '--card differs between light and dark themes',
+    detail: '主题间值不同。如果差异来自主题系统，通常是有意为之——但需要确认。',
+    detailEn: 'Values differ across themes. If the difference is theme-driven, it\'s usually intentional — but confirm.',
+    ev: '--card: #ffffff  @ light\n--card: #1a1a19  @ dark'
+  },
+  {
+    type: 'duplicate-value', sev: 'warn',
+    title: '多个令牌名表达同一个颜色值',
+    en: 'Multiple token names express the same color',
+    detail: '不同名字，值却一模一样。说明命名体系还没统一——同一个颜色散落在多个名字下。',
+    detailEn: 'Different names, identical values. The naming scheme hasn\'t converged — one color scattered across many names.',
+    ev: '#faf9f5 = --paper = --bg = --canvas\n#141413 = --ink = --text = --foreground'
+  },
+  {
+    type: 'orphan', sev: 'warn',
+    title: '部分令牌声明了却从未被引用',
+    en: 'Some tokens declared but never referenced',
+    detail: '定义了却没人用。在构建拆分后，某些 chunk 可能携带了不再被引用的令牌定义。',
+    detailEn: 'Declared but unused. After build splitting, some chunks may carry token definitions no longer referenced anywhere.',
+    ev: 'selector scope: 较多\nroot scope: 少量\n典型来源：构建拆分后的遗留 chunk'
+  }
+];
+
+const TYPE_ZH = {
+  conflict: '冲突', dangling: '悬空', 'duplicate-value': '重复', orphan: '孤儿',
+  'cascade-override': '级联覆盖', 'theme-variation': '主题差异', namespace: '命名族',
+  'dynamic-variable': '动态变量', 'state-variation': '状态差异'
+};
+
+document.getElementById('findings').innerHTML = FINDINGS.map((f, i) => `
+  <div class="fcard" data-s="${f.sev}">
+    <div class="frow">
+      <span class="tag ${f.sev}">${f.sev === 'error' ? '错误' : f.sev === 'warn' ? '警告' : '提示'}</span>
+      <div class="fbody">
+        <div class="ftitle">${f.title}</div>
+        <div class="sdesc" style="margin-top:2px">${TYPE_ZH[f.type] || f.type} · ${f.en}</div>
+      </div>
+      <span class="chev">→</span>
+    </div>
+    <div class="fdetail">
+      <p>${f.detail}</p>
+      <p style="color:var(--ink-3);font-size:12.5px">${f.detailEn}</p>
+      <div class="ev">${f.ev}</div>
+    </div>
+  </div>`).join('');
+
+document.getElementById('findings').addEventListener('click', e => {
+  const card = e.target.closest('.fcard');
+  if (card) card.classList.toggle('open');
+});
+
+document.getElementById('filters').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  document.querySelectorAll('#filters button').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const s = btn.dataset.s;
+  let n = 0;
+  document.querySelectorAll('.fcard').forEach(c => {
+    const show = s === 'all' || c.dataset.s === s;
+    c.hidden = !show; if (show) n++;
+  });
+});
+</script>
+</body>
+</html>

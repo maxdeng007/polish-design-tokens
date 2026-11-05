@@ -1,0 +1,1168 @@
+{
+  "$extensions": {
+    "design-tokens/v1": {
+      "id": "38b37969-a72c-3183-525e-98ca63ea743f3fe15777184e72a4d33d0b2c1e825579",
+      "generated": "2026-10-30T03:51:52.815Z"
+    }
+  },
+  "$nm-gut": {
+    "$value": "clamp(20px, 4.6vw, 64px)",
+    "$type": "unknown"
+  },
+  "$nm-container": {
+    "$value": "1440px",
+    "$type": "unknown"
+  },
+  "$bg": {
+    "$value": "#102a43",
+    "$type": "color"
+  },
+  "$bg-2": {
+    "$value": "#0d253d",
+    "$type": "color"
+  },
+  "$bg-3": {
+    "$value": "#12345c",
+    "$type": "color"
+  },
+  "$card": {
+    "$value": "#1b456a",
+    "$type": "unknown"
+  },
+  "$ink": {
+    "$value": "#f7fbff",
+    "$type": "unknown"
+  },
+  "$muted": {
+    "$value": "#a9bdd3",
+    "$type": "unknown"
+  },
+  "$line": {
+    "$value": "rgba(41, 168, 255, 0.28)",
+    "$type": "unknown"
+  },
+  "$wine": {
+    "$value": "#ff6900",
+    "$type": "unknown"
+  },
+  "$wine-soft": {
+    "$value": "rgba(255,105,0,.14)",
+    "$type": "unknown"
+  },
+  "$gold": {
+    "$value": "#E05800",
+    "$type": "unknown"
+  },
+  "$green": {
+    "$value": "#10b981",
+    "$type": "unknown"
+  },
+  "$green-soft": {
+    "$value": "rgba(16, 185, 129, 0.1)",
+    "$type": "unknown"
+  },
+  "$red": {
+    "$value": "#f87171",
+    "$type": "unknown"
+  },
+  "$red-soft": {
+    "$value": "rgba(248, 113, 113, 0.12)",
+    "$type": "unknown"
+  },
+  "$amber": {
+    "$value": "#f59e0b",
+    "$type": "unknown"
+  },
+  "$amber-soft": {
+    "$value": "rgba(245, 158, 11, 0.12)",
+    "$type": "unknown"
+  },
+  "$blue": {
+    "$value": "#29a8ff",
+    "$type": "unknown"
+  },
+  "$blue-soft": {
+    "$value": "rgba(41,168,255,.14)",
+    "$type": "unknown"
+  },
+  "$purple": {
+    "$value": "#6A4F92",
+    "$type": "unknown"
+  },
+  "$purple-soft": {
+    "$value": "#F2EDFA",
+    "$type": "unknown"
+  },
+  "$radius": {
+    "$value": "11px",
+    "$type": "borderRadius"
+  },
+  "$sh": {
+    "$value": "0 2px 5px rgba(30,37,47,.025)",
+    "$type": "unknown"
+  },
+  "$sans": {
+    "$value": "-apple-system,BlinkMacSystemFont,\"PingFang SC\",\"Hiragino Sans GB\",\"Microsoft YaHei\",\"Segoe UI\",sans-serif",
+    "$type": "unknown"
+  },
+  "$font-wordmark": {
+    "$value": "\"wordmarkFont\",\"wordmarkFont Fallback\"",
+    "$type": "typography"
+  },
+  "$font-manrope": {
+    "$value": "\"manropeFont\",\"manropeFont Fallback\"",
+    "$type": "typography"
+  },
+  "$side": {
+    "$value": "#0D253D",
+    "$type": "unknown"
+  },
+  "$me": {
+    "$value": "#FF6900",
+    "$type": "unknown"
+  },
+  "$ev-seat-color": {
+    "$value": "#EF4444",
+    "$type": "color"
+  },
+  "$ev-seat-track": {
+    "$value": "rgba(239,68,68,.18)",
+    "$type": "unknown"
+  },
+  "$persona-bg": {
+    "$value": "none",
+    "$type": "color"
+  },
+  "$ch-space-xs": {
+    "$value": "8px",
+    "$type": "dimension"
+  },
+  "$ch-space-sm": {
+    "$value": "12px",
+    "$type": "dimension"
+  },
+  "$ch-space-md": {
+    "$value": "20px",
+    "$type": "dimension"
+  },
+  "$ch-space-lg": {
+    "$value": "26px",
+    "$type": "dimension"
+  },
+  "$ch-space-xl": {
+    "$value": "40px",
+    "$type": "dimension"
+  },
+  "$skeleton-base": {
+    "$value": "#214e70",
+    "$type": "unknown"
+  },
+  "$skeleton-highlight": {
+    "$value": "#3b7397",
+    "$type": "unknown"
+  },
+  "$skeleton-panel": {
+    "$value": "#153d5d",
+    "$type": "unknown"
+  },
+  "$skeleton-cover": {
+    "$value": "#123650",
+    "$type": "unknown"
+  },
+  "$skeleton-border": {
+    "$value": "rgba(79,157,207,.26)",
+    "$type": "color"
+  },
+  "$bg2": {
+    "$value": "#f8f7f4",
+    "$type": "color"
+  },
+  "$text": {
+    "$value": "#2b2620",
+    "$type": "color"
+  },
+  "$orange": {
+    "$value": "#f47a38",
+    "$type": "unknown"
+  },
+  "$product-motion-fast": {
+    "$value": "120ms",
+    "$type": "unknown"
+  },
+  "$product-motion-medium": {
+    "$value": "260ms",
+    "$type": "unknown"
+  },
+  "$product-ease-out": {
+    "$value": "cubic-bezier(.25,1,.5,1)",
+    "$type": "unknown"
+  },
+  "$product-inset-surface": {
+    "$value": "color-mix(in srgb,#12345C 54%,#0D253D)",
+    "$type": "unknown"
+  },
+  "$product-panel-radius": {
+    "$value": "14px",
+    "$type": "borderRadius"
+  },
+  "$product-inset-radius": {
+    "$value": "10px",
+    "$type": "borderRadius"
+  },
+  "$product-text-caption": {
+    "$value": ".65625rem",
+    "$type": "color"
+  },
+  "$product-text-supporting": {
+    "$value": ".75rem",
+    "$type": "color"
+  },
+  "$product-text-body": {
+    "$value": ".8125rem",
+    "$type": "color"
+  },
+  "$panel": {
+    "$value": "#fff",
+    "$type": "unknown"
+  },
+  "$accent": {
+    "$value": "#e05800",
+    "$type": "unknown"
+  },
+  "$csm-red": {
+    "$value": "#FF7B72",
+    "$type": "unknown"
+  },
+  "$csm-red-soft": {
+    "$value": "rgba(255,123,114,.14)",
+    "$type": "unknown"
+  },
+  "$csm-neutral": {
+    "$value": "#8F8A80",
+    "$type": "unknown"
+  },
+  "$csm-neutral-soft": {
+    "$value": "#12345C",
+    "$type": "unknown"
+  },
+  "$csm-lead": {
+    "$value": "#1F5BFF",
+    "$type": "unknown"
+  },
+  "$csm-lead-soft": {
+    "$value": "#EAF0FF",
+    "$type": "unknown"
+  },
+  "$csm-toact": {
+    "$value": "#B4720E",
+    "$type": "unknown"
+  },
+  "$csm-toact-soft": {
+    "$value": "#FBF3E4",
+    "$type": "unknown"
+  },
+  "$csm-active": {
+    "$value": "#2E7D5B",
+    "$type": "unknown"
+  },
+  "$csm-active-soft": {
+    "$value": "rgba(16,185,129,.14)",
+    "$type": "unknown"
+  },
+  "$csm-high": {
+    "$value": "#F6C453",
+    "$type": "unknown"
+  },
+  "$csm-high-soft": {
+    "$value": "rgba(246,196,83,.14)",
+    "$type": "unknown"
+  },
+  "$csm-text-2": {
+    "$value": "#A9BDD3",
+    "$type": "color"
+  },
+  "$csm-accent-ink": {
+    "$value": "#F25E00",
+    "$type": "unknown"
+  },
+  "$csm-field": {
+    "$value": "#FFFFFF",
+    "$type": "unknown"
+  },
+  "$csm-hover": {
+    "$value": "#12345C",
+    "$type": "unknown"
+  },
+  "$csm-th": {
+    "$value": "#0D253D",
+    "$type": "unknown"
+  },
+  "$csm-row-hover": {
+    "$value": "#12345C",
+    "$type": "unknown"
+  },
+  "$csm-track": {
+    "$value": "#12345C",
+    "$type": "unknown"
+  },
+  "$csm-line-2": {
+    "$value": "#EAE6DF",
+    "$type": "unknown"
+  },
+  "$csm-stripe": {
+    "$value": "#12345C",
+    "$type": "unknown"
+  },
+  "$csm-hover-border": {
+    "$value": "#1F5BFF",
+    "$type": "color"
+  },
+  "$csm-hover-shadow": {
+    "$value": "0 0 28px rgba(41,168,255,.18)",
+    "$type": "unknown"
+  },
+  "$csm-active-shadow": {
+    "$value": "0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14)",
+    "$type": "unknown"
+  },
+  "$csm-pick-shadow": {
+    "$value": "0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14)",
+    "$type": "unknown"
+  },
+  "$csm-act-hover": {
+    "$value": "#F25E00",
+    "$type": "unknown"
+  },
+  "$csm-warn-border": {
+    "$value": "#F25E00",
+    "$type": "color"
+  },
+  "$csm-tier-family": {
+    "$value": "#B79BE0",
+    "$type": "typography"
+  },
+  "$csm-tier-family-bg": {
+    "$value": "rgba(183,155,224,.14)",
+    "$type": "color"
+  },
+  "$csm-tier-family-ink": {
+    "$value": "#B79BE0",
+    "$type": "typography"
+  },
+  "$csm-tier-black": {
+    "$value": "#8F8A80",
+    "$type": "unknown"
+  },
+  "$csm-tier-black-bg": {
+    "$value": "#12345C",
+    "$type": "color"
+  },
+  "$csm-tier-black-ink": {
+    "$value": "#2B2620",
+    "$type": "unknown"
+  },
+  "$csm-tier-diamond": {
+    "$value": "#EAE6DF",
+    "$type": "unknown"
+  },
+  "$csm-tier-diamond-bg": {
+    "$value": "#EAF0FF",
+    "$type": "color"
+  },
+  "$csm-tier-diamond-ink": {
+    "$value": "#1F5BFF",
+    "$type": "unknown"
+  },
+  "$csm-tier-gold": {
+    "$value": "#F6C453",
+    "$type": "unknown"
+  },
+  "$csm-tier-gold-bg": {
+    "$value": "rgba(246,196,83,.14)",
+    "$type": "color"
+  },
+  "$csm-tier-gold-ink": {
+    "$value": "#F6C453",
+    "$type": "unknown"
+  },
+  "$csm-tier-ivory": {
+    "$value": "#EAE6DF",
+    "$type": "unknown"
+  },
+  "$csm-tier-ivory-bg": {
+    "$value": "#0D253D",
+    "$type": "color"
+  },
+  "$csm-tier-ivory-ink": {
+    "$value": "#A9BDD3",
+    "$type": "unknown"
+  },
+  "$csm-tone": {
+    "$value": "#F6C453",
+    "$type": "unknown"
+  },
+  "$csm-tone-soft": {
+    "$value": "rgba(246,196,83,.14)",
+    "$type": "unknown"
+  },
+  "$crec-radius": {
+    "$value": "18px",
+    "$type": "borderRadius"
+  },
+  "$muted-2": {
+    "$value": "#A9BDD3",
+    "$type": "unknown"
+  },
+  "$line-2": {
+    "$value": "rgba(41,168,255,.16)",
+    "$type": "unknown"
+  },
+  "$grad-orange": {
+    "$value": "linear-gradient(135deg,#FF6900,#FF6900)",
+    "$type": "unknown"
+  },
+  "$grad-purple": {
+    "$value": "linear-gradient(135deg,#29A8FF,#29A8FF)",
+    "$type": "unknown"
+  },
+  "$grad-brand": {
+    "$value": "linear-gradient(135deg,#FF6900,#29A8FF)",
+    "$type": "unknown"
+  },
+  "$glow-orange": {
+    "$value": "0 0 32px rgba(255,105,0,.14)",
+    "$type": "unknown"
+  },
+  "$glow-purple": {
+    "$value": "0 0 28px rgba(41,168,255,.18)",
+    "$type": "unknown"
+  },
+  "$product-detail-dark-surface": {
+    "$value": "color-mix(in srgb,#FFFFFF 64%,#0D253D)",
+    "$type": "unknown"
+  },
+  "$surface": {
+    "$value": "#F7F3ED",
+    "$type": "unknown"
+  },
+  "$card2": {
+    "$value": "#FFFFFF",
+    "$type": "unknown"
+  },
+  "$ink2": {
+    "$value": "#5C5C5C",
+    "$type": "unknown"
+  },
+  "$ink3": {
+    "$value": "#8F8A80",
+    "$type": "unknown"
+  },
+  "$goldline": {
+    "$value": "#E05800",
+    "$type": "unknown"
+  },
+  "$goldbg": {
+    "$value": "#FFF0E4",
+    "$type": "color"
+  },
+  "$ok": {
+    "$value": "#2E7D5B",
+    "$type": "unknown"
+  },
+  "$warn": {
+    "$value": "#B4720E",
+    "$type": "unknown"
+  },
+  "$crit": {
+    "$value": "#E04545",
+    "$type": "unknown"
+  },
+  "$lock": {
+    "$value": "#8F8A80",
+    "$type": "unknown"
+  },
+  "$a1": {
+    "$value": "#5B6FA8",
+    "$type": "unknown"
+  },
+  "$a2": {
+    "$value": "#805AD5",
+    "$type": "unknown"
+  },
+  "$a3": {
+    "$value": "#E05800",
+    "$type": "unknown"
+  },
+  "$p0": {
+    "$value": "#E04545",
+    "$type": "unknown"
+  },
+  "$p1": {
+    "$value": "#E87050",
+    "$type": "unknown"
+  },
+  "$p2": {
+    "$value": "#D4A537",
+    "$type": "unknown"
+  },
+  "$p3": {
+    "$value": "#5B6FA8",
+    "$type": "unknown"
+  },
+  "$p4": {
+    "$value": "#8F8A80",
+    "$type": "unknown"
+  },
+  "$ch-whatsapp": {
+    "$value": "#5B8A55",
+    "$type": "unknown"
+  },
+  "$ch-email": {
+    "$value": "#5B6FA8",
+    "$type": "unknown"
+  },
+  "$ch-wechat": {
+    "$value": "#805AD5",
+    "$type": "unknown"
+  },
+  "$ch-sms": {
+    "$value": "#D4A537",
+    "$type": "unknown"
+  },
+  "$s1": {
+    "$value": "#2a78d6",
+    "$type": "unknown"
+  },
+  "$s2": {
+    "$value": "#eb6834",
+    "$type": "unknown"
+  },
+  "$s3": {
+    "$value": "#1baf7a",
+    "$type": "unknown"
+  },
+  "$s4": {
+    "$value": "#eda100",
+    "$type": "unknown"
+  },
+  "$s5": {
+    "$value": "#e87ba4",
+    "$type": "unknown"
+  },
+  "$s6": {
+    "$value": "#008300",
+    "$type": "unknown"
+  },
+  "$s7": {
+    "$value": "#4a3aa7",
+    "$type": "unknown"
+  },
+  "$lineink": {
+    "$value": "#5B6FA8",
+    "$type": "unknown"
+  },
+  "$serif": {
+    "$value": "-apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+    "$type": "unknown"
+  },
+  "$mono": {
+    "$value": "\"SF Mono\",ui-monospace,Menlo,Consolas,monospace",
+    "$type": "unknown"
+  },
+  "$r": {
+    "$value": "8px",
+    "$type": "unknown"
+  },
+  "$rs": {
+    "$value": "6px",
+    "$type": "unknown"
+  },
+  "$toolbar-control-height": {
+    "$value": "34px",
+    "$type": "dimension"
+  },
+  "$compact-tag-height": {
+    "$value": "20px",
+    "$type": "dimension"
+  },
+  "$compact-tag-font-size": {
+    "$value": "10.5px",
+    "$type": "dimension"
+  },
+  "$compact-tag-pad-x": {
+    "$value": "8px",
+    "$type": "unknown"
+  },
+  "$compact-tag-gap": {
+    "$value": "8px",
+    "$type": "unknown"
+  },
+  "$tag-copy-gap": {
+    "$value": "10px",
+    "$type": "unknown"
+  },
+  "$bg-main": {
+    "$value": "hsl(42,22%,96.5%)",
+    "$type": "color"
+  },
+  "$bg-300": {
+    "$value": "hsl(42,15%,92%)",
+    "$type": "color"
+  },
+  "$bg-input": {
+    "$value": "#ffffff",
+    "$type": "color"
+  },
+  "$bg-hover": {
+    "$value": "hsl(42,14%,90%)",
+    "$type": "color"
+  },
+  "$brand": {
+    "$value": "hsl(14.8,55%,48%)",
+    "$type": "unknown"
+  },
+  "$text-0": {
+    "$value": "hsl(40,8%,12%)",
+    "$type": "color"
+  },
+  "$text-1": {
+    "$value": "hsl(40,6%,28%)",
+    "$type": "color"
+  },
+  "$text-2": {
+    "$value": "hsl(40,5%,52%)",
+    "$type": "color"
+  },
+  "$text-3": {
+    "$value": "hsl(40,5%,36%)",
+    "$type": "color"
+  },
+  "$border": {
+    "$value": "hsl(42,12%,85%)",
+    "$type": "color"
+  },
+  "$font-serif": {
+    "$value": "Georgia,\"Times New Roman\",serif",
+    "$type": "typography"
+  },
+  "$font-sans": {
+    "$value": "system-ui,-apple-system,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif",
+    "$type": "typography"
+  },
+  "$sidebar-w": {
+    "$value": "288px",
+    "$type": "unknown"
+  },
+  "$task-bg": {
+    "$value": "#f5f3ee",
+    "$type": "color"
+  },
+  "$task-panel": {
+    "$value": "#fff",
+    "$type": "unknown"
+  },
+  "$task-side": {
+    "$value": "#fbfaf7",
+    "$type": "unknown"
+  },
+  "$task-border": {
+    "$value": "#eae6dd",
+    "$type": "color"
+  },
+  "$task-border-strong": {
+    "$value": "#efcfb8",
+    "$type": "color"
+  },
+  "$task-ink": {
+    "$value": "#211e19",
+    "$type": "unknown"
+  },
+  "$task-text": {
+    "$value": "#575144",
+    "$type": "color"
+  },
+  "$task-muted": {
+    "$value": "#8b8578",
+    "$type": "unknown"
+  },
+  "$task-faint": {
+    "$value": "#b3ada0",
+    "$type": "unknown"
+  },
+  "$task-orange": {
+    "$value": "#ff6900",
+    "$type": "unknown"
+  },
+  "$task-orange-soft": {
+    "$value": "#fff1e6",
+    "$type": "unknown"
+  },
+  "$stack-pad": {
+    "$value": "0px",
+    "$type": "unknown"
+  },
+  "$holding-action-gradient": {
+    "$value": "linear-gradient(135deg, #ff8a00 0%, #ff6900 52%, #ff4f00 100%)",
+    "$type": "unknown"
+  },
+  "$holding-action-gradient-hover": {
+    "$value": "linear-gradient(135deg, #ff9a1f 0%, #ff7214 48%, #f05a00 100%)",
+    "$type": "unknown"
+  },
+  "$line2": {
+    "$value": "#DDD7CD",
+    "$type": "unknown"
+  },
+  "$mut": {
+    "$value": "#8F8A80",
+    "$type": "unknown"
+  },
+  "$dim": {
+    "$value": "#A9A298",
+    "$type": "unknown"
+  },
+  "$org": {
+    "$value": "#D45400",
+    "$type": "unknown"
+  },
+  "$blu": {
+    "$value": "#2F6FD0",
+    "$type": "unknown"
+  },
+  "$pur": {
+    "$value": "#7B5BD0",
+    "$type": "unknown"
+  },
+  "$grn": {
+    "$value": "#2E7D5B",
+    "$type": "unknown"
+  },
+  "$yel": {
+    "$value": "#D9A62B",
+    "$type": "unknown"
+  },
+  "$pnk": {
+    "$value": "#C2557E",
+    "$type": "unknown"
+  },
+  "$cyn": {
+    "$value": "#1F8A9E",
+    "$type": "unknown"
+  },
+  "$v2-navy": {
+    "$value": "#0B1724",
+    "$type": "unknown"
+  },
+  "$v2-or": {
+    "$value": "#E4762F",
+    "$type": "unknown"
+  },
+  "$v2-or2": {
+    "$value": "#FF9A4D",
+    "$type": "unknown"
+  },
+  "$v2-or-soft": {
+    "$value": "#FFF1E8",
+    "$type": "unknown"
+  },
+  "$v2-ink": {
+    "$value": "#16202B",
+    "$type": "unknown"
+  },
+  "$v2-sub": {
+    "$value": "#6B7685",
+    "$type": "unknown"
+  },
+  "$v2-line": {
+    "$value": "#E6EAF0",
+    "$type": "unknown"
+  },
+  "$v2-soft": {
+    "$value": "#F7F9FB",
+    "$type": "unknown"
+  },
+  "$v2-green": {
+    "$value": "#12945F",
+    "$type": "unknown"
+  },
+  "$v2-green-soft": {
+    "$value": "#E6F6EE",
+    "$type": "unknown"
+  },
+  "$v2-red": {
+    "$value": "#E02B2B",
+    "$type": "unknown"
+  },
+  "$v2-red-soft": {
+    "$value": "#FDECEC",
+    "$type": "unknown"
+  },
+  "$v2-amber": {
+    "$value": "#C27A10",
+    "$type": "unknown"
+  },
+  "$v2-amber-soft": {
+    "$value": "#FFF5E1",
+    "$type": "unknown"
+  },
+  "$v2-blue": {
+    "$value": "#1F5BFF",
+    "$type": "unknown"
+  },
+  "$v2-blue-soft": {
+    "$value": "#EAF0FF",
+    "$type": "unknown"
+  },
+  "$v2-violet": {
+    "$value": "#7B4FE0",
+    "$type": "unknown"
+  },
+  "$v2-violet-soft": {
+    "$value": "#F2EDFF",
+    "$type": "unknown"
+  },
+  "$hr-bg": {
+    "$value": "#fbfaf7",
+    "$type": "color"
+  },
+  "$hr-panel": {
+    "$value": "#fff",
+    "$type": "unknown"
+  },
+  "$hr-nested": {
+    "$value": "#fff",
+    "$type": "unknown"
+  },
+  "$hr-line": {
+    "$value": "#e5e1d8",
+    "$type": "unknown"
+  },
+  "$hr-line-strong": {
+    "$value": "#d6cfbf",
+    "$type": "unknown"
+  },
+  "$hr-ink": {
+    "$value": "#1c1c1c",
+    "$type": "unknown"
+  },
+  "$hr-text": {
+    "$value": "#4a4a4a",
+    "$type": "color"
+  },
+  "$hr-muted": {
+    "$value": "#8a8478",
+    "$type": "unknown"
+  },
+  "$hr-brand": {
+    "$value": "#8b2c1d",
+    "$type": "unknown"
+  },
+  "$hr-brand-soft": {
+    "$value": "#f6efe6",
+    "$type": "unknown"
+  },
+  "$hr-green": {
+    "$value": "#4a7c59",
+    "$type": "unknown"
+  },
+  "$hr-red": {
+    "$value": "#a05050",
+    "$type": "unknown"
+  },
+  "$hr-gold": {
+    "$value": "#b08a4c",
+    "$type": "unknown"
+  },
+  "$hr-shadow": {
+    "$value": "0 1px 2px rgba(28,28,28,.04),0 4px 16px rgba(28,28,28,.04)",
+    "$type": "unknown"
+  },
+  "$nm-color-bg": {
+    "$value": "#f8f7f4",
+    "$type": "color"
+  },
+  "$nm-color-surface": {
+    "$value": "#fff",
+    "$type": "color"
+  },
+  "$nm-color-text": {
+    "$value": "#2b2620",
+    "$type": "color"
+  },
+  "$nm-color-text-secondary": {
+    "$value": "#8f8a80",
+    "$type": "color"
+  },
+  "$nm-color-border": {
+    "$value": "#eae6df",
+    "$type": "color"
+  },
+  "$nm-color-brand-fill": {
+    "$value": "#f25e00",
+    "$type": "color"
+  },
+  "$nm-color-brand-accent": {
+    "$value": "#e05800",
+    "$type": "color"
+  },
+  "$nm-color-on-brand": {
+    "$value": "#ffffff",
+    "$type": "color"
+  },
+  "$nm-color-success": {
+    "$value": "#10b981",
+    "$type": "color"
+  },
+  "$nm-color-success-soft": {
+    "$value": "rgba(16, 185, 129, 0.1)",
+    "$type": "color"
+  },
+  "$nm-color-warning": {
+    "$value": "#f59e0b",
+    "$type": "color"
+  },
+  "$nm-color-warning-soft": {
+    "$value": "rgba(245, 158, 11, 0.12)",
+    "$type": "color"
+  },
+  "$nm-color-danger": {
+    "$value": "#f87171",
+    "$type": "color"
+  },
+  "$nm-color-danger-soft": {
+    "$value": "rgba(248, 113, 113, 0.12)",
+    "$type": "color"
+  },
+  "$nm-color-brand-fill-hover": {
+    "$value": "#ff6900",
+    "$type": "color"
+  },
+  "$nm-color-on-brand-track": {
+    "$value": "rgba(255, 255, 255, 0.35)",
+    "$type": "color"
+  },
+  "$nm-shadow-brand": {
+    "$value": "0 4px 16px -4px rgba(255, 105, 0, 0.3)",
+    "$type": "unknown"
+  },
+  "$nm-shadow-brand-hover": {
+    "$value": "0 6px 24px -4px rgba(255, 105, 0, 0.45)",
+    "$type": "unknown"
+  },
+  "$nm-shadow-card": {
+    "$value": "0 1px 1px rgba(90,70,45,.03),0 3px 8px -4px rgba(90,70,45,.05),0 26px 54px -40px rgba(90,70,45,.22)",
+    "$type": "unknown"
+  },
+  "$nm-opacity-disabled": {
+    "$value": "0.4",
+    "$type": "unknown"
+  },
+  "$nm-opacity-loading": {
+    "$value": "0.92",
+    "$type": "unknown"
+  },
+  "$nm-radius-button": {
+    "$value": "6px",
+    "$type": "borderRadius"
+  },
+  "$nm-background-button": {
+    "$value": "#ef6815",
+    "$type": "unknown"
+  },
+  "$nm-background-button-hover": {
+    "$value": "#ff6900",
+    "$type": "unknown"
+  },
+  "$nm-radius-sm": {
+    "$value": "4px",
+    "$type": "borderRadius"
+  },
+  "$nm-radius-md": {
+    "$value": "6px",
+    "$type": "borderRadius"
+  },
+  "$nm-radius-lg": {
+    "$value": "11px",
+    "$type": "borderRadius"
+  },
+  "$nm-radius-modal": {
+    "$value": "10px",
+    "$type": "borderRadius"
+  },
+  "$nm-radius-pill": {
+    "$value": "999px",
+    "$type": "borderRadius"
+  },
+  "$nm-space-1": {
+    "$value": "2px",
+    "$type": "dimension"
+  },
+  "$nm-space-2": {
+    "$value": "4px",
+    "$type": "dimension"
+  },
+  "$nm-space-3": {
+    "$value": "8px",
+    "$type": "dimension"
+  },
+  "$nm-space-4": {
+    "$value": "12px",
+    "$type": "dimension"
+  },
+  "$nm-space-5": {
+    "$value": "16px",
+    "$type": "dimension"
+  },
+  "$nm-space-6": {
+    "$value": "24px",
+    "$type": "dimension"
+  },
+  "$nm-space-7": {
+    "$value": "32px",
+    "$type": "dimension"
+  },
+  "$nm-font-sans": {
+    "$value": "-apple-system,\"PingFang SC\",\"Microsoft YaHei\",sans-serif",
+    "$type": "typography"
+  },
+  "$nm-font-number": {
+    "$value": "'Space Grotesk', 'Manrope', ui-sans-serif, system-ui,\n    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,\n    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+    "$type": "typography"
+  },
+  "$nm-font-size-eyebrow": {
+    "$value": "12px",
+    "$type": "dimension"
+  },
+  "$nm-line-height-eyebrow": {
+    "$value": "1.4",
+    "$type": "dimension"
+  },
+  "$nm-font-size-subtitle": {
+    "$value": "16px",
+    "$type": "dimension"
+  },
+  "$nm-line-height-subtitle": {
+    "$value": "1.5",
+    "$type": "dimension"
+  },
+  "$nm-font-size-title": {
+    "$value": "28px",
+    "$type": "dimension"
+  },
+  "$nm-line-height-title": {
+    "$value": "1.35",
+    "$type": "dimension"
+  },
+  "$nm-font-size-title-narrow": {
+    "$value": "24px",
+    "$type": "dimension"
+  },
+  "$nm-line-height-title-narrow": {
+    "$value": "1.3",
+    "$type": "dimension"
+  },
+  "$btn": {
+    "$value": "#ff6900",
+    "$type": "unknown"
+  },
+  "$font": {
+    "$value": "'Manrope', ui-sans-serif, system-ui,\n    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,\n    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+    "$type": "typography"
+  },
+  "$np-ink": {
+    "$value": "#2B2620",
+    "$type": "unknown"
+  },
+  "$np-muted": {
+    "$value": "#8F8A80",
+    "$type": "unknown"
+  },
+  "$np-line": {
+    "$value": "#EAE6DF",
+    "$type": "unknown"
+  },
+  "$np-card": {
+    "$value": "#FFFFFF",
+    "$type": "unknown"
+  },
+  "$np-orange": {
+    "$value": "#F25E00",
+    "$type": "unknown"
+  },
+  "$np-orange-soft": {
+    "$value": "#FFF0E4",
+    "$type": "unknown"
+  },
+  "$np-green": {
+    "$value": "#2E7D5B",
+    "$type": "unknown"
+  },
+  "$np-green-soft": {
+    "$value": "#EAF4EF",
+    "$type": "unknown"
+  },
+  "$np-amber": {
+    "$value": "#B4720E",
+    "$type": "unknown"
+  },
+  "$np-amber-soft": {
+    "$value": "#FBF3E4",
+    "$type": "unknown"
+  },
+  "$np-gray": {
+    "$value": "#8F8A80",
+    "$type": "unknown"
+  },
+  "$np-gray-soft": {
+    "$value": "#F3F1EC",
+    "$type": "unknown"
+  },
+  "$np-red": {
+    "$value": "#B84038",
+    "$type": "unknown"
+  },
+  "$np-red-soft": {
+    "$value": "#FCEDEA",
+    "$type": "unknown"
+  },
+  "$soft": {
+    "$value": "#fff1e6",
+    "$type": "unknown"
+  },
+  "$sidebar": {
+    "$value": "64px",
+    "$type": "unknown"
+  },
+  "$nb-gut": {
+    "$value": "max(26px,calc((100% - 1228px) / 2))",
+    "$type": "unknown"
+  },
+  "$navy": {
+    "$value": "#0B1724",
+    "$type": "unknown"
+  },
+  "$or": {
+    "$value": "#E4762F",
+    "$type": "unknown"
+  },
+  "$or2": {
+    "$value": "#FF9A4D",
+    "$type": "unknown"
+  },
+  "$or-soft": {
+    "$value": "#FFF1E8",
+    "$type": "unknown"
+  },
+  "$sub": {
+    "$value": "#6B7685",
+    "$type": "unknown"
+  },
+  "$violet": {
+    "$value": "#7B4FE0",
+    "$type": "unknown"
+  },
+  "$violet-soft": {
+    "$value": "#F2EDFF",
+    "$type": "unknown"
+  }
+}
