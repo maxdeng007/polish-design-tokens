@@ -4,6 +4,10 @@
 
 Works as a CLI, an MCP server for AI coding agents, or a Node.js module.
 
+**Repository**: [https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
+
+![polish pipeline flow](examples/walkthrough/pipeline-flow.png)
+
 ## Problem
 
 Design tokens — CSS custom properties like `--color-primary` — are powerful but fragile. As projects grow, tokens drift: hardcoded colors creep in, duplicate values appear under different names, references dangle, and cascade overrides silently break consistency. Detecting these issues manually is tedious; fixing them is even more so.
@@ -16,17 +20,52 @@ Design tokens — CSS custom properties like `--color-primary` — are powerful 
 
 ## Installation
 
+**From npm** (recommended):
+
 ```bash
-npm install -g @design-tokens/polish
+npm install -g polish-design-tokens
 ```
 
 Or as a project dependency:
 
 ```bash
-npm install @design-tokens/polish --save-dev
+npm install polish-design-tokens --save-dev
+```
+
+**From GitHub** (if you want the latest source):
+
+```bash
+git clone https://github.com/maxdeng007/polish-design-tokens.git
+cd polish-design-tokens/polish-mono
+npm install -g .
 ```
 
 Requires Node.js ≥ 18.
+
+## Quick Start
+
+```bash
+# 1. Audit a project for token issues (via MCP or Node API — see below)
+# 2. Convert findings to a ranked plan
+polish plan findings.json > plan.json
+
+# 3. Generate mechanical patches
+polish diff plan.json > patches.json
+
+# 4. Apply patches (creates .backup files automatically)
+polish apply patches.json
+```
+
+## AI Agent Deployment
+
+The most common workflow: give your AI coding agent (Qoder, Claude, etc.) the GitHub repo URL and ask it to set up and run polish. The agent will:
+
+1. Clone the repo or install from npm
+2. Register the MCP server (see below)
+3. Use `polish_audit` to scan the target project
+4. Use `polish_plan` → `polish_diff` → `polish_apply` to fix mechanical issues
+
+All commands are idempotent and backed up — no risk of data loss.
 
 ## The Pipeline
 
@@ -79,28 +118,37 @@ Applies patches to files with automatic backup protection. Each file is backed u
 ## CLI Usage
 
 ```bash
-# Convert findings to an ordered plan
-polish plan findings.json > plan.json
-
-# Generate mechanical patches from the plan
-polish diff plan.json > patches.json
-
-# Apply patches (creates backups automatically)
-polish apply patches.json
+polish plan  <findings.json>   # Convert findings to an ordered action list
+polish diff  <plan.json>       # Generate mechanical patches from a plan
+polish apply <patches.json>    # Apply patches (creates .backup files)
+polish mcp                     # Start MCP server (JSON-RPC over stdin/stdout)
 ```
 
 ## MCP Server
 
-polish exposes 7 tools via the Model Context Protocol, so any AI coding agent (Qoder, Claude, etc.) can use it directly.
+polish exposes 8 tools via the Model Context Protocol, so any AI coding agent (Qoder, Claude, etc.) can drive the full pipeline.
 
-Add to your MCP config:
+Add to your MCP config (`mcp.json`, `.mcp.json`, or your agent's config):
+
+```json
+{
+  "mcpServers": {
+    "polish": {
+      "command": "polish",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+If `polish` is not on the agent's PATH, use `npx` instead:
 
 ```json
 {
   "mcpServers": {
     "polish": {
       "command": "npx",
-      "args": ["-y", "@design-tokens/polish", "mcp"]
+      "args": ["-y", "polish-design-tokens", "mcp"]
     }
   }
 }
@@ -112,17 +160,18 @@ Available tools:
 |------|-------------|
 | `polish_extract` | Extract token declarations from a directory |
 | `polish_audit` | Scan + cross-reference to produce findings |
+| `polish_measure` | Normalize runtime observation data for audit |
 | `polish_plan` | Convert findings to a ranked, classified action queue |
 | `polish_diff` | Generate mechanical patches from a plan |
 | `polish_apply` | Execute patches with backup protection |
-| `polish_doctor` | Verify token health after fixes |
+| `polish_doctor` | Check required and optional dependencies |
 | `polish_style_lookup` | Find tokens by name or pattern |
 
 ## Node.js API
 
 ```javascript
-import { plan, generateDiffs, apply } from '@design-tokens/polish';
-import { extract, audit, runPipeline } from '@design-tokens/polish';
+import { plan, generateDiffs, apply } from 'polish-design-tokens';
+import { extract, audit, runPipeline, measure } from 'polish-design-tokens';
 
 // Full pipeline: scan → audit → plan → diff (does NOT apply)
 const { graph, findings, plan, patches } = runPipeline('./my-project');
@@ -134,6 +183,14 @@ const actions = plan(report.findings);
 const patches = generateDiffs(actions);
 const result = await apply(patches);
 ```
+
+## Static vs Runtime Analysis
+
+**polish-design-tokens** performs **static analysis** — it scans source files (CSS, SCSS, HTML, JS/TS) to find token declarations, references, and conflicts. This works on any project, any environment, no extra setup required.
+
+**Runtime measurement** (checking actual rendered values in a live browser) is a separate capability in the companion `token-audit-mcp` tool. It detects `runtime-drift` and `hardcoded` findings that only appear when tokens are evaluated in a real browser. This requires Chrome DevTools to be available and is not part of the npm package's default pipeline.
+
+For most use cases — auditing a project's source, fixing mechanical issues, and verifying token consistency — the static pipeline in `polish-design-tokens` is sufficient. Use `token-audit-mcp` when you need to verify what users actually see in the browser.
 
 ## What It Finds
 
@@ -164,15 +221,17 @@ const result = await apply(patches);
 | Directory | Description |
 |-----------|-------------|
 | `polish/` | Core tool: `plan.js`, `diff.js`, `apply.js` + CLI (`bin/polish.mjs`) |
-| `polish-mcp/` | MCP server with 7 tool handlers |
-| `polish-mono/` | Unified npm package for distribution |
+| `polish-mcp/` | MCP server with tool handlers |
+| `polish-mono/` | Unified npm package for distribution (`polish-design-tokens`) |
 | `token-audit-mcp/` | Token audit MCP server (static scan + runtime measurement) |
 | `examples/` | Sample projects with known token issues |
 | `docs/` | Design specs and implementation plans |
 
 ## Examples
 
-See [`examples/noah-sample/`](examples/noah-sample/) — a rich test case covering all finding types, including a real-world stylesheet with duplicate values, hardcoded colors, and dangling references.
+See [`examples/walkthrough/`](examples/walkthrough/) — a complete, runnable walkthrough of the full pipeline (audit → plan → diff → apply) on a demo project with real pipeline outputs, including a visual flow diagram and terminal screenshots.
+
+Also see [`examples/noah-sample/`](examples/noah-sample/) — a rich test case covering all finding types, including a real-world stylesheet with duplicate values, hardcoded colors, and dangling references.
 
 ## License
 
