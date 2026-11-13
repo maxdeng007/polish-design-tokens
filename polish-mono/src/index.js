@@ -6,11 +6,12 @@
 
 import { scan } from './scan.js';
 import { cross } from './cross.js';
+import { measure } from './measure.js';
 import { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS } from './plan.js';
 import { generateDiffs } from './diff.js';
 import { apply } from './apply.js';
 
-export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, apply };
+export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, apply, measure };
 
 /**
  * Extract tokens from a directory.
@@ -26,11 +27,12 @@ export function extract(target, ignore = []) {
  * Full critique: scan + cross. Returns findings.
  * @param {string} target - directory path to scan
  * @param {string[]} [ignore=[]] - path fragments to skip
+ * @param {object} [observation] - optional RuntimeObservation from measure()
  * @returns {object} AuditReport with findings array
  */
-export function audit(target, ignore = []) {
+export function audit(target, ignore = [], observation = null) {
   const graph = scan(target, ignore);
-  return cross(graph);
+  return cross(graph, observation);
 }
 
 /**
@@ -38,11 +40,12 @@ export function audit(target, ignore = []) {
  * Does NOT apply patches — that requires explicit consent.
  * @param {string} target - directory path to scan
  * @param {string[]} [ignore=[]] - path fragments to skip
+ * @param {object} [observation] - optional RuntimeObservation from measure()
  * @returns {{graph: object, findings: Array, plan: Array, patches: Array}}
  */
-export function runPipeline(target, ignore = []) {
+export function runPipeline(target, ignore = [], observation = null) {
   const graph = scan(target, ignore);
-  const report = cross(graph);
+  const report = cross(graph, observation);
   const actions = plan(report.findings || []);
   const patches = generateDiffs(actions);
   return { graph, findings: report.findings, plan: actions, patches };
