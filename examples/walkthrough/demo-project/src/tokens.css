@@ -1,0 +1,35 @@
+/* demo-project/src/tokens.css — a small file with known token issues.
+   Run polish against this and you'll see each finding type in action. */
+
+:root {
+  /* duplicate-value: #1a1a2e is declared under three different names */
+  --bg: #1a1a2e;
+  --background: #1a1a2e;
+  --nm-bg: #1a1a2e;
+
+  /* duplicate-value: #e05800 shared by --accent and --gold */
+  --accent: #e05800;
+  --gold: #e05800;
+
+  /* conflict: --card declared with two different values in root scope */
+  --card: #16213e;
+}
+
+:root {
+  /* conflict: --card again, different value */
+  --card: #1f2937;
+}
+
+.button {
+  /* hardcoded: raw color instead of var(--accent) */
+  background: #e05800;
+  color: #ffffff;
+
+  /* dangling: --btn-bg is never declared */
+  background-color: var(--btn-bg);
+}
+
+.card {
+  /* uses the conflicting --card, which is ambiguous */
+  background: var(--card);
+}
