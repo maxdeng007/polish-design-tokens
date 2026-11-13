@@ -1,6 +1,6 @@
 {
-  "name": "@design-tokens/polish",
-  "version": "1.0.0",
+  "name": "polish-design-tokens",
+  "version": "1.1.0",
   "description": "Design token superpower tool: extract · critique · apply · publish via npm",
   "type": "module",
   "bin": {
@@ -29,9 +29,14 @@
   },
   "keywords": ["design-tokens", "css-variables", "token-audit", "mcp"],
   "license": "MIT",
-  "repository": "https://github.com/your-username/polish",
-  "bugs": "https://github.com/your-username/polish/issues",
-  "homepage": "https://github.com/your-username/polish#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxdeng007/polish-design-tokens.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maxdeng007/polish-design-tokens/issues"
+  },
+  "homepage": "https://github.com/maxdeng007/polish-design-tokens#readme",
   "engines": {
     "node": ">=18"
   }
