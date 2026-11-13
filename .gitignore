@@ -1,0 +1,14 @@
+node_modules/
+.DS_Store
+*.log
+.probe/
+.workflow/
+fonts/
+plates/
+*.woff2
+*.pdf
+dist/
+.env
+coverage/
+*.backup
+test/.apply-tmp/

@@ -1,0 +1,29 @@
+[
+  {
+    "type": "add",
+    "file": "src/tokens.css",
+    "line": 29,
+    "before": "",
+    "after": "--btn-bg: var(--token-default);",
+    "reason": "btn-* 家族有 1 个悬空引用（占全部 1 个的 100%）",
+    "findingId": "dangling"
+  },
+  {
+    "type": "replace",
+    "file": "src/tokens.css",
+    "line": 7,
+    "before": "#1a1a2e",
+    "after": "var(--bg)",
+    "reason": "--background → alias --bg（#1a1a2e）",
+    "findingId": "duplicate-value"
+  },
+  {
+    "type": "replace",
+    "file": "src/tokens.css",
+    "line": 12,
+    "before": "#e05800",
+    "after": "var(--accent)",
+    "reason": "--gold → alias --accent（#e05800）",
+    "findingId": "duplicate-value"
+  }
+]
