@@ -1,4 +1,3 @@
-'use strict';
 /**
  * cross — the judgement layer.
  *
@@ -6,7 +5,7 @@
  * and decides what is actually wrong. scan never judges; cross never parses.
  */
 
-const { normalizeValue, isAlias, isKeyword } = require('./lib/parse');
+import { normalizeValue, isAlias, isKeyword } from './lib/parse.js';
 
 const STATE_CLASS_RE = /^(is|has)[-_]|(^|[-_])(active|selected|disabled|hover|focus|open|closed|full|tight|empty|loading|error|warn|ok|done|on|off|muted|dim)([-_]|$)/i;
 
@@ -430,4 +429,4 @@ function cross(graph, observation) {
   };
 }
 
-module.exports = { cross, familyOf, isStateVariant, selectorClasses };
+export { cross, familyOf, isStateVariant, selectorClasses };

@@ -1,4 +1,3 @@
-'use strict';
 /**
  * scan — static half of the pipeline.
  *
@@ -8,9 +7,9 @@
  * Emits FACTS only. Whether a same-name conflict is a bug is cross.js's call.
  */
 
-const fs = require('fs');
-const path = require('path');
-const { parseSource, resolveValue, resolveVar, classify, normalizeValue, isAlias, isKeyword } = require('./lib/parse');
+import fs from 'fs';
+import path from 'path';
+import { parseSource, resolveValue, resolveVar, classify, normalizeValue, isAlias, isKeyword } from './lib/parse.js';
 
 const SCAN_EXT = new Set(['.css', '.scss', '.less', '.html', '.htm', '.jsx', '.tsx', '.js', '.ts', '.mjs', '.cjs', '.vue', '.svelte']);
 const SKIP_DIR = new Set(['node_modules', '.git', '.svn', 'dist', 'build', 'out', 'coverage', '.next', '.nuxt', '.cache', '__pycache__', '.venv', 'venv', '.idea', '.vscode', 'target']);
@@ -169,4 +168,4 @@ function scan(target, opts) {
   };
 }
 
-module.exports = { scan, walk };
+export { scan, walk };
