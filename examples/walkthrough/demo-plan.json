@@ -1,0 +1,220 @@
+[
+  {
+    "finding": {
+      "id": "conflict",
+      "severity": "error",
+      "title": "--card 在 root 作用域内有 2 个不同的值",
+      "detail": "#16213e（1 处，如 src/tokens.css:15）；#1f2937（1 处，如 src/tokens.css:20）",
+      "evidence": [
+        {
+          "file": "src/tokens.css",
+          "line": 15,
+          "scope": "root",
+          "selector": ":root",
+          "themes": []
+        },
+        {
+          "file": "src/tokens.css",
+          "line": 20,
+          "scope": "root",
+          "selector": ":root",
+          "themes": []
+        }
+      ],
+      "suggestion": "根作用域应只有一个真值——合并后其余位置改为引用。"
+    },
+    "action": "fix",
+    "type": "judgmental",
+    "priority": 1,
+    "mechanical": false,
+    "judgmental": true
+  },
+  {
+    "finding": {
+      "id": "dangling",
+      "severity": "error",
+      "title": "btn-* 家族有 1 个悬空引用（占全部 1 个的 100%）",
+      "detail": "整个命名族被引用却从未声明——这是生成端的系统性缺口，不是 1 个独立 bug。最可能的原因是该组件库的页面级样式按需生成但输出不完整。",
+      "evidence": [
+        {
+          "name": "--btn-bg",
+          "count": 1,
+          "file": "src/tokens.css",
+          "line": 29
+        }
+      ],
+      "suggestion": "排查 btn-* 的生成器配置，重新导出页面样式。其余 0 个非 btn-* 的悬空引用见下方。",
+      "refCount": 1
+    },
+    "action": "fix",
+    "type": "mechanical",
+    "priority": 2,
+    "mechanical": true,
+    "judgmental": false
+  },
+  {
+    "finding": {
+      "id": "orphan",
+      "severity": "warn",
+      "title": "4 个令牌声明了却从未被引用",
+      "detail": "按作用域分布：root 4 个。典型来源是共享样式表被另一个页面的变量体系取代了。",
+      "evidence": [
+        {
+          "name": "--bg",
+          "declarations": 1,
+          "scopes": [
+            "root"
+          ],
+          "file": "src/tokens.css",
+          "line": 6
+        },
+        {
+          "name": "--background",
+          "declarations": 1,
+          "scopes": [
+            "root"
+          ],
+          "file": "src/tokens.css",
+          "line": 7
+        },
+        {
+          "name": "--nm-bg",
+          "declarations": 1,
+          "scopes": [
+            "root"
+          ],
+          "file": "src/tokens.css",
+          "line": 8
+        },
+        {
+          "name": "--gold",
+          "declarations": 1,
+          "scopes": [
+            "root"
+          ],
+          "file": "src/tokens.css",
+          "line": 12
+        }
+      ],
+      "suggestion": "逐个确认：删掉，或让真正的消费方引用它。"
+    },
+    "action": "review",
+    "type": "judgmental",
+    "priority": 4,
+    "mechanical": false,
+    "judgmental": true
+  },
+  {
+    "finding": {
+      "id": "duplicate-value",
+      "severity": "warn",
+      "title": "2 组颜色被多个令牌名重复表达",
+      "detail": "#1a1a2e = --bg = --background = --nm-bg；#e05800 = --accent = --gold",
+      "evidence": [
+        {
+          "value": "#1a1a2e",
+          "names": [
+            "--bg",
+            "--background",
+            "--nm-bg"
+          ],
+          "primary": "--bg",
+          "secondary": "--background",
+          "primaryFile": "src/tokens.css",
+          "primaryLine": 6,
+          "secondaryFile": "src/tokens.css",
+          "secondaryLine": 7
+        },
+        {
+          "value": "#e05800",
+          "names": [
+            "--accent",
+            "--gold"
+          ],
+          "primary": "--accent",
+          "secondary": "--gold",
+          "primaryFile": "src/tokens.css",
+          "primaryLine": 11,
+          "secondaryFile": "src/tokens.css",
+          "secondaryLine": 12
+        }
+      ],
+      "suggestion": "同一颜色保留一个主名，其余改成别名引用，减少\"该用哪个\"的猜测。"
+    },
+    "action": "review",
+    "type": "mechanical",
+    "priority": 5,
+    "mechanical": true,
+    "judgmental": false
+  },
+  {
+    "finding": {
+      "id": "namespace",
+      "severity": "info",
+      "title": "并存 6 个命名族",
+      "detail": "--bg-*（1），--background-*（1），--nm-*（1），--accent-*（1），--gold-*（1），--card-*（1）",
+      "evidence": [
+        {
+          "family": "bg",
+          "tokens": [
+            "--bg"
+          ],
+          "count": 1,
+          "file": "src/tokens.css",
+          "line": 6
+        },
+        {
+          "family": "background",
+          "tokens": [
+            "--background"
+          ],
+          "count": 1,
+          "file": "src/tokens.css",
+          "line": 7
+        },
+        {
+          "family": "nm",
+          "tokens": [
+            "--nm-bg"
+          ],
+          "count": 1,
+          "file": "src/tokens.css",
+          "line": 8
+        },
+        {
+          "family": "accent",
+          "tokens": [
+            "--accent"
+          ],
+          "count": 1,
+          "file": "src/tokens.css",
+          "line": 11
+        },
+        {
+          "family": "gold",
+          "tokens": [
+            "--gold"
+          ],
+          "count": 1,
+          "file": "src/tokens.css",
+          "line": 12
+        },
+        {
+          "family": "card",
+          "tokens": [
+            "--card"
+          ],
+          "count": 1,
+          "file": "src/tokens.css",
+          "line": 15
+        }
+      ],
+      "suggestion": "选定一到两个命名族作为主体系，其余降级为别名或逐步废弃。"
+    },
+    "action": "note",
+    "type": "judgmental",
+    "priority": 6,
+    "mechanical": false,
+    "judgmental": true
+  }
+]
