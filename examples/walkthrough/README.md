@@ -4,6 +4,8 @@ This directory is a complete, runnable example of the polish pipeline: **extract
 
 It uses a small demo project (`demo-project/`) with deliberately planted token issues. Every file here was produced by actually running the pipeline against that project — no hand-written mocks.
 
+![polish pipeline flow](pipeline-flow.png)
+
 ## What's Here
 
 ```
@@ -296,6 +298,8 @@ And at line 29, the dangling reference gets a declaration:
 - `namespace` — six naming families still coexist. Decide on a unified naming convention.
 
 ## Running It Yourself
+
+![polish CLI in action](terminal-cli.png)
 
 ```bash
 # 1. Install
