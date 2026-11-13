@@ -1,0 +1,1188 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>设计令牌体检报告 · /tmp/anthropic-fetched</title>
+<style>
+:root{--bg:#f8f7f4;--surface:#ffffff;--ink:#141413;--muted:#8b877e;--line:#eae6df;--accent:#f25e00}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 -apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px 80px}
+header{background:var(--ink);color:#fff;padding:40px 0 34px;margin-bottom:34px}
+header .wrap{padding-bottom:0}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:30px;line-height:1.25;margin:10px 0 8px;font-weight:800;letter-spacing:-.01em}
+.sub{color:#b9c2cd;font-size:14px;max-width:70ch}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+.stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:13px 15px}
+.sv{font-size:22px;font-weight:800;line-height:1.3}
+.sl{font-size:12px;color:#98a4b3;margin-top:2px}
+.sn{font-size:11px;color:#6f7d8c;margin-top:3px}
+.note{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:12px 15px;font-size:13px;margin:0 0 26px;color:var(--ink)}
+.note b{font-weight:700}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em;background:rgba(0,0,0,.05);padding:1px 5px;border-radius:4px}
+h2.grp{font-size:18px;font-weight:800;margin:38px 0 4px;display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
+h2.grp i{width:9px;height:9px;border-radius:50%;display:inline-block}
+h2.grp b{font-size:12px;font-weight:700;color:var(--muted);background:rgba(0,0,0,.05);padding:2px 8px;border-radius:99px}
+.gd{font-size:13.5px;color:var(--muted);margin:0 0 14px;max-width:74ch}
+ul.fs{list-style:none;margin:0;padding:0}
+li.f{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:14px 16px;margin-bottom:9px}
+li.f.error{border-left:3px solid #b84038}
+li.f.warn{border-left:3px solid #b4720e}
+li.f.info{border-left:3px solid var(--line)}
+.fh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.tag.error{background:#fcedea;color:#b84038}
+.tag.warn{background:#fbf3e4;color:#b4720e}
+.tag.info{background:rgba(0,0,0,.05);color:var(--muted)}
+.id{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--muted)}
+.t{font-size:14.5px;font-weight:700}
+.d{font-size:13.5px;color:var(--ink);margin:8px 0 0;word-break:break-word}
+.s{font-size:13px;color:var(--muted);margin:6px 0 0}
+.evs{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.ev{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;background:rgba(0,0,0,.045);color:var(--ink);padding:2px 7px;border-radius:4px}
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--muted);line-height:1.9}
+</style></head><body>
+<header><div class="wrap">
+  <div class="eyebrow">Design token audit</div>
+  <h1>278 个问题 · 573 个令牌</h1>
+  <p class="sub">扫描 <code>13</code> 个源文件得到全量声明，与浏览器实测值交叉比对。红色是确凿的问题，黄色是体系分叉，灰色是结构性观察。</p>
+  <div class="stats">
+    <div class="stat"><div class="sv">144</div><div class="sl">错误</div><div class="sn">同一个令牌解析出不同值</div></div>
+    <div class="stat"><div class="sv">101</div><div class="sl">警告</div><div class="sn">命名分叉 / 大量孤儿</div></div>
+    <div class="stat"><div class="sv">33</div><div class="sl">提示</div><div class="sn">结构性观察</div></div>
+    <div class="stat"><div class="sv">7008</div><div class="sl">声明总数</div><div class="sn">同一令牌可有多处声明</div></div>
+  </div>
+</div></header>
+<div class="wrap">
+  <section class="grp">
+      <h2><i style="background:#f25e00"></i>必须处理 <b>144</b></h2>
+      <p class="gd">这些是确凿的问题：同一个令牌在不同地方解析出不同的值，或者引用了根本不存在的令牌。</p>
+      <ul class="fs"><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--grid-columns 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">4（51 处，如 __next_static_chunks_0hpfgvivairw9.css:1）；12（102 处，如 __next_static_chunks_0hpfgvivairw9.css:1）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:1</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:3</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:4</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:1</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:1</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--grid-margin 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">32px（51 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；48px（51 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；80px（51 处，如 __next_static_chunks_0hpfgvivairw9.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:2</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:4</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:2</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:4</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--page-top-spacer 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">48px（51 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；64px（50 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；80px（50 处，如 __next_static_chunks_0hpfgvivairw9.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:2</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:4</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:2</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:4</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--radius-sm 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">8px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；12px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:1）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--radius-md 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">12px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；16px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--radius-lg 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">16px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；24px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--gap-xxs 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">4px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；8px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--gap-xs 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">12px（3 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；16px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--gap-sm 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">16px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；20px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；24px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--gap-md 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">24px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；32px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--gap-lg 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">32px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；48px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--gap-xl 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">48px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；56px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；64px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--page-margins 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">32px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；48px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；64px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--gutter 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">24px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；32px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--section-spacer-lg 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">64px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；80px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；96px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--section-spacer-sm 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">32px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；40px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；48px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--media-max-height 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">560px（3 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；540px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--card-padding-xs 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">12px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；16px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--card-padding-sm 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">16px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；24px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--card-padding-md 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">24px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；32px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--card-padding-lg 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">48px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；64px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--display-1 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">42px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；58px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；72px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--display-2 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">36px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；48px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；64px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--headline-1 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">32px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；44px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；52px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--headline-2 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">30px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；36px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；44px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--headline-3 在 root 作用域内有 3 个不同的值</span></div>
+      <p class="d">28px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；30px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；36px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--headline-4 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">23px（3 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；32px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--headline-5 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">20px（3 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；25px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--headline-6 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">17px（3 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；19px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--body-large-1 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">22px（3 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；25px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--body-large-2 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">20px（3 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；23px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--body-1 在 root 作用域内有 2 个不同的值</span></div>
+      <p class="d">19px（3 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；20px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--spacer-micro 在 root 作用域内有 5 个不同的值</span></div>
+      <p class="d">8px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）；10px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）；12px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）；14px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）；16px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--spacer-small 在 root 作用域内有 5 个不同的值</span></div>
+      <p class="d">16px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；20px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；24px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；28px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；32px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--spacer-medium 在 root 作用域内有 5 个不同的值</span></div>
+      <p class="d">32px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；40px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；48px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；56px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；64px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--spacer-large 在 root 作用域内有 5 个不同的值</span></div>
+      <p class="d">64px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；80px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；96px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；112px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；128px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">conflict</span><span class="t">--spacer-huge 在 root 作用域内有 5 个不同的值</span></div>
+      <p class="d">128px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；160px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；192px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；224px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；256px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 根作用域应只有一个真值——合并后其余位置改为引用。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--site-header-height 被引用了 5 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--site-header-height ×5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--copernicus 被引用了 5 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--copernicus ×5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--display-s 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--display-s ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--display-m 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--display-m ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--display-l 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--display-l ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--display-xl 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--display-xl ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--display-xxl 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--display-xxl ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--tiempos-text 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--tiempos-text ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--paragraph-xs 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--paragraph-xs ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--paragraph-s 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--paragraph-s ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--paragraph-m 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--paragraph-m ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--paragraph-l 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--paragraph-l ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--styrene-b 被引用了 5 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--styrene-b ×5</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--detail-xs 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--detail-xs ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--detail-s 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--detail-s ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--detail-m 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--detail-m ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--detail-l 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--detail-l ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--detail-xl 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--detail-xl ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nav-dropdown-columns 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nav-dropdown-columns ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--available-width 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--available-width ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--transform-origin 被引用了 9 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--transform-origin ×9</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--anchor-width 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--anchor-width ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--menu-featured-span 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--menu-featured-span ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--menu-group-columns 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--menu-group-columns ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--menu-group-cards 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--menu-group-cards ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--accordion-panel-height 被引用了 7 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--accordion-panel-height ×7</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--fade-width 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--fade-width ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--type-display 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--type-display ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--type-body 被引用了 8 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--type-body ×8</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--ease-out-cc 被引用了 8 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--ease-out-cc ×8</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--ease-draw 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--ease-draw ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--foreground-quarternary 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--foreground-quarternary ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--border-secondary 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--border-secondary ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--nav-h 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--nav-h ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--ease-power2-out 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--ease-power2-out ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--type-caption 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--type-caption ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--arrow-rotate 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--arrow-rotate ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--text-lines 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--text-lines ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--table-cols-md 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--table-cols-md ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--table-cols-lg 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--table-cols-lg ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--peek-height 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--peek-height ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--color-red 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--color-red ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--font-size-sm 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--font-size-sm ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--color-text 被引用了 4 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--color-text ×4</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--screen 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--screen ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--fold 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--fold ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--radius-tiny 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--radius-tiny ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--description-columns 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--description-columns ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--team-count 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--team-count ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--featured-teams-snap-distance 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--featured-teams-snap-distance ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--toc-below 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--toc-below ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--grid-sticky-top 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--grid-sticky-top ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--grid-scroll-x 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--grid-scroll-x ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--grid-live-rest 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--grid-live-rest ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--grid-table-w 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--grid-table-w ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--compact-columns-tablet 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--compact-columns-tablet ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--compact-columns 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--compact-columns ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--align 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--align ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--col-start-md 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--col-start-md ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--col-span-md 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--col-span-md ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--col-start 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--col-start ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--col-span 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--col-span ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--ax 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--ax ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--ay 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--ay ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--bx 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--bx ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--by 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--by ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--cx 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--cx ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--cy 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--cy ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--stack-gap-02 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--stack-gap-02 ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--spacing-40 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--spacing-40 ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--figure-label 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--figure-label ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--css-grid-gap-x 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--css-grid-gap-x ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--editorial-feature-size 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--editorial-feature-size ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--editorial-popout-size 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--editorial-popout-size ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--editorial-content-max 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--editorial-content-max ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--min-width 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--min-width ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--available-height 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--available-height ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--text-primary 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--text-primary ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--active-tab-left 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--active-tab-left ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--active-tab-width 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--active-tab-width ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--video-anchor 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--video-anchor ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--spine-color 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--spine-color ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--height 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--height ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--height-expanded 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--height-expanded ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--clip-path-nav-bg 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--clip-path-nav-bg ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--grain 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--grain ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--grain-shift 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--grain-shift ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--j 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--j ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--color-white 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--color-white ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drawer-bg 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drawer-bg ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drawer-swipe-strength 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drawer-swipe-strength ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drawer-swipe-movement-x 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drawer-swipe-movement-x ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drawer-swipe-movement-y 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drawer-swipe-movement-y ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drawer-content-gap 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drawer-content-gap ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drawer-content-padding-right 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drawer-content-padding-right ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drawer-content-padding-bottom 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drawer-content-padding-bottom ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drawer-content-padding-left 被引用了 3 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drawer-content-padding-left ×3</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--fit-scale 被引用了 1 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--fit-scale ×1</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drift-x-cycle 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drift-x-cycle ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drift-turn-cycle 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drift-turn-cycle ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drift-y-cycle 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drift-y-cycle ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drift-zoom-cycle 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drift-zoom-cycle ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drift-x 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drift-x ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drift-y 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drift-y ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drift-scale 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drift-scale ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drift-zoom 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drift-zoom ×2</span></div>
+    </li><li class="f error">
+      <div class="fh"><span class="tag error">错误</span>
+      <span class="id">dangling</span><span class="t">--drift-turn 被引用了 2 次，但没有任何声明</span></div>
+      <p class="d">引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。</p><p class="s">→ 补上声明，或把引用改成已存在的令牌。</p><div class="evs"><span class="ev">--drift-turn ×2</span></div>
+    </li></ul>
+    </section><section class="grp">
+      <h2><i style="background:#b4720e"></i>值得处理 <b>101</b></h2>
+      <p class="gd">体系已经开始分叉：多套命名指向同一个颜色、大量令牌无人使用。</p>
+      <ul class="fs"><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--page-top-spacer 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">24px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）；32px（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--size-base 在 selector 作用域内有 11 个不同的值</span></div>
+      <p class="d">20px（30 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；18px（30 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；16px（36 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；14px（27 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；48px（26 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；40px（26 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；32px（29 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；30px（26 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；25px（28 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；22px（30 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；15px（2 处，如 __next_static_chunks_0zjrix53pdagy.css:2）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:2</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:3</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:2</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:3</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--size-desktop 在 selector 作用域内有 10 个不同的值</span></div>
+      <p class="d">22px（30 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；20px（30 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；17px（38 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；15px（27 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；80px（26 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；71px（26 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；61px（29 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；48px（27 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；36px（27 处，如 __next_static_chunks_0hpfgvivairw9.css:2）；28px（30 处，如 __next_static_chunks_0hpfgvivairw9.css:2）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:2</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:3</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:2</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:3</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-foreground-body 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#141413（121 处，如 __next_static_chunks_0hpfgvivairw9.css:5）；#e8e6dc（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:5</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-background-primary 在 selector 作用域内有 7 个不同的值</span></div>
+      <p class="d">#faf9f5（33 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#141413（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#1f1e1d（22 处，如 __next_static_chunks_0hpfgvivairw9.css:5）；#000000（23 处，如 __next_static_chunks_0hpfgvivairw9.css:5）；#f0eee6（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#e8e6dc（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#ffffff（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-background-secondary 在 selector 作用域内有 7 个不同的值</span></div>
+      <p class="d">#f5f4ed（33 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#1f1e1d（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#262624（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#141413（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#e8e6dc（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#dedcd1（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#faf9f5（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-background-tertiary 在 selector 作用域内有 6 个不同的值</span></div>
+      <p class="d">#e8e6dc（33 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#30302e（88 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#1a1918（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#dedcd1（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#d1cfc5（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#f0eee6（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-background-quaternary 在 selector 作用域内有 6 个不同的值</span></div>
+      <p class="d">#d1cfc5（55 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#4d4c48（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#3d3d3a（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#1f1e1d（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#c2c0b6（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#dedcd1（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-foreground-primary 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#141413（99 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#faf9f5（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-foreground-secondary 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">#30302e（55 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#b0aea5（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#3d3d3a（44 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-foreground-tertiary 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#5e5d59（99 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#87867f（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-foreground-quaternary 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">#87867f（77 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#5e5d59（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#73726c（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-border-primary 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">#c2c0b6（55 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#3d3d3a（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#d1cfc5（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#e8e6dc（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；color-mix(in srgb,#141413 20%,initial#e8e6dc)（1 处，如 __next_static_chunks_35uako10vtsya.css:10）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-border-secondary 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">#dedcd1（33 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#3d3d3a（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#d1cfc5（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#c2c0b6（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#e8e6dc（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-border-tertiary 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">#f0eee6（33 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#3d3d3a（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#d1cfc5（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#c2c0b6（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#dedcd1（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-button-primary-background 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#141413（99 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#faf9f5（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-button-primary-foreground 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#faf9f5（99 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#141413（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-button-secondary-background 在 selector 作用域内有 7 个不同的值</span></div>
+      <p class="d">#e8e6dc（33 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#30302e（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#dedcd1（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#d1cfc5（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#f0eee6（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#141413（1 处，如 __next_static_chunks_20y336fy0c2fa.css:10）；#1f1e1d（2 处，如 __next_static_chunks_3o9di1p9cgo-l.css:20）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-button-secondary-foreground 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">#30302e（77 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#faf9f5（68 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#3d3d3a（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#de6262（2 处，如 __next_static_chunks_20y336fy0c2fa.css:10）；#141413（3 处，如 __next_static_chunks_3o9di1p9cgo-l.css:20）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-button-secondary-border 在 selector 作用域内有 6 个不同的值</span></div>
+      <p class="d">#dedcd1（77 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#30302e（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#d1cfc5（23 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#4d4c48（1 处，如 __next_static_chunks_20y336fy0c2fa.css:10）；#de6262（2 处，如 __next_static_chunks_20y336fy0c2fa.css:9）；#1f1e1d（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:34）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-button-tertiary-background 在 selector 作用域内有 4 个不同的值</span></div>
+      <p class="d">#f5f4ed（55 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#262624（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#f0eee6（33 处，如 __next_static_chunks_0hpfgvivairw9.css:5）；#ffffff（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-button-tertiary-foreground 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">#3d3d3a（77 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#faf9f5（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#4d4c48（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--theme-button-tertiary-border 在 selector 作用域内有 4 个不同的值</span></div>
+      <p class="d">#e8e6dc（55 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#3d3d3a（66 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#d1cfc5（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）；#c2c0b6（22 处，如 __next_static_chunks_0hpfgvivairw9.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--anthropic-sans 在 selector 作用域内有 4 个不同的值</span></div>
+      <p class="d">&quot;anthropicsans&quot;,&quot;anthropicsans fallback&quot;,&quot;apple sd gothic neo&quot;,&quot;malgun gothic&quot;,&quot;noto sans kr&quot;（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）；&quot;anthropicsans&quot;,&quot;anthropicsans fallback&quot;,&quot;hiragino sans&quot;,&quot;hiragino kaku gothic pron&quot;,&quot;yu gothic&quot;,&quot;meiryo&quot;,&quot;noto sans jp&quot;（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）；&quot;anthropicsans&quot;,&quot;anthropicsans fallback&quot;,&quot;kohinoor devanagari&quot;,&quot;nirmala ui&quot;,&quot;noto sans devanagari&quot;（1 处，如 __next_static_chunks_0zjrix53pdagy.css:1）；&quot;anthropicsans&quot;,&quot;anthropicsans fallback&quot;（1 处，如 __next_static_chunks_3lfhvsoi4d4vt.css:1）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_3lfhvsoi4d4vt.css:1</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--anthropic-serif 在 selector 作用域内有 4 个不同的值</span></div>
+      <p class="d">&quot;anthropicserif&quot;,&quot;anthropicserif fallback&quot;,&quot;apple sd gothic neo&quot;,&quot;malgun gothic&quot;,&quot;noto sans kr&quot;（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；&quot;anthropicserif&quot;,&quot;anthropicserif fallback&quot;,&quot;hiragino sans&quot;,&quot;hiragino kaku gothic pron&quot;,&quot;yu gothic&quot;,&quot;meiryo&quot;,&quot;noto sans jp&quot;（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；&quot;anthropicserif&quot;,&quot;anthropicserif fallback&quot;,&quot;kohinoor devanagari&quot;,&quot;nirmala ui&quot;,&quot;noto sans devanagari&quot;（1 处，如 __next_static_chunks_0zjrix53pdagy.css:2）；&quot;anthropicserif&quot;,&quot;anthropicserif fallback&quot;（1 处，如 __next_static_chunks_3lfhvsoi4d4vt.css:2）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_3lfhvsoi4d4vt.css:2</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-text 在 selector 作用域内有 6 个不同的值</span></div>
+      <p class="d">#f5f4ed（1 处，如 __next_static_chunks_20y336fy0c2fa.css:10）；#ffffff（1 处，如 __next_static_chunks_20y336fy0c2fa.css:11）；#30302e（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；#3d3d3a（2 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；color-mix(in srgb,#fff 75%,transparent)（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:29）；#87867f（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:10）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_20y336fy0c2fa.css:10</span><span class="ev">__next_static_chunks_20y336fy0c2fa.css:11</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:11</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:29</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--header-actions-column 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">8（1 处，如 __next_static_chunks_16bfh721-emix.css:1）；9（1 处，如 __next_static_chunks_16bfh721-emix.css:1）；10（1 处，如 __next_static_chunks_16bfh721-emix.css:1）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:1</span><span class="ev">__next_static_chunks_16bfh721-emix.css:1</span><span class="ev">__next_static_chunks_16bfh721-emix.css:1</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-text-hover 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#faf9f5（2 处，如 __next_static_chunks_16bfh721-emix.css:4）；#ffffff（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:29）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:4</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:11</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:29</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-background 在 selector 作用域内有 9 个不同的值</span></div>
+      <p class="d">#141413（2 处，如 __next_static_chunks_16bfh721-emix.css:4）；#4d4c48（1 处，如 __next_static_chunks_20y336fy0c2fa.css:10）；#d97757（1 处，如 __next_static_chunks_20y336fy0c2fa.css:12）；#c6613f（1 处，如 __next_static_chunks_20y336fy0c2fa.css:11）；#e8e6dc（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；#f0eee6（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；color-mix(in srgb,#141413 40%,transparent)（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:28）；#1f1e1d（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:11）；#d1cfc5（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:20）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_20y336fy0c2fa.css:10</span><span class="ev">__next_static_chunks_20y336fy0c2fa.css:12</span><span class="ev">__next_static_chunks_20y336fy0c2fa.css:11</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-border 在 selector 作用域内有 8 个不同的值</span></div>
+      <p class="d">#141413（2 处，如 __next_static_chunks_16bfh721-emix.css:4）；#3d3d3a（1 处，如 __next_static_chunks_20y336fy0c2fa.css:10）；#d97757（1 处，如 __next_static_chunks_20y336fy0c2fa.css:12）；#c6613f（1 处，如 __next_static_chunks_20y336fy0c2fa.css:12）；#dedcd1（2 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；#e8e6dc（3 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；color-mix(in srgb,#141413 70%,transparent)（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:29）；#d1cfc5（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:20）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_20y336fy0c2fa.css:10</span><span class="ev">__next_static_chunks_20y336fy0c2fa.css:12</span><span class="ev">__next_static_chunks_20y336fy0c2fa.css:12</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--menu-group-link-color 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#87867f（1 处，如 __next_static_chunks_16bfh721-emix.css:13）；#141413（1 处，如 __next_static_chunks_16bfh721-emix.css:13）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:13</span><span class="ev">__next_static_chunks_16bfh721-emix.css:13</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--site-menu-inset-start 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">calc((100vw - min(100vw,1920px)) / 2 + 32px)（1 处，如 __next_static_chunks_16bfh721-emix.css:14）；calc(calc((100vw - min(100vw,1920px)) / 2 + 32px) + 6 * (calc((min(100vw,1920px) - 2 * 32px - (4 - 1) * 16px) / 4) + 16px) + 48px)（1 处，如 __next_static_chunks_16bfh721-emix.css:14）；calc(calc((100vw - min(100vw,1920px)) / 2 + 32px) + 6 * (calc((min(100vw,1920px) - 2 * 32px - (4 - 1) * 16px) / 4) + 16px) + 80px)（1 处，如 __next_static_chunks_16bfh721-emix.css:14）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:14</span><span class="ev">__next_static_chunks_16bfh721-emix.css:14</span><span class="ev">__next_static_chunks_16bfh721-emix.css:14</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--site-menu-main-font-size 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">30px（2 处，如 __next_static_chunks_16bfh721-emix.css:14）；36px（1 处，如 __next_static_chunks_16bfh721-emix.css:14）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:14</span><span class="ev">__next_static_chunks_16bfh721-emix.css:14</span><span class="ev">__next_static_chunks_16bfh721-emix.css:14</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--site-menu-main-line-height 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">38px（1 处，如 __next_static_chunks_16bfh721-emix.css:15）；40px（1 处，如 __next_static_chunks_16bfh721-emix.css:15）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:15</span><span class="ev">__next_static_chunks_16bfh721-emix.css:15</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--footer-logo-block-size 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">24px（1 处，如 __next_static_chunks_16bfh721-emix.css:15）；calc(170px * 64 / 570)（1 处，如 __next_static_chunks_16bfh721-emix.css:15）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:15</span><span class="ev">__next_static_chunks_16bfh721-emix.css:15</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--link-icon-color 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#87867f（1 处，如 __next_static_chunks_16bfh721-emix.css:16）；#5e5d59（1 处，如 __next_static_chunks_16bfh721-emix.css:17）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:16</span><span class="ev">__next_static_chunks_16bfh721-emix.css:17</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--scrolling-text-fade-start 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">0px（1 处，如 __next_static_chunks_16bfh721-emix.css:16）；var(--fade-width)（2 处，如 __next_static_chunks_16bfh721-emix.css:16）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:16</span><span class="ev">__next_static_chunks_16bfh721-emix.css:16</span><span class="ev">__next_static_chunks_16bfh721-emix.css:16</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--scrolling-text-fade-end 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">var(--fade-width)（2 处，如 __next_static_chunks_16bfh721-emix.css:17）；0px（1 处，如 __next_static_chunks_16bfh721-emix.css:17）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:17</span><span class="ev">__next_static_chunks_16bfh721-emix.css:17</span><span class="ev">__next_static_chunks_16bfh721-emix.css:17</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--s 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">clamp(.75px,calc(100vw / 1440),1px)（1 处，如 __next_static_chunks_16bfh721-emix.css:19）；clamp(1.5px,calc(100vw / 720),2px)（1 处，如 __next_static_chunks_16bfh721-emix.css:20）；min(calc(100vw / 1440),calc(100vh / 1024))（3 处，如 __next_static_chunks_16bfh721-emix.css:22）；min(calc(100vw / 440),calc(100vh / 956))（1 处，如 __next_static_chunks_16bfh721-emix.css:25）；clamp(.9px,min(calc(100vw / 800),calc(100vh / 768)),1.4px)（1 处，如 __next_static_chunks_16bfh721-emix.css:25）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:19</span><span class="ev">__next_static_chunks_16bfh721-emix.css:20</span><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span><span class="ev">__next_static_chunks_16bfh721-emix.css:25</span><span class="ev">__next_static_chunks_16bfh721-emix.css:28</span><span class="ev">__next_static_chunks_16bfh721-emix.css:25</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--history-bg 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#141413（1 处，如 __next_static_chunks_16bfh721-emix.css:21）；#faf9f5（1 处，如 __next_static_chunks_16bfh721-emix.css:21）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:21</span><span class="ev">__next_static_chunks_16bfh721-emix.css:21</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--history-fg 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#faf9f5（1 处，如 __next_static_chunks_16bfh721-emix.css:22）；#141413（1 处，如 __next_static_chunks_16bfh721-emix.css:22）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--history-focus-ring 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#6b5ce7（1 处，如 __next_static_chunks_16bfh721-emix.css:22）；#faf9f5（1 处，如 __next_static_chunks_16bfh721-emix.css:22）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--history-headline 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">22px（2 处，如 __next_static_chunks_16bfh721-emix.css:21）；28px（1 处，如 __next_static_chunks_16bfh721-emix.css:21）；32px（1 处，如 __next_static_chunks_16bfh721-emix.css:21）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:21</span><span class="ev">__next_static_chunks_16bfh721-emix.css:21</span><span class="ev">__next_static_chunks_16bfh721-emix.css:21</span><span class="ev">__next_static_chunks_16bfh721-emix.css:21</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--history-body 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">14px（2 处，如 __next_static_chunks_16bfh721-emix.css:22）；15px（1 处，如 __next_static_chunks_16bfh721-emix.css:22）；16px（1 处，如 __next_static_chunks_16bfh721-emix.css:22）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--history-caption 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">12px（2 处，如 __next_static_chunks_16bfh721-emix.css:22）；13px（2 处，如 __next_static_chunks_16bfh721-emix.css:22）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span><span class="ev">__next_static_chunks_16bfh721-emix.css:22</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--container-height 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">calc(13px * 1.54)（1 处，如 __next_static_chunks_20y336fy0c2fa.css:6）；calc(5em + 2px)（1 处，如 __next_static_chunks_20y336fy0c2fa.css:6）；16px（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:15）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_20y336fy0c2fa.css:6</span><span class="ev">__next_static_chunks_20y336fy0c2fa.css:6</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:15</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-width 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">fit-content（1 处，如 __next_static_chunks_20y336fy0c2fa.css:7）；100%（2 处，如 __next_static_chunks_2uzdzei5vni2y.css:25）；auto（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:43）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_20y336fy0c2fa.css:7</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:25</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:43</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:43</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--css-grid-gap-y 在 selector 作用域内有 4 个不同的值</span></div>
+      <p class="d">16px（1 处，如 __next_static_chunks_20y336fy0c2fa.css:23）；24px（1 处，如 __next_static_chunks_20y336fy0c2fa.css:23）；48px（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:18）；64px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:32）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_20y336fy0c2fa.css:23</span><span class="ev">__next_static_chunks_20y336fy0c2fa.css:23</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:18</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:32</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--hero-bg 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#faf9f5（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:4）；#0d0c0b（2 处，如 __next_static_chunks_2y6g9_1fokilo.css:4）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:4</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:4</span><span class="ev">__next_static_chunks_35uako10vtsya.css:4</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--padding 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">0px（3 处，如 __next_static_chunks_2uzdzei5vni2y.css:6）；24px（1 处，如 __next_static_chunks_35uako10vtsya.css:9）；32px（1 处，如 __next_static_chunks_35uako10vtsya.css:8）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:6</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:6</span><span class="ev">__next_static_chunks_35uako10vtsya.css:7</span><span class="ev">__next_static_chunks_35uako10vtsya.css:9</span><span class="ev">__next_static_chunks_35uako10vtsya.css:8</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--radius 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">0（3 处，如 __next_static_chunks_2uzdzei5vni2y.css:7）；16px（1 处，如 __next_static_chunks_35uako10vtsya.css:9）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:7</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:7</span><span class="ev">__next_static_chunks_35uako10vtsya.css:8</span><span class="ev">__next_static_chunks_35uako10vtsya.css:9</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--card-inset 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">24px（2 处，如 __next_static_chunks_2uzdzei5vni2y.css:12）；32px（2 处，如 __next_static_chunks_2uzdzei5vni2y.css:12）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:12</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:24</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:12</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:24</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--grid-content-row 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">1（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:13）；2（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:13）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:13</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:13</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--row-gap 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">32px（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:14）；48px（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:13）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:14</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:13</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--card-inset-inline 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">0px（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:24）；24px（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:25）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:24</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:25</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--card-inset-block 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">24px（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:25）；64px（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:25）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:25</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:25</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--carousel-columns 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">calc((100% - 16px) / 2) 1fr（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:24）；calc((100% - 0px - 2 * 16px) / 3) 1fr（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:24）；calc((100% + 0px - 16px) / 2) 1fr（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:24）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:24</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:24</span><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:24</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--illustration-padding 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">32px（1 处，如 __next_static_chunks_2uzdzei5vni2y.css:24）；0（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:15）；16px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:15）；24px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:15）；calc(24px * 2)（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:15）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:24</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:15</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:15</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:15</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:15</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--hero-name-scale 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">.94（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:5）；1.06（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:4）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:5</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:4</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--tsize 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">calc(clamp(34px,6.6vw,112px) * 1.06)（2 处，如 __next_static_chunks_2y6g9_1fokilo.css:5）；clamp(34px,6.6vw,112px)（2 处，如 __next_static_chunks_35uako10vtsya.css:5）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:5</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:5</span><span class="ev">__next_static_chunks_35uako10vtsya.css:5</span><span class="ev">__next_static_chunks_35uako10vtsya.css:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--grid-highlight 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">#ced6bf（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）；#ebc9b7（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:9）；#c5d3e0（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:9）；#e5cada（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:9）；#bcd1ca（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:9）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:9</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:9</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:9</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:9</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--grid-rival 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#e8e6dc（4 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）；#d1cfc5（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--grid-subject-edge 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">#788c5d（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）；#d97757（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）；#6a9bcc（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）；#c46686（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）；#629987（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--grid-label-w 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">200px（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）；240px（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:9）；148px（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:9）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:9</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:9</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--grid-fade-w 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">28px（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）；22px（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:10）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:10</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--width 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">80%（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:12）；65%（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:12）；420px（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:12）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:12</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:12</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:12</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--fade-background 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#f5f4ed（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:14）；#e8e6dc（1 处，如 __next_static_chunks_2y6g9_1fokilo.css:14）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:14</span><span class="ev">__next_static_chunks_2y6g9_1fokilo.css:14</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--pf-pull 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">min(6rem,25vh)（1 处，如 __next_static_chunks_35uako10vtsya.css:6）；min(6rem,25lvh)（1 处，如 __next_static_chunks_35uako10vtsya.css:5）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_35uako10vtsya.css:6</span><span class="ev">__next_static_chunks_35uako10vtsya.css:5</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--bleed 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">32px（1 处，如 __next_static_chunks_35uako10vtsya.css:8）；0px（1 处，如 __next_static_chunks_35uako10vtsya.css:8）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_35uako10vtsya.css:8</span><span class="ev">__next_static_chunks_35uako10vtsya.css:8</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--column-min-width 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">188px（1 处，如 __next_static_chunks_35uako10vtsya.css:9）；auto（1 处，如 __next_static_chunks_35uako10vtsya.css:9）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_35uako10vtsya.css:9</span><span class="ev">__next_static_chunks_35uako10vtsya.css:9</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--carousel-bleed 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">32px（3 处，如 __next_static_chunks_35uako10vtsya.css:12）；16px（3 处，如 __next_static_chunks_35uako10vtsya.css:12）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_35uako10vtsya.css:12</span><span class="ev">__next_static_chunks_35uako10vtsya.css:29</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:14</span><span class="ev">__next_static_chunks_35uako10vtsya.css:12</span><span class="ev">__next_static_chunks_35uako10vtsya.css:29</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:14</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--fade-direction 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">to left（1 处，如 __next_static_chunks_35uako10vtsya.css:23）；to right（1 处，如 __next_static_chunks_35uako10vtsya.css:23）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_35uako10vtsya.css:23</span><span class="ev">__next_static_chunks_35uako10vtsya.css:23</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-height 在 selector 作用域内有 7 个不同的值</span></div>
+      <p class="d">18px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；28px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；36px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；44px（2 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；56px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:29）；64px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:29）；84px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:29）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:10</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:29</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-padding-x 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">12px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；16px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；24px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；32px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；4px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-padding-y 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">4px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；8px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；12px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；16px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；0（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:30）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:30</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-separator-color 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">#5e5d59（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）；#141413（2 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:4）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:4</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-padding-left 在 selector 作用域内有 4 个不同的值</span></div>
+      <p class="d">8px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；12px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；20px（2 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；28px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:11</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--button-padding-right 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">4px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；12px（2 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；20px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；28px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:3）；16px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:11）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:25</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:3</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:11</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--css-grid-cols 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">4（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:10）；12（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:10）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:10</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:10</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--play-pause-icon-size 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">14px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:29）；20px（2 处，如 __next_static_chunks_3o9di1p9cgo-l.css:37）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:29</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:37</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:40</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--play-icon-size 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">24px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:30）；28px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:30）；36px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:30）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:30</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:30</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:30</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--col-count 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">12（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:34）；10（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:34）；8（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:34）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:34</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:34</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:34</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--slide-spacing 在 selector 作用域内有 4 个不同的值</span></div>
+      <p class="d">16px（1 处，如 __next_static_chunks_3_0qx9s-ohsdh.css:35）；32px（1 处，如 __next_static_chunks_3h_9qsz5evtuq.css:1）；48px（1 处，如 __next_static_chunks_3h_9qsz5evtuq.css:2）；80px（1 处，如 __next_static_chunks_3h_9qsz5evtuq.css:1）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:35</span><span class="ev">__next_static_chunks_3h_9qsz5evtuq.css:1</span><span class="ev">__next_static_chunks_3h_9qsz5evtuq.css:2</span><span class="ev">__next_static_chunks_3h_9qsz5evtuq.css:1</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--toc-row-inset 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">0（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:4）；calc((100% - min(100%,1920px)) / 2 + 32px)（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:6）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:4</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:6</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--toc-downloads-flow 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">column（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:7）；row（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:7）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:7</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:7</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--toc-downloads-column 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">200px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:8）；1fr（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:8）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:8</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:8</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--drawer-size 在 selector 作用域内有 6 个不同的值</span></div>
+      <p class="d">100%（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:16）；calc(calc((100vw - min(100vw,1920px)) / 2 + 32px) + 4 * calc((min(100vw,1920px) - 2 * 32px - (4 - 1) * 16px) / 4) + 3 * 16px)（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:16）；calc(calc((100vw - min(100vw,1920px)) / 2 + 32px) + 5 * calc((min(100vw,1920px) - 2 * 32px - (4 - 1) * 16px) / 4) + 4 * 16px)（2 处，如 __next_static_chunks_3o9di1p9cgo-l.css:16）；calc(calc((100vw - min(100vw,1920px)) / 2 + 32px) + 6 * calc((min(100vw,1920px) - 2 * 32px - (4 - 1) * 16px) / 4) + 5 * 16px)（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:16）；calc(calc((100vw - min(100vw,1920px)) / 2 + 32px) + 7 * calc((min(100vw,1920px) - 2 * 32px - (4 - 1) * 16px) / 4) + 6 * 16px)（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:16）；calc(calc((100vw - min(100vw,1920px)) / 2 + 32px) + 8 * calc((min(100vw,1920px) - 2 * 32px - (4 - 1) * 16px) / 4) + 7 * 16px)（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:16）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:16</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:16</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:16</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:16</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:16</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:16</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--card-ground 在 selector 作用域内有 5 个不同的值</span></div>
+      <p class="d">#c5d3e0（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:24）；#ced6bf（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:23）；#ebc9b7（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:23）；#e5cada（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:23）；#bcd1ca（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:23）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:24</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:23</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:23</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:23</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:23</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--slide-gutter 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">32px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:23）；64px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:23）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:23</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:23</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--scroller-fade-start 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">0px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:24）；32px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:24）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:24</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:24</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--scroller-fade-end 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">0px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:25）；32px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:24）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:25</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:24</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--title-floor 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">28px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:32）；32px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:32）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:32</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:32</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--title-shift 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">1.25em（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:33）；2.25em（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:33）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:33</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:33</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--title-spacing 在 selector 作用域内有 6 个不同的值</span></div>
+      <p class="d">24px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:33）；32px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:33）；48px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:33）；64px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:33）；96px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:33）；128px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:33）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:33</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:33</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:33</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:33</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:33</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:33</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--radius-grown 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">0px（2 处，如 __next_static_chunks_3o9di1p9cgo-l.css:37）；4px（2 处，如 __next_static_chunks_3o9di1p9cgo-l.css:36）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:37</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:40</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:36</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:39</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--copy-block 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">calc(96px + 16px)（2 处，如 __next_static_chunks_3o9di1p9cgo-l.css:37）；calc(200px + 24px)（2 处，如 __next_static_chunks_3o9di1p9cgo-l.css:36）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:37</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:40</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:36</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:39</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--min-height 在 selector 作用域内有 3 个不同的值</span></div>
+      <p class="d">calc(100lvh - 84px)（2 处，如 __next_static_chunks_3o9di1p9cgo-l.css:37）；min(90svh,56.25cqi,1920px * .5625)（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:36）；min(56.25cqi,1920px * .5625)（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:39）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:37</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:40</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:36</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:39</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--grow 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">0（2 处，如 __next_static_chunks_3o9di1p9cgo-l.css:37）；1（4 处，如 __next_static_chunks_3o9di1p9cgo-l.css:36）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:37</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:40</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:36</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:36</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:39</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">conflict</span><span class="t">--toc-list-offset 在 selector 作用域内有 2 个不同的值</span></div>
+      <p class="d">32px（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:42）；calc(32px * 2 + 1px)（1 处，如 __next_static_chunks_3o9di1p9cgo-l.css:42）</p><p class="s">→ 同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。</p><div class="evs"><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:42</span><span class="ev">__next_static_chunks_3o9di1p9cgo-l.css:42</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">duplicate-value</span><span class="t">42 组颜色被多个令牌名重复表达</span></div>
+      <p class="d">#141413 = --theme-foreground-body = --theme-foreground-primary = --theme-button-primary-background = --theme-button-primary-border = --theme-background-primary = --theme-button-primary-foreground = --theme-background-secondary = --color-gray-950 = --color-slate-950 = --color-slate-dark = --foreground-primary = --border-strong = --button-primary-background = --button-secondary-stroke = --button-secondary-foreground = --button-secondary-background-hover = --background-primary = --button-primary-foreground = --button-primary-foreground-hover = --button-secondary-foreground-hover = --text-color = --secondary-text = --button-color = --border-dark = --background = --button-text = --button-background = --button-border = --menu-group-link-color = --history-bg = --history-fg = --theme-button-secondary-background = --hero-ink = --pf-ink = --button-separator-color = --ink = --theme-button-secondary-foreground；#faf9f5 = --theme-background-primary = --theme-button-primary-foreground = --theme-foreground-primary = --theme-button-primary-background = --theme-button-secondary-foreground = --theme-button-tertiary-foreground = --theme-background-secondary = --color-gray-050 = --color-slate-050 = --color-ivory-light = --background-primary = --button-primary-foreground = --button-primary-foreground-hover = --button-secondary-foreground-hover = --foreground-primary = --border-strong = --button-primary-background = --button-secondary-stroke = --button-secondary-foreground = --button-secondary-background-hover = --background = --button-text = --text-color = --secondary-text = --button-color = --border-dark = --card-color = --button-text-hover = --history-fg = --terminal-bg = --tc-bg = --history-bg = --history-focus-ring = --hero-bg = --pf-ivory；#f5f4ed = --theme-background-secondary = --theme-button-tertiary-background = --color-gray-100 = --color-slate-100 = --button-text = --media-surface = --fade-background = --signoff-surface；#e8e6dc = --theme-background-tertiary = --theme-button-secondary-background = --theme-button-tertiary-border = --theme-foreground-body = --theme-background-secondary = --theme-background-primary = --theme-border-primary = --theme-border-secondary = --color-gray-200 = --color-slate-200 = --color-ivory-dark = --background-tertiary = --button-tertiary-background-hover = --button-hover = --border-light = --grid-rival = --fade-background = --button-background = --button-border；#d1cfc5 = --theme-background-quaternary = --theme-border-primary = --theme-border-secondary = --theme-border-tertiary = --theme-button-tertiary-border = --theme-background-tertiary = --theme-button-secondary-background = --theme-button-secondary-border = --color-gray-300 = --color-slate-300 = --color-cloud-light = --border-subtle = --button-tertiary-stroke = --history-border = --grid-rival = --button-background = --button-border；#30302e = --theme-foreground-secondary = --theme-button-secondary-foreground = --theme-background-tertiary = --theme-button-secondary-background = --theme-button-secondary-border = --color-gray-750 = --color-slate-750 = --foreground-secondary = --background-tertiary = --history-fg-secondary = --button-text；#5e5d59 = --theme-foreground-tertiary = --theme-foreground-quaternary = --color-gray-600 = --color-slate-600 = --color-slate-light = --foreground-tertiary = --button-tertiary-foreground = --border-subtle = --secondary-background-hover = --link-icon-color = --history-muted = --history-fg-tertiary = --button-separator-color；#87867f = --theme-foreground-quaternary = --theme-foreground-tertiary = --color-gray-500 = --color-slate-500 = --color-cloud-dark = --foreground-tertiary = --menu-group-link-color = --nav-dropdown-heading = --link-icon-color = --history-fg-quaternary = --button-text</p><p class="s">→ 同一颜色保留一个主名，其余改成别名引用，减少&quot;该用哪个&quot;的猜测。</p><div class="evs"><span class="ev">#141413</span><span class="ev">#faf9f5</span><span class="ev">#f5f4ed</span><span class="ev">#e8e6dc</span><span class="ev">#d1cfc5</span><span class="ev">#30302e</span></div>
+    </li><li class="f warn">
+      <div class="fh"><span class="tag warn">警告</span>
+      <span class="id">orphan</span><span class="t">103 个令牌声明了却从未被引用</span></div>
+      <p class="d">按作用域分布：root 62 个，theme 13 个，selector 28 个。典型来源是共享样式表被另一个页面的变量体系取代了。</p><p class="s">→ 逐个确认：删掉，或让真正的消费方引用它。</p><div class="evs"><span class="ev">--color-oat</span><span class="ev">--color-iris</span><span class="ev">--color-iris-deep</span><span class="ev">--color-periwinkle</span><span class="ev">--color-periwinkle-deep</span><span class="ev">--gutter-x</span></div>
+    </li></ul>
+    </section><section class="grp">
+      <h2><i style="background:#8b877e"></i>结构性观察 <b>33</b></h2>
+      <p class="gd">不算错，但理清之后整个体系会好维护很多。</p>
+      <ul class="fs"><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">cascade-override</span><span class="t">--text-column-max-width 被 root 与 selector 作用域分别定义</span></div>
+      <p class="d">640px @ root；720px @ selector</p><p class="s">→ CSS 级联下的正常覆盖。若覆盖频繁，可提升为独立令牌减少隐性依赖。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_3_0qx9s-ohsdh.css:20</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">dynamic-variable</span><span class="t">--i 有 5 个取值，是逐元素动态变量而非令牌</span></div>
+      <p class="d">全部来自内联样式或 JS 对象，值域为 1, 2, 3, 4, 5。这是把数据写进 CSS 变量的常见手法，不是设计令牌冲突。</p><p class="s">→ 保留即可；如需治理，可改用 data-* 属性或 CSS 计数器，避免与令牌体系混淆。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:4</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">dynamic-variable</span><span class="t">--columns 有 5 个取值，是逐元素动态变量而非令牌</span></div>
+      <p class="d">全部来自内联样式或 JS 对象，值域为 1, 2, 3, 4, 6。这是把数据写进 CSS 变量的常见手法，不是设计令牌冲突。</p><p class="s">→ 保留即可；如需治理，可改用 data-* 属性或 CSS 计数器，避免与令牌体系混淆。</p><div class="evs"><span class="ev">__next_static_chunks_2uzdzei5vni2y.css:17</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">namespace</span><span class="t">并存 115 个命名族</span></div>
+      <p class="d">--color-*（73），--chart-*（30），--button-*（25），--grid-*（23），--comparison-*（23），--theme-*（22），--sp-*（17），--spacer-*（17），--spacing-*（15），--line-*（14），--history-*（13），--card-*（11），--bt-*（11），--hero-*（10），--border-*（9），--weight-*（9），--vs-*（9），--radius-*（8），--br-*（8），--tc-*（8），--ease-*（7），--body-*（7），--nav-*（7），--site-*（7），--carousel-*（7），--toc-*（7），--font-*（6），--gap-*（6），--headline-*（6），--background-*（6），--leading-*（5），--cc-*（5），--slide-*（4），--header-*（4），--z-*（4），--media-*（4），--fade-*（4），--page-*（3），--anthropic-*（3），--gutter-*（3），--breakpoint-*（3），--section-*（3），--text-*（3），--foreground-*（3），--secondary-*（3），--scroll-*（3），--css-*（3），--pf-*（3），--icon-*（3），--play-*（3），--span-*（3），--title-*（3），--size-*（2），--lightningcss-*（2），--responsive-*（2），--container-*（2），--display-*（2），--caption-*（2），--column-*（2），--search-*（2），--scrolling-*（2），--col-*（2），--table-*（2），--expandable-*（2），--scroller-*（2），--toggle-*（2），--mono-*（1），--micro-*（1），--focus-*（1），--menu-*（1），--footer-*（1），--trigger-*（1），--link-*（1），--s-*（1），--terminal-*（1），--article-*（1），--constellation-*（1），--i-*（1），--fs-*（1），--padding-*（1），--row-*（1），--columns-*（1），--illustration-*（1），--apex-*（1），--tsize-*（1），--ttop-*（1），--width-*（1），--collapsed-*（1），--related-*（1），--bleed-*（1），--rule-*（1），--code-*（1），--aspect-*（1），--cycle-*（1），--full-*（1），--track-*（1），--jetbrains-*（1），--screens-*（1），--grain-*（1），--ground-*（1），--cue-*（1），--word-*（1），--ink-*（1），--emphasis-*（1），--beat-*（1），--delay-*（1），--form-*（1），--drawer-*（1），--rest-*（1），--copy-*（1），--grown-*（1），--min-*（1），--grow-*（1），--edge-*（1），--signoff-*（1）</p><p class="s">→ 选定一到两个命名族作为主体系，其余降级为别名或逐步废弃。</p><div class="evs"><span class="ev">--grid-*（23）</span><span class="ev">--page-*（3）</span><span class="ev">--size-*（2）</span><span class="ev">--slide-*（4）</span><span class="ev">--spacing-*（15）</span><span class="ev">--radius-*（8）</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--theme-focus-ring 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#154c92 @ selector；#90c3f6 @ selector/theme[slate,dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span><span class="ev">__next_static_chunks_0hpfgvivairw9.css:6</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--foreground-primary 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[ivory]；#faf9f5 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--foreground-secondary 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#30302e @ theme[ivory]；#b0aea5 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--foreground-tertiary 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#5e5d59 @ theme[ivory]；#87867f @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--background-primary 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#faf9f5 @ theme[ivory]；#141413 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--background-secondary 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f0eee6 @ theme[ivory]；#1f1e1d @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--background-tertiary 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#e8e6dc @ theme[ivory]；#30302e @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--border-strong 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[ivory]；#faf9f5 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--border-subtle 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#d1cfc5 @ theme[ivory]；#5e5d59 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--border-faint 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#f0eee6 @ theme[ivory]；#1f1e1d @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-primary-background 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[ivory]；#faf9f5 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-primary-foreground 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#faf9f5 @ theme[ivory]；#141413 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-primary-background-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#3d3d3a @ theme[ivory]；#f0eee6 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-primary-foreground-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#faf9f5 @ theme[ivory]；#141413 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-secondary-stroke 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[ivory]；#faf9f5 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-secondary-foreground 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[ivory]；#faf9f5 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-secondary-background-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[ivory]；#faf9f5 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-secondary-foreground-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#faf9f5 @ theme[ivory]；#141413 @ theme[slate]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--text-color 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[light,color-light]；#faf9f5 @ theme[dark,color-dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:1</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--background 在不同作用域/主题下有 3 个值</span></div>
+      <p class="d">#faf9f5 @ theme[light]；#141413 @ theme[dark,color-dark]；#f0eee6 @ theme[color-light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--secondary-background 在不同作用域/主题下有 3 个值</span></div>
+      <p class="d">#f0eee6 @ theme[light]；#3d3d3a @ theme[dark]；#1919191a @ theme[color-light,color-dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--secondary-background-hover 在不同作用域/主题下有 3 个值</span></div>
+      <p class="d">#dedcd1 @ theme[light]；#5e5d59 @ theme[dark]；#19191933 @ theme[color-light,color-dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--secondary-text 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[light,color-light]；#faf9f5 @ theme[dark,color-dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-color 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[light,color-light]；#faf9f5 @ theme[dark,color-dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--button-hover 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#3d3d3a @ theme[light,color-light]；#e8e6dc @ theme[dark,color-dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--border-dark 在不同作用域/主题下有 2 个值</span></div>
+      <p class="d">#141413 @ theme[light,color-light,color-dark]；#faf9f5 @ theme[dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--border-light 在不同作用域/主题下有 3 个值</span></div>
+      <p class="d">#b0aea5 @ theme[light]；#e8e6dc @ theme[dark]；#1919191a @ theme[color-light,color-dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--text-agate 在不同作用域/主题下有 3 个值</span></div>
+      <p class="d">#b0aea5 @ theme[light]；#f0eee6 @ theme[dark]；#1919191a @ theme[color-light,color-dark]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li><li class="f info">
+      <div class="fh"><span class="tag info">提示</span>
+      <span class="id">theme-variation</span><span class="t">--card-color 在不同作用域/主题下有 3 个值</span></div>
+      <p class="d">#ffffff @ theme[light]；#f0eee6 @ theme[dark,color-dark]；#faf9f5 @ theme[color-light]</p><p class="s">→ 主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让&quot;主题&quot;成为体系的一部分而不是散落的例外。</p><div class="evs"><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span><span class="ev">__next_static_chunks_0zjrix53pdagy.css:2</span></div>
+    </li></ul>
+    </section>
+  <footer>
+    生成于 2026-10-30 05:47:06 · token-audit<br>
+    静态来源 /tmp/anthropic-fetched · 13 个文件<br>
+    未做运行时实测（纯静态）
+  </footer>
+</div>
+</body></html>

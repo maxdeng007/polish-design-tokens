@@ -1,0 +1,59 @@
+{
+  "name": "token-audit-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing design token auditing capabilities as programmatic API tools",
+  "type": "module",
+  "bin": {
+    "token-audit-mcp": "./bin/token-audit-mcp.js"
+  },
+  "main": "src/mcp-server.js",
+  "exports": {
+    ".": "./src/mcp-server.js",
+    "./handlers/*": "./src/handlers/*.js",
+    "./cache": "./src/cache/index.js",
+    "./utils/*": "./src/utils/*.js"
+  },  "files": [
+    "bin",
+    "src",
+    "scripts",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node bin/test.js",
+    "test:e2e": "node bin/test.js",
+    "dev": "node --watch src/mcp-server.js"
+  },
+  "peerDependencies": {
+    "token-audit": ">=0.1.0",
+    "playwright-core": ">=1.40"
+  },
+  "peerDependenciesMeta": {
+    "token-audit": { "optional": true },
+    "playwright-core": { "optional": true }
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "design-tokens",
+    "audit",
+    "mcp",
+    "figma",
+    "style-dictionary",
+    "tokens-studio",
+    "dtcg",
+    "tailwind",
+    "shadcn"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "postinstall": "node scripts/setup.js"
+}

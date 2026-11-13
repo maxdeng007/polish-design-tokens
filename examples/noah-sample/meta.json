@@ -1,0 +1,37 @@
+{
+  "job_id": "38b37969-a72c-3183-525e-98ca63ea743f3fe15777184e72a4d33d0b2c1e825579",
+  "target": {
+    "kind": "path",
+    "value": "/Users/dengzhou/Desktop/08-Noah-Project/03-AI AI/page-enhanced/Noah mind 2.0/src/pages"
+  },
+  "status": "complete",
+  "summary": {
+    "declarations": 1101,
+    "uniqueTokens": 290,
+    "runtimeVariables": 0,
+    "runtimeDocuments": 0,
+    "findings": 186,
+    "bySeverity": {
+      "error": 65,
+      "warn": 32,
+      "info": 89
+    }
+  },
+  "findings_by_severity": {
+    "error": 65,
+    "warn": 32,
+    "info": 89
+  },
+  "findings_by_rule": {
+    "conflict": 39,
+    "dangling": 56,
+    "duplicate-value": 1,
+    "orphan": 1,
+    "cascade-override": 1,
+    "namespace": 1,
+    "state-variation": 2,
+    "theme-variation": 85
+  },
+  "declarations_total": 1101,
+  "generated_at": "2026-10-30"
+}

@@ -1,0 +1,2244 @@
+/**
+ * Generated Style Dictionary - web
+ * Source: token-audit audit #38b37969-a72c-3183-525e-98ca63ea743f3fe15777184e72a4d33d0b2c1e825579
+ */
+:root {
+  --nm-gut: clamp(20px, 4.6vw, 72px);
+  --nm-gut: clamp(20px, 4.6vw, 64px);
+  --nm-container: 1440px;
+  --bg: #F3F5F8;
+  --bg-2: #F7F9FB;
+  --bg-3: #EFF2F6;
+  --card: #FFFFFF;
+  --ink: #16202B;
+  --muted: #6B7685;
+  --line: #E6EAF0;
+  --wine: #E4762F;
+  --wine-soft: #FFF1E8;
+  --gold: #E4762F;
+  --green: #12945F;
+  --green-soft: #E6F6EE;
+  --red: #E02B2B;
+  --red-soft: #FDECEC;
+  --amber: #C27A10;
+  --amber-soft: #FFF5E1;
+  --blue: #1F5BFF;
+  --blue-soft: #EAF0FF;
+  --purple: #7B4FE0;
+  --purple-soft: #F2EDFF;
+  --radius: 14px;
+  --sh: 0 1px 2px rgba(11,23,36,.05), 0 2px 8px rgba(11,23,36,.05);
+  --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+  --font-wordmark: "wordmarkFont","wordmarkFont Fallback";
+  --font-manrope: "manropeFont","manropeFont Fallback";
+  --bg: #F8F7F4;
+  --card: #FFFFFF;
+  --ink: #2B2620;
+  --muted: #8F8A80;
+  --line: #EAE6DF;
+  --wine: #F25E00;
+  --wine-soft: #FFF0E4;
+  --gold: #E05800;
+  --green: #2E7D5B;
+  --green-soft: #EAF4EF;
+  --red: #B84038;
+  --red-soft: #FCEDEA;
+  --amber: #B4720E;
+  --amber-soft: #FBF3E4;
+  --side: #282420;
+  --me: #95EC69;
+  --radius: 18px;
+  --ev-seat-color: #2F8A63;
+  --ev-seat-track: #DCEBE3;
+  --ev-seat-color: #C28A24;
+  --ev-seat-track: #F1E4C7;
+  --ev-seat-color: #B84B43;
+  --ev-seat-track: #F0D7D4;
+  --persona-bg: none;
+  --persona-bg: none;
+  --persona-bg: none;
+  --ch-space-xs: 8px;
+  --ch-space-sm: 12px;
+  --ch-space-md: 20px;
+  --ch-space-lg: 32px;
+  --ch-space-xl: 52px;
+  --ch-space-lg: 26px;
+  --ch-space-xl: 40px;
+  --skeleton-base: #214e70;
+  --skeleton-highlight: #3b7397;
+  --skeleton-panel: #153d5d;
+  --skeleton-cover: #123650;
+  --skeleton-border: rgba(79,157,207,.26);
+  --ev-seat-color: #5bd9a0;
+  --ev-seat-track: #2b5269;
+  --ev-seat-color: #ffcc7a;
+  --ev-seat-track: #574d3b;
+  --ev-seat-color: #ff8f87;
+  --ev-seat-track: #5a4147;
+  --bg: #f8f7f4;
+  --bg2: #f8f7f4;
+  --card: #fff;
+  --ink: #2b2620;
+  --text: #2b2620;
+  --muted: #8f8a80;
+  --line: #eae6df;
+  --gold: #e05800;
+  --orange: #e05800;
+  --wine: #f25e00;
+  --wine-soft: #fff0e4;
+  --product-motion-fast: 120ms;
+  --product-motion-medium: 260ms;
+  --product-ease-out: cubic-bezier(.25,1,.5,1);
+  --product-inset-surface: color-mix(in srgb,#F8F7F4 48%,#FFFFFF);
+  --product-panel-radius: 14px;
+  --product-inset-radius: 10px;
+  --product-text-caption: .65625rem;
+  --product-text-supporting: .75rem;
+  --product-text-body: .8125rem;
+  --bg: #102f49;
+  --bg2: #102f49;
+  --card: #173f60;
+  --ink: #f3f6f8;
+  --text: #f3f6f8;
+  --muted: #a7bbc9;
+  --line: #345f7e;
+  --gold: #f47a38;
+  --orange: #f47a38;
+  --wine: #f47a38;
+  --wine-soft: rgba(244,122,56,.14);
+  --bg: #102f49;
+  --card: #173f60;
+  --ink: #f3f6f8;
+  --muted: #a7bbc9;
+  --line: #345f7e;
+  --gold: #f47a38;
+  --wine-soft: rgba(244,122,56,.14);
+  --panel: #fff;
+  --bg2: #f8f7f4;
+  --text: #2b2620;
+  --accent: #e05800;
+  --csm-red: #B42318;
+  --csm-red-soft: #FDECEC;
+  --csm-neutral: #8F8A80;
+  --csm-neutral-soft: #F1ECE3;
+  --csm-lead: #3D6B8E;
+  --csm-lead-soft: #EDF3F8;
+  --csm-toact: #B4720E;
+  --csm-toact-soft: #FBF3E4;
+  --csm-active: #2E7D5B;
+  --csm-active-soft: #EAF4EF;
+  --csm-high: #F25E00;
+  --csm-high-soft: #FFF0E4;
+  --csm-text-2: #75706A;
+  --csm-accent-ink: #C05A0E;
+  --csm-field: #FFFFFF;
+  --csm-hover: #F6F4F0;
+  --csm-th: #FCFBF9;
+  --csm-row-hover: #FCFAF7;
+  --csm-track: #F1ECE3;
+  --csm-line-2: #DDD6CA;
+  --csm-stripe: #FAF8F4;
+  --csm-hover-border: #E4DACB;
+  --csm-hover-shadow: 0 2px 5px -2px rgba(90,70,45,.06),0 26px 50px -30px rgba(90,70,45,.3);
+  --csm-active-shadow: 0 0 0 1px #8F8A80,0 18px 38px -26px rgba(90,70,45,.35);
+  --csm-pick-shadow: 0 0 0 2px #FFF0E4,0 18px 38px -26px rgba(90,70,45,.35);
+  --csm-act-hover: #D95400;
+  --csm-warn-border: #F2D9C4;
+  --csm-tier-family: #8A6FB0;
+  --csm-tier-family-bg: #F2EEF8;
+  --csm-tier-family-ink: #6B4E96;
+  --csm-tier-black: #3A3A3A;
+  --csm-tier-black-bg: #F2F1EF;
+  --csm-tier-black-ink: #2A2A2A;
+  --csm-tier-diamond: #A8C2D6;
+  --csm-tier-diamond-bg: #EDF3F8;
+  --csm-tier-diamond-ink: #3D6B8E;
+  --csm-tier-gold: #DCC48A;
+  --csm-tier-gold-bg: #FBF3E4;
+  --csm-tier-gold-ink: #B4720E;
+  --csm-tier-ivory: #DED6C6;
+  --csm-tier-ivory-bg: #F8F5EE;
+  --csm-tier-ivory-ink: #93856A;
+  --csm-tone: #8F8A80;
+  --csm-tone: #1F5BFF;
+  --csm-tone: #8F8A80;
+  --csm-tone: #B4720E;
+  --csm-tone: #2E7D5B;
+  --csm-tone: #F6C453;
+  --csm-tone: #8F8A80;
+  --csm-tone: #B4720E;
+  --csm-tone: #2E7D5B;
+  --csm-tone: #F6C453;
+  --csm-tone: #8F8A80;
+  --csm-tone-soft: #12345C;
+  --csm-tone: #2E7D5B;
+  --csm-tone-soft: rgba(16,185,129,.14);
+  --csm-tone: #F6C453;
+  --csm-tone-soft: rgba(246,196,83,.14);
+  --crec-radius: 18px;
+  --bg: #102A43;
+  --bg-2: #0D253D;
+  --bg-3: #12345C;
+  --card: #1B456A;
+  --ink: #F7FBFF;
+  --muted: #A9BDD3;
+  --muted-2: #A9BDD3;
+  --line: rgba(41,168,255,.28);
+  --line-2: rgba(41,168,255,.16);
+  --wine: #FF6900;
+  --wine-soft: rgba(255,105,0,.14);
+  --gold: #FF6900;
+  --blue: #29A8FF;
+  --blue-soft: rgba(41,168,255,.14);
+  --green: #10B981;
+  --green-soft: rgba(16,185,129,.1);
+  --red: #F87171;
+  --red-soft: rgba(248,113,113,.12);
+  --amber: #F59E0B;
+  --amber-soft: rgba(245,158,11,.12);
+  --side: #0D253D;
+  --me: #FF6900;
+  --radius: 8px;
+  --grad-orange: linear-gradient(135deg,#FF6900,#FF6900);
+  --grad-purple: linear-gradient(135deg,#29A8FF,#29A8FF);
+  --grad-brand: linear-gradient(135deg,#FF6900,#29A8FF);
+  --glow-orange: 0 0 32px rgba(255,105,0,.14);
+  --glow-purple: 0 0 28px rgba(41,168,255,.18);
+  --ev-seat-color: #10B981;
+  --ev-seat-track: rgba(16,185,129,.18);
+  --ev-seat-color: #F59E0B;
+  --ev-seat-track: rgba(245,158,11,.18);
+  --ev-seat-color: #EF4444;
+  --ev-seat-track: rgba(239,68,68,.18);
+  --csm-red: #FF7B72;
+  --csm-red-soft: rgba(255,123,114,.14);
+  --csm-neutral: #8F8A80;
+  --csm-neutral-soft: #12345C;
+  --csm-lead: #1F5BFF;
+  --csm-lead-soft: #EAF0FF;
+  --csm-active: #2E7D5B;
+  --csm-active-soft: rgba(16,185,129,.14);
+  --csm-high: #F6C453;
+  --csm-high-soft: rgba(246,196,83,.14);
+  --csm-text-2: #A9BDD3;
+  --csm-accent-ink: #F25E00;
+  --csm-field: #FFFFFF;
+  --csm-hover: #12345C;
+  --csm-th: #0D253D;
+  --csm-row-hover: #12345C;
+  --csm-track: #12345C;
+  --csm-line-2: #EAE6DF;
+  --csm-stripe: #12345C;
+  --csm-hover-border: #1F5BFF;
+  --csm-hover-shadow: 0 0 28px rgba(41,168,255,.18);
+  --csm-active-shadow: 0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14);
+  --csm-pick-shadow: 0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14);
+  --csm-act-hover: #F25E00;
+  --csm-warn-border: #F25E00;
+  --csm-tier-family: #B79BE0;
+  --csm-tier-family-bg: rgba(183,155,224,.14);
+  --csm-tier-family-ink: #B79BE0;
+  --csm-tier-black: #8F8A80;
+  --csm-tier-black-bg: #12345C;
+  --csm-tier-black-ink: #2B2620;
+  --csm-tier-diamond: #EAE6DF;
+  --csm-tier-diamond-bg: #EAF0FF;
+  --csm-tier-diamond-ink: #1F5BFF;
+  --csm-tier-gold: #F6C453;
+  --csm-tier-gold-bg: rgba(246,196,83,.14);
+  --csm-tier-gold-ink: #F6C453;
+  --csm-tier-ivory: #EAE6DF;
+  --csm-tier-ivory-bg: #0D253D;
+  --csm-tier-ivory-ink: #A9BDD3;
+  --product-detail-dark-surface: color-mix(in srgb,#FFFFFF 64%,#0D253D);
+  --product-inset-surface: color-mix(in srgb,#12345C 54%,#0D253D);
+  --surface: #0D253D;
+  --card2: #12345C;
+  --ink2: #D7E5F2;
+  --ink3: #8F8A80;
+  --goldline: #E05800;
+  --goldbg: #FFF0E4;
+  --ok: #2E7D5B;
+  --warn: #B4720E;
+  --crit: #FF6B6B;
+  --lock: #8F8A80;
+  --a1: #29A8FF;
+  --a2: #A855F7;
+  --a3: #E05800;
+  --p0: #FF6B6B;
+  --p1: #FF9B54;
+  --p2: #F5C451;
+  --p3: #29A8FF;
+  --p4: #8F8A80;
+  --ch-whatsapp: #2E7D5B;
+  --ch-email: #29A8FF;
+  --ch-wechat: #A855F7;
+  --ch-sms: #F5C451;
+  --s1: #3987e5;
+  --s2: #d95926;
+  --s3: #199e70;
+  --s4: #c98500;
+  --s5: #d55181;
+  --s6: #008300;
+  --s7: #9085e9;
+  --lineink: #29A8FF;
+  --sans: "HarmonyOS Sans SC","PingFang SC","Microsoft YaHei","manropeFont","manropeFont Fallback",-apple-system,sans-serif;
+  --serif: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+  --mono: "SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sh: 0 12px 32px rgba(2,16,31,.18);
+  --r: 8px;
+  --rs: 6px;
+  --surface: #F7F3ED;
+  --card2: #F3EEE6;
+  --ink2: #5C5C5C;
+  --crit: #E04545;
+  --a1: #5B6FA8;
+  --a2: #805AD5;
+  --p0: #E04545;
+  --p1: #E87050;
+  --p2: #D4A537;
+  --p3: #5B6FA8;
+  --ch-whatsapp: #5B8A55;
+  --ch-email: #5B6FA8;
+  --ch-wechat: #805AD5;
+  --ch-sms: #D4A537;
+  --s1: #2a78d6;
+  --s2: #eb6834;
+  --s3: #1baf7a;
+  --s4: #eda100;
+  --s5: #e87ba4;
+  --s6: #008300;
+  --s7: #4a3aa7;
+  --lineink: #5B6FA8;
+  --sh: 0 8px 24px rgba(95,72,54,.08);
+  --toolbar-control-height: 34px;
+  --compact-tag-height: 20px;
+  --compact-tag-font-size: 10.5px;
+  --compact-tag-pad-x: 8px;
+  --compact-tag-gap: 8px;
+  --tag-copy-gap: 10px;
+  --bg-main: hsl(42,22%,96.5%);
+  --bg-300: hsl(42,15%,92%);
+  --bg-input: #ffffff;
+  --bg-hover: hsl(42,14%,90%);
+  --brand: hsl(14.8,55%,48%);
+  --text-0: hsl(40,8%,12%);
+  --text-1: hsl(40,6%,28%);
+  --text-2: hsl(40,5%,52%);
+  --text-3: hsl(40,5%,36%);
+  --border: hsl(42,12%,85%);
+  --font-serif: Georgia,"Times New Roman",serif;
+  --font-sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sidebar-w: 288px;
+  --task-bg: #f5f3ee;
+  --task-panel: #fff;
+  --task-side: #fbfaf7;
+  --task-border: #eae6dd;
+  --task-border-strong: #ded8cc;
+  --task-ink: #211e19;
+  --task-text: #575144;
+  --task-muted: #8b8578;
+  --task-faint: #b3ada0;
+  --task-orange: #a94f24;
+  --task-orange-soft: #fbefe6;
+  --task-bg: #f5f3ee;
+  --task-panel: #fff;
+  --task-side: #fbfaf7;
+  --task-border: #eae6dd;
+  --task-border-strong: #ded8cc;
+  --task-ink: #211e19;
+  --task-text: #575144;
+  --task-muted: #8b8578;
+  --task-faint: #b3ada0;
+  --task-orange: #a94f24;
+  --task-orange-soft: #fbefe6;
+  --stack-pad: 18px;
+  --stack-pad: 30px;
+  --stack-pad: 0px;
+  --task-orange: #ff6900;
+  --task-orange-soft: #fff1e6;
+  --task-border-strong: #efcfb8;
+  --holding-action-gradient: linear-gradient(135deg, #ff8a00 0%, #ff6900 52%, #ff4f00 100%);
+  --holding-action-gradient-hover: linear-gradient(135deg, #ff9a1f 0%, #ff7214 48%, #f05a00 100%);
+  --stack-pad: 10px;
+  --stack-pad: 16px;
+  --stack-pad: 0px;
+  --bg: #F8F7F4;
+  --card: #FFFFFF;
+  --card2: #FFFFFF;
+  --line: #EAE6DF;
+  --line2: #DDD7CD;
+  --ink: #2B2620;
+  --mut: #8F8A80;
+  --dim: #A9A298;
+  --org: #D45400;
+  --blu: #2F6FD0;
+  --pur: #7B5BD0;
+  --grn: #2E7D5B;
+  --yel: #D9A62B;
+  --red: #B84038;
+  --pnk: #C2557E;
+  --cyn: #1F8A9E;
+  --v2-navy: #0B1724;
+  --v2-or: #E4762F;
+  --v2-or2: #FF9A4D;
+  --v2-or-soft: #FFF1E8;
+  --v2-ink: #16202B;
+  --v2-sub: #6B7685;
+  --v2-line: #E6EAF0;
+  --v2-soft: #F7F9FB;
+  --v2-green: #12945F;
+  --v2-green-soft: #E6F6EE;
+  --v2-red: #E02B2B;
+  --v2-red-soft: #FDECEC;
+  --v2-amber: #C27A10;
+  --v2-amber-soft: #FFF5E1;
+  --v2-blue: #1F5BFF;
+  --v2-blue-soft: #EAF0FF;
+  --v2-violet: #7B4FE0;
+  --v2-violet-soft: #F2EDFF;
+  --nm-gut: clamp(20px, 4.6vw, 72px);
+  --nm-gut: clamp(20px, 4.6vw, 64px);
+  --nm-container: 1440px;
+  --hr-bg: #fbfaf7;
+  --hr-panel: #fff;
+  --hr-nested: #fff;
+  --hr-line: #e5e1d8;
+  --hr-line-strong: #d6cfbf;
+  --hr-ink: #1c1c1c;
+  --hr-text: #4a4a4a;
+  --hr-muted: #8a8478;
+  --hr-brand: #8b2c1d;
+  --hr-brand-soft: #f6efe6;
+  --hr-green: #4a7c59;
+  --hr-red: #a05050;
+  --hr-gold: #b08a4c;
+  --hr-shadow: 0 1px 2px rgba(28,28,28,.04),0 4px 16px rgba(28,28,28,.04);
+  --bg: #F8F7F4;
+  --card: #FFFFFF;
+  --ink: #2B2620;
+  --muted: #8F8A80;
+  --line: #EAE6DF;
+  --wine: #F25E00;
+  --wine-soft: #FFF0E4;
+  --gold: #E05800;
+  --green: #2E7D5B;
+  --green-soft: #EAF4EF;
+  --red: #B84038;
+  --red-soft: #FCEDEA;
+  --amber: #B4720E;
+  --amber-soft: #FBF3E4;
+  --blue: #28618F;
+  --blue-soft: #EAF2FA;
+  --purple: #6A4F92;
+  --purple-soft: #F2EDFA;
+  --radius: 18px;
+  --bg-2: #F3F0EB;
+  --bg-3: #EDE9E2;
+  --sans: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+  --sh: 0 2px 5px rgba(30,37,47,.025);
+  --nm-color-bg: #f8f7f4;
+  --nm-color-surface: #ffffff;
+  --nm-color-text: #2b2620;
+  --nm-color-text-secondary: #8f8a80;
+  --nm-color-border: #eae6df;
+  --nm-color-brand-fill: #f25e00;
+  --nm-color-brand-accent: #e05800;
+  --nm-color-on-brand: #ffffff;
+  --nm-color-success: #2e7d5b;
+  --nm-color-success-soft: #eaf4ef;
+  --nm-color-warning: #b4720e;
+  --nm-color-warning-soft: #fbf3e4;
+  --nm-color-danger: #b84038;
+  --nm-color-danger-soft: #fcedea;
+  --nm-color-brand-fill-hover: #ee6000;
+  --nm-color-on-brand-track: rgba(255, 255, 255, 0.35);
+  --nm-shadow-brand: 0 12px 28px -14px rgba(242, 94, 0, 0.55);
+  --nm-shadow-brand-hover: 0 16px 34px -14px rgba(242, 94, 0, 0.6);
+  --nm-shadow-card: 0 1px 1px rgba(90, 70, 45, 0.03),
+    0 3px 8px -4px rgba(90, 70, 45, 0.05),
+    0 26px 54px -40px rgba(90, 70, 45, 0.22);
+  --nm-opacity-disabled: 0.35;
+  --nm-opacity-loading: 0.92;
+  --nm-radius-button: 6px;
+  --nm-background-button: linear-gradient(165deg, #ff8a2e 0%, #f96a00 52%, #e85800 100%);
+  --nm-background-button-hover: linear-gradient(165deg, #ff7e1b 0%, #ee6000 55%, #db5300 100%);
+  --nm-radius-sm: 8px;
+  --nm-radius-md: 12px;
+  --nm-radius-lg: 16px;
+  --nm-radius-modal: 16px;
+  --nm-radius-pill: 999px;
+  --nm-space-1: 2px;
+  --nm-space-2: 4px;
+  --nm-space-3: 8px;
+  --nm-space-4: 12px;
+  --nm-space-5: 16px;
+  --nm-space-6: 24px;
+  --nm-space-7: 32px;
+  --nm-font-sans: 'Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --nm-font-number: 'Space Grotesk', 'Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --nm-font-size-eyebrow: 12px;
+  --nm-line-height-eyebrow: 1.4;
+  --nm-font-size-subtitle: 16px;
+  --nm-line-height-subtitle: 1.5;
+  --nm-font-size-title: 28px;
+  --nm-line-height-title: 1.35;
+  --nm-font-size-title-narrow: 24px;
+  --nm-line-height-title-narrow: 1.3;
+  --nm-color-bg: #102a43;
+  --nm-color-surface: #1b456a;
+  --nm-color-text: #f7fbff;
+  --nm-color-text-secondary: #a9bdd3;
+  --nm-color-border: rgba(41, 168, 255, 0.28);
+  --nm-color-brand-fill: #ff6900;
+  --nm-color-brand-accent: #ff6900;
+  --nm-color-on-brand: #ffffff;
+  --nm-color-success: #10b981;
+  --nm-color-success-soft: rgba(16, 185, 129, 0.1);
+  --nm-color-warning: #f59e0b;
+  --nm-color-warning-soft: rgba(245, 158, 11, 0.12);
+  --nm-color-danger: #f87171;
+  --nm-color-danger-soft: rgba(248, 113, 113, 0.12);
+  --nm-color-brand-fill-hover: #ff6900;
+  --nm-shadow-brand: 0 4px 16px -4px rgba(255, 105, 0, 0.3);
+  --nm-shadow-brand-hover: 0 6px 24px -4px rgba(255, 105, 0, 0.45);
+  --nm-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --nm-opacity-disabled: 0.4;
+  --nm-background-button: #ff6900;
+  --nm-background-button-hover: #ff6900;
+  --nm-radius-sm: 4px;
+  --nm-radius-md: 6px;
+  --nm-radius-lg: 8px;
+  --nm-radius-modal: 10px;
+  --bg: #102a43;
+  --card: #1b456a;
+  --ink: #f7fbff;
+  --muted: #a9bdd3;
+  --line: rgba(41, 168, 255, 0.28);
+  --wine: #ff6900;
+  --wine-soft: #fff0e4;
+  --bg-2: #fcfbf9;
+  --bg-3: #f6f4f0;
+  --blue: #3d6b8e;
+  --blue-soft: #edf3f8;
+  --green: #10b981;
+  --green-soft: rgba(16, 185, 129, 0.1);
+  --red: #f87171;
+  --red-soft: rgba(248, 113, 113, 0.12);
+  --amber: #f59e0b;
+  --amber-soft: rgba(245, 158, 11, 0.12);
+  --btn: #ff6900;
+  --font: 'Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --bg-2: #0d253d;
+  --bg-3: #12345c;
+  --blue: #29a8ff;
+  --blue-soft: rgba(41,168,255,.14);
+  --wine-soft: rgba(255,105,0,.14);
+  --np-ink: #2B2620;
+  --np-muted: #8F8A80;
+  --np-line: #EAE6DF;
+  --np-card: #FFFFFF;
+  --np-orange: #F25E00;
+  --np-orange-soft: #FFF0E4;
+  --np-green: #2E7D5B;
+  --np-green-soft: #EAF4EF;
+  --np-amber: #B4720E;
+  --np-amber-soft: #FBF3E4;
+  --np-gray: #8F8A80;
+  --np-gray-soft: #F3F1EC;
+  --np-red: #B84038;
+  --np-red-soft: #FCEDEA;
+  --radius: 11px;
+  --nm-color-bg: #f8f7f4;
+  --nm-color-surface: #fff;
+  --nm-color-text: #2b2620;
+  --nm-color-text-secondary: #8f8a80;
+  --nm-color-border: #eae6df;
+  --nm-color-brand-fill: #f25e00;
+  --nm-color-brand-accent: #e05800;
+  --nm-radius-button: 6px;
+  --nm-radius-lg: 18px;
+  --nm-font-sans: 'Manrope','PingFang SC','Microsoft YaHei',sans-serif;
+  --nm-shadow-card: 0 1px 1px rgba(90,70,45,.03),0 3px 8px -4px rgba(90,70,45,.05),0 26px 54px -40px rgba(90,70,45,.22);
+  --soft: #fff1e6;
+  --sidebar: 212px;
+  --nm-background-button: linear-gradient(165deg,#ff8a2e,#f96a00 52%,#e85800);
+  --sidebar: 72px;
+  --sidebar: 180px;
+  --sidebar: 64px;
+  --nm-font-sans: -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  --nm-radius-lg: 11px;
+  --nm-background-button: #ef6815;
+  --nb-gut: max(26px,calc((100% - 1228px) / 2));
+  --navy: #0B1724;
+  --or: #E4762F;
+  --or2: #FF9A4D;
+  --or-soft: #FFF1E8;
+  --bg: #F3F5F8;
+  --ink: #16202B;
+  --sub: #6B7685;
+  --line: #E6EAF0;
+  --soft: #F7F9FB;
+  --green: #12945F;
+  --green-soft: #E6F6EE;
+  --red: #E02B2B;
+  --red-soft: #FDECEC;
+  --amber: #C27A10;
+  --amber-soft: #FFF5E1;
+  --blue: #1F5BFF;
+  --blue-soft: #EAF0FF;
+  --violet: #7B4FE0;
+  --violet-soft: #F2EDFF;
+  --font-wordmark: "wordmarkFont","wordmarkFont Fallback";
+  --font-manrope: "manropeFont","manropeFont Fallback";
+  --bg: #F8F7F4;
+  --card: #FFFFFF;
+  --ink: #2B2620;
+  --muted: #8F8A80;
+  --line: #EAE6DF;
+  --wine: #F25E00;
+  --wine-soft: #FFF0E4;
+  --gold: #E05800;
+  --green: #2E7D5B;
+  --green-soft: #EAF4EF;
+  --red: #B84038;
+  --red-soft: #FCEDEA;
+  --amber: #B4720E;
+  --amber-soft: #FBF3E4;
+  --side: #282420;
+  --me: #95EC69;
+  --radius: 18px;
+  --ev-seat-color: #2F8A63;
+  --ev-seat-track: #DCEBE3;
+  --ev-seat-color: #C28A24;
+  --ev-seat-track: #F1E4C7;
+  --ev-seat-color: #B84B43;
+  --ev-seat-track: #F0D7D4;
+  --persona-bg: none;
+  --persona-bg: none;
+  --persona-bg: none;
+  --ch-space-xs: 8px;
+  --ch-space-sm: 12px;
+  --ch-space-md: 20px;
+  --ch-space-lg: 32px;
+  --ch-space-xl: 52px;
+  --ch-space-lg: 26px;
+  --ch-space-xl: 40px;
+  --skeleton-base: #214e70;
+  --skeleton-highlight: #3b7397;
+  --skeleton-panel: #153d5d;
+  --skeleton-cover: #123650;
+  --skeleton-border: rgba(79,157,207,.26);
+  --ev-seat-color: #5bd9a0;
+  --ev-seat-track: #2b5269;
+  --ev-seat-color: #ffcc7a;
+  --ev-seat-track: #574d3b;
+  --ev-seat-color: #ff8f87;
+  --ev-seat-track: #5a4147;
+  --bg: #f8f7f4;
+  --bg2: #f8f7f4;
+  --card: #fff;
+  --ink: #2b2620;
+  --text: #2b2620;
+  --muted: #8f8a80;
+  --line: #eae6df;
+  --gold: #e05800;
+  --orange: #e05800;
+  --wine: #f25e00;
+  --wine-soft: #fff0e4;
+  --product-motion-fast: 120ms;
+  --product-motion-medium: 260ms;
+  --product-ease-out: cubic-bezier(.25,1,.5,1);
+  --product-inset-surface: color-mix(in srgb,#F8F7F4 48%,#FFFFFF);
+  --product-panel-radius: 14px;
+  --product-inset-radius: 10px;
+  --product-text-caption: .65625rem;
+  --product-text-supporting: .75rem;
+  --product-text-body: .8125rem;
+  --bg: #102f49;
+  --bg2: #102f49;
+  --card: #173f60;
+  --ink: #f3f6f8;
+  --text: #f3f6f8;
+  --muted: #a7bbc9;
+  --line: #345f7e;
+  --gold: #f47a38;
+  --orange: #f47a38;
+  --wine: #f47a38;
+  --wine-soft: rgba(244,122,56,.14);
+  --bg: #102f49;
+  --card: #173f60;
+  --ink: #f3f6f8;
+  --muted: #a7bbc9;
+  --line: #345f7e;
+  --gold: #f47a38;
+  --wine-soft: rgba(244,122,56,.14);
+  --panel: #fff;
+  --bg2: #f8f7f4;
+  --text: #2b2620;
+  --accent: #e05800;
+  --csm-red: #B42318;
+  --csm-red-soft: #FDECEC;
+  --csm-neutral: #8F8A80;
+  --csm-neutral-soft: #F1ECE3;
+  --csm-lead: #3D6B8E;
+  --csm-lead-soft: #EDF3F8;
+  --csm-toact: #B4720E;
+  --csm-toact-soft: #FBF3E4;
+  --csm-active: #2E7D5B;
+  --csm-active-soft: #EAF4EF;
+  --csm-high: #F25E00;
+  --csm-high-soft: #FFF0E4;
+  --csm-text-2: #75706A;
+  --csm-accent-ink: #C05A0E;
+  --csm-field: #FFFFFF;
+  --csm-hover: #F6F4F0;
+  --csm-th: #FCFBF9;
+  --csm-row-hover: #FCFAF7;
+  --csm-track: #F1ECE3;
+  --csm-line-2: #DDD6CA;
+  --csm-stripe: #FAF8F4;
+  --csm-hover-border: #E4DACB;
+  --csm-hover-shadow: 0 2px 5px -2px rgba(90,70,45,.06),0 26px 50px -30px rgba(90,70,45,.3);
+  --csm-active-shadow: 0 0 0 1px #8F8A80,0 18px 38px -26px rgba(90,70,45,.35);
+  --csm-pick-shadow: 0 0 0 2px #FFF0E4,0 18px 38px -26px rgba(90,70,45,.35);
+  --csm-act-hover: #D95400;
+  --csm-warn-border: #F2D9C4;
+  --csm-tier-family: #8A6FB0;
+  --csm-tier-family-bg: #F2EEF8;
+  --csm-tier-family-ink: #6B4E96;
+  --csm-tier-black: #3A3A3A;
+  --csm-tier-black-bg: #F2F1EF;
+  --csm-tier-black-ink: #2A2A2A;
+  --csm-tier-diamond: #A8C2D6;
+  --csm-tier-diamond-bg: #EDF3F8;
+  --csm-tier-diamond-ink: #3D6B8E;
+  --csm-tier-gold: #DCC48A;
+  --csm-tier-gold-bg: #FBF3E4;
+  --csm-tier-gold-ink: #B4720E;
+  --csm-tier-ivory: #DED6C6;
+  --csm-tier-ivory-bg: #F8F5EE;
+  --csm-tier-ivory-ink: #93856A;
+  --csm-tone: #8F8A80;
+  --csm-tone: #1F5BFF;
+  --csm-tone: #8F8A80;
+  --csm-tone: #B4720E;
+  --csm-tone: #2E7D5B;
+  --csm-tone: #F6C453;
+  --csm-tone: #8F8A80;
+  --csm-tone: #B4720E;
+  --csm-tone: #2E7D5B;
+  --csm-tone: #F6C453;
+  --csm-tone: #8F8A80;
+  --csm-tone-soft: #12345C;
+  --csm-tone: #2E7D5B;
+  --csm-tone-soft: rgba(16,185,129,.14);
+  --csm-tone: #F6C453;
+  --csm-tone-soft: rgba(246,196,83,.14);
+  --crec-radius: 18px;
+  --bg: #102A43;
+  --bg-2: #0D253D;
+  --bg-3: #12345C;
+  --card: #1B456A;
+  --ink: #F7FBFF;
+  --muted: #A9BDD3;
+  --muted-2: #A9BDD3;
+  --line: rgba(41,168,255,.28);
+  --line-2: rgba(41,168,255,.16);
+  --wine: #FF6900;
+  --wine-soft: rgba(255,105,0,.14);
+  --gold: #FF6900;
+  --blue: #29A8FF;
+  --blue-soft: rgba(41,168,255,.14);
+  --green: #10B981;
+  --green-soft: rgba(16,185,129,.1);
+  --red: #F87171;
+  --red-soft: rgba(248,113,113,.12);
+  --amber: #F59E0B;
+  --amber-soft: rgba(245,158,11,.12);
+  --side: #0D253D;
+  --me: #FF6900;
+  --radius: 8px;
+  --grad-orange: linear-gradient(135deg,#FF6900,#FF6900);
+  --grad-purple: linear-gradient(135deg,#29A8FF,#29A8FF);
+  --grad-brand: linear-gradient(135deg,#FF6900,#29A8FF);
+  --glow-orange: 0 0 32px rgba(255,105,0,.14);
+  --glow-purple: 0 0 28px rgba(41,168,255,.18);
+  --ev-seat-color: #10B981;
+  --ev-seat-track: rgba(16,185,129,.18);
+  --ev-seat-color: #F59E0B;
+  --ev-seat-track: rgba(245,158,11,.18);
+  --ev-seat-color: #EF4444;
+  --ev-seat-track: rgba(239,68,68,.18);
+  --csm-red: #FF7B72;
+  --csm-red-soft: rgba(255,123,114,.14);
+  --csm-neutral: #8F8A80;
+  --csm-neutral-soft: #12345C;
+  --csm-lead: #1F5BFF;
+  --csm-lead-soft: #EAF0FF;
+  --csm-active: #2E7D5B;
+  --csm-active-soft: rgba(16,185,129,.14);
+  --csm-high: #F6C453;
+  --csm-high-soft: rgba(246,196,83,.14);
+  --csm-text-2: #A9BDD3;
+  --csm-accent-ink: #F25E00;
+  --csm-field: #FFFFFF;
+  --csm-hover: #12345C;
+  --csm-th: #0D253D;
+  --csm-row-hover: #12345C;
+  --csm-track: #12345C;
+  --csm-line-2: #EAE6DF;
+  --csm-stripe: #12345C;
+  --csm-hover-border: #1F5BFF;
+  --csm-hover-shadow: 0 0 28px rgba(41,168,255,.18);
+  --csm-active-shadow: 0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14);
+  --csm-pick-shadow: 0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14);
+  --csm-act-hover: #F25E00;
+  --csm-warn-border: #F25E00;
+  --csm-tier-family: #B79BE0;
+  --csm-tier-family-bg: rgba(183,155,224,.14);
+  --csm-tier-family-ink: #B79BE0;
+  --csm-tier-black: #8F8A80;
+  --csm-tier-black-bg: #12345C;
+  --csm-tier-black-ink: #2B2620;
+  --csm-tier-diamond: #EAE6DF;
+  --csm-tier-diamond-bg: #EAF0FF;
+  --csm-tier-diamond-ink: #1F5BFF;
+  --csm-tier-gold: #F6C453;
+  --csm-tier-gold-bg: rgba(246,196,83,.14);
+  --csm-tier-gold-ink: #F6C453;
+  --csm-tier-ivory: #EAE6DF;
+  --csm-tier-ivory-bg: #0D253D;
+  --csm-tier-ivory-ink: #A9BDD3;
+  --product-detail-dark-surface: color-mix(in srgb,#FFFFFF 64%,#0D253D);
+  --product-inset-surface: color-mix(in srgb,#12345C 54%,#0D253D);
+  --surface: #0D253D;
+  --card2: #12345C;
+  --ink2: #D7E5F2;
+  --ink3: #8F8A80;
+  --goldline: #E05800;
+  --goldbg: #FFF0E4;
+  --ok: #2E7D5B;
+  --warn: #B4720E;
+  --crit: #FF6B6B;
+  --lock: #8F8A80;
+  --a1: #29A8FF;
+  --a2: #A855F7;
+  --a3: #E05800;
+  --p0: #FF6B6B;
+  --p1: #FF9B54;
+  --p2: #F5C451;
+  --p3: #29A8FF;
+  --p4: #8F8A80;
+  --ch-whatsapp: #2E7D5B;
+  --ch-email: #29A8FF;
+  --ch-wechat: #A855F7;
+  --ch-sms: #F5C451;
+  --s1: #3987e5;
+  --s2: #d95926;
+  --s3: #199e70;
+  --s4: #c98500;
+  --s5: #d55181;
+  --s6: #008300;
+  --s7: #9085e9;
+  --lineink: #29A8FF;
+  --sans: "HarmonyOS Sans SC","PingFang SC","Microsoft YaHei","manropeFont","manropeFont Fallback",-apple-system,sans-serif;
+  --serif: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+  --mono: "SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --sh: 0 12px 32px rgba(2,16,31,.18);
+  --r: 8px;
+  --rs: 6px;
+  --surface: #F7F3ED;
+  --card2: #F3EEE6;
+  --ink2: #5C5C5C;
+  --crit: #E04545;
+  --a1: #5B6FA8;
+  --a2: #805AD5;
+  --p0: #E04545;
+  --p1: #E87050;
+  --p2: #D4A537;
+  --p3: #5B6FA8;
+  --ch-whatsapp: #5B8A55;
+  --ch-email: #5B6FA8;
+  --ch-wechat: #805AD5;
+  --ch-sms: #D4A537;
+  --s1: #2a78d6;
+  --s2: #eb6834;
+  --s3: #1baf7a;
+  --s4: #eda100;
+  --s5: #e87ba4;
+  --s6: #008300;
+  --s7: #4a3aa7;
+  --lineink: #5B6FA8;
+  --sh: 0 8px 24px rgba(95,72,54,.08);
+  --toolbar-control-height: 34px;
+  --compact-tag-height: 20px;
+  --compact-tag-font-size: 10.5px;
+  --compact-tag-pad-x: 8px;
+  --compact-tag-gap: 8px;
+  --tag-copy-gap: 10px;
+  --bg-main: hsl(42,22%,96.5%);
+  --bg-300: hsl(42,15%,92%);
+  --bg-input: #ffffff;
+  --bg-hover: hsl(42,14%,90%);
+  --brand: hsl(14.8,55%,48%);
+  --text-0: hsl(40,8%,12%);
+  --text-1: hsl(40,6%,28%);
+  --text-2: hsl(40,5%,52%);
+  --text-3: hsl(40,5%,36%);
+  --border: hsl(42,12%,85%);
+  --font-serif: Georgia,"Times New Roman",serif;
+  --font-sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sidebar-w: 288px;
+  --task-bg: #f5f3ee;
+  --task-panel: #fff;
+  --task-side: #fbfaf7;
+  --task-border: #eae6dd;
+  --task-border-strong: #ded8cc;
+  --task-ink: #211e19;
+  --task-text: #575144;
+  --task-muted: #8b8578;
+  --task-faint: #b3ada0;
+  --task-orange: #a94f24;
+  --task-orange-soft: #fbefe6;
+  --task-bg: #f5f3ee;
+  --task-panel: #fff;
+  --task-side: #fbfaf7;
+  --task-border: #eae6dd;
+  --task-border-strong: #ded8cc;
+  --task-ink: #211e19;
+  --task-text: #575144;
+  --task-muted: #8b8578;
+  --task-faint: #b3ada0;
+  --task-orange: #a94f24;
+  --task-orange-soft: #fbefe6;
+  --stack-pad: 18px;
+  --stack-pad: 30px;
+  --stack-pad: 0px;
+  --task-orange: #ff6900;
+  --task-orange-soft: #fff1e6;
+  --task-border-strong: #efcfb8;
+  --holding-action-gradient: linear-gradient(135deg, #ff8a00 0%, #ff6900 52%, #ff4f00 100%);
+  --holding-action-gradient-hover: linear-gradient(135deg, #ff9a1f 0%, #ff7214 48%, #f05a00 100%);
+  --stack-pad: 10px;
+  --stack-pad: 16px;
+  --stack-pad: 0px;
+  --bg: #F8F7F4;
+  --card: #FFFFFF;
+  --card2: #FFFFFF;
+  --line: #EAE6DF;
+  --line2: #DDD7CD;
+  --ink: #2B2620;
+  --mut: #8F8A80;
+  --dim: #A9A298;
+  --org: #D45400;
+  --blu: #2F6FD0;
+  --pur: #7B5BD0;
+  --grn: #2E7D5B;
+  --yel: #D9A62B;
+  --red: #B84038;
+  --pnk: #C2557E;
+  --cyn: #1F8A9E;
+  --hr-bg: #fbfaf7;
+  --hr-panel: #fff;
+  --hr-nested: #fff;
+  --hr-line: #e5e1d8;
+  --hr-line-strong: #d6cfbf;
+  --hr-ink: #1c1c1c;
+  --hr-text: #4a4a4a;
+  --hr-muted: #8a8478;
+  --hr-brand: #8b2c1d;
+  --hr-brand-soft: #f6efe6;
+  --hr-green: #4a7c59;
+  --hr-red: #a05050;
+  --hr-gold: #b08a4c;
+  --hr-shadow: 0 1px 2px rgba(28,28,28,.04),0 4px 16px rgba(28,28,28,.04);
+  --bg: #F8F7F4;
+  --card: #FFFFFF;
+  --ink: #2B2620;
+  --muted: #8F8A80;
+  --line: #EAE6DF;
+  --wine: #F25E00;
+  --wine-soft: #FFF0E4;
+  --gold: #E05800;
+  --green: #2E7D5B;
+  --green-soft: #EAF4EF;
+  --red: #B84038;
+  --red-soft: #FCEDEA;
+  --amber: #B4720E;
+  --amber-soft: #FBF3E4;
+  --blue: #28618F;
+  --blue-soft: #EAF2FA;
+  --purple: #6A4F92;
+  --purple-soft: #F2EDFA;
+  --radius: 18px;
+  --bg-2: #F3F0EB;
+  --bg-3: #EDE9E2;
+  --sans: -apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif;
+  --sh: 0 2px 5px rgba(30,37,47,.025);
+  --nm-color-bg: #f8f7f4;
+  --nm-color-surface: #ffffff;
+  --nm-color-text: #2b2620;
+  --nm-color-text-secondary: #8f8a80;
+  --nm-color-border: #eae6df;
+  --nm-color-brand-fill: #f25e00;
+  --nm-color-brand-accent: #e05800;
+  --nm-color-on-brand: #ffffff;
+  --nm-color-success: #2e7d5b;
+  --nm-color-success-soft: #eaf4ef;
+  --nm-color-warning: #b4720e;
+  --nm-color-warning-soft: #fbf3e4;
+  --nm-color-danger: #b84038;
+  --nm-color-danger-soft: #fcedea;
+  --nm-color-brand-fill-hover: #ee6000;
+  --nm-color-on-brand-track: rgba(255, 255, 255, 0.35);
+  --nm-shadow-brand: 0 12px 28px -14px rgba(242, 94, 0, 0.55);
+  --nm-shadow-brand-hover: 0 16px 34px -14px rgba(242, 94, 0, 0.6);
+  --nm-shadow-card: 0 1px 1px rgba(90, 70, 45, 0.03),
+    0 3px 8px -4px rgba(90, 70, 45, 0.05),
+    0 26px 54px -40px rgba(90, 70, 45, 0.22);
+  --nm-opacity-disabled: 0.35;
+  --nm-opacity-loading: 0.92;
+  --nm-radius-button: 6px;
+  --nm-background-button: linear-gradient(165deg, #ff8a2e 0%, #f96a00 52%, #e85800 100%);
+  --nm-background-button-hover: linear-gradient(165deg, #ff7e1b 0%, #ee6000 55%, #db5300 100%);
+  --nm-radius-sm: 8px;
+  --nm-radius-md: 12px;
+  --nm-radius-lg: 16px;
+  --nm-radius-modal: 16px;
+  --nm-radius-pill: 999px;
+  --nm-space-1: 2px;
+  --nm-space-2: 4px;
+  --nm-space-3: 8px;
+  --nm-space-4: 12px;
+  --nm-space-5: 16px;
+  --nm-space-6: 24px;
+  --nm-space-7: 32px;
+  --nm-font-sans: 'Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --nm-font-number: 'Space Grotesk', 'Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --nm-font-size-eyebrow: 12px;
+  --nm-line-height-eyebrow: 1.4;
+  --nm-font-size-subtitle: 16px;
+  --nm-line-height-subtitle: 1.5;
+  --nm-font-size-title: 28px;
+  --nm-line-height-title: 1.35;
+  --nm-font-size-title-narrow: 24px;
+  --nm-line-height-title-narrow: 1.3;
+  --nm-color-bg: #102a43;
+  --nm-color-surface: #1b456a;
+  --nm-color-text: #f7fbff;
+  --nm-color-text-secondary: #a9bdd3;
+  --nm-color-border: rgba(41, 168, 255, 0.28);
+  --nm-color-brand-fill: #ff6900;
+  --nm-color-brand-accent: #ff6900;
+  --nm-color-on-brand: #ffffff;
+  --nm-color-success: #10b981;
+  --nm-color-success-soft: rgba(16, 185, 129, 0.1);
+  --nm-color-warning: #f59e0b;
+  --nm-color-warning-soft: rgba(245, 158, 11, 0.12);
+  --nm-color-danger: #f87171;
+  --nm-color-danger-soft: rgba(248, 113, 113, 0.12);
+  --nm-color-brand-fill-hover: #ff6900;
+  --nm-shadow-brand: 0 4px 16px -4px rgba(255, 105, 0, 0.3);
+  --nm-shadow-brand-hover: 0 6px 24px -4px rgba(255, 105, 0, 0.45);
+  --nm-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --nm-opacity-disabled: 0.4;
+  --nm-background-button: #ff6900;
+  --nm-background-button-hover: #ff6900;
+  --nm-radius-sm: 4px;
+  --nm-radius-md: 6px;
+  --nm-radius-lg: 8px;
+  --nm-radius-modal: 10px;
+  --bg: #102a43;
+  --card: #1b456a;
+  --ink: #f7fbff;
+  --muted: #a9bdd3;
+  --line: rgba(41, 168, 255, 0.28);
+  --wine: #ff6900;
+  --wine-soft: #fff0e4;
+  --bg-2: #fcfbf9;
+  --bg-3: #f6f4f0;
+  --blue: #3d6b8e;
+  --blue-soft: #edf3f8;
+  --green: #10b981;
+  --green-soft: rgba(16, 185, 129, 0.1);
+  --red: #f87171;
+  --red-soft: rgba(248, 113, 113, 0.12);
+  --amber: #f59e0b;
+  --amber-soft: rgba(245, 158, 11, 0.12);
+  --btn: #ff6900;
+  --font: 'Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --bg-2: #0d253d;
+  --bg-3: #12345c;
+  --blue: #29a8ff;
+  --blue-soft: rgba(41,168,255,.14);
+  --wine-soft: rgba(255,105,0,.14);
+  --np-ink: #2B2620;
+  --np-muted: #8F8A80;
+  --np-line: #EAE6DF;
+  --np-card: #FFFFFF;
+  --np-orange: #F25E00;
+  --np-orange-soft: #FFF0E4;
+  --np-green: #2E7D5B;
+  --np-green-soft: #EAF4EF;
+  --np-amber: #B4720E;
+  --np-amber-soft: #FBF3E4;
+  --np-gray: #8F8A80;
+  --np-gray-soft: #F3F1EC;
+  --np-red: #B84038;
+  --np-red-soft: #FCEDEA;
+  --radius: 11px;
+  --nm-color-bg: #f8f7f4;
+  --nm-color-surface: #fff;
+  --nm-color-text: #2b2620;
+  --nm-color-text-secondary: #8f8a80;
+  --nm-color-border: #eae6df;
+  --nm-color-brand-fill: #f25e00;
+  --nm-color-brand-accent: #e05800;
+  --nm-radius-button: 6px;
+  --nm-radius-lg: 18px;
+  --nm-font-sans: 'Manrope','PingFang SC','Microsoft YaHei',sans-serif;
+  --nm-shadow-card: 0 1px 1px rgba(90,70,45,.03),0 3px 8px -4px rgba(90,70,45,.05),0 26px 54px -40px rgba(90,70,45,.22);
+  --soft: #fff1e6;
+  --sidebar: 212px;
+  --nm-background-button: linear-gradient(165deg,#ff8a2e,#f96a00 52%,#e85800);
+  --sidebar: 72px;
+  --sidebar: 180px;
+  --sidebar: 64px;
+  --nm-font-sans: -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  --nm-radius-lg: 11px;
+  --nm-background-button: #ef6815;
+}
+
+/** TypeScript module */
+export const designTokens = {
+  'nm-gut': 'clamp(20px, 4.6vw, 72px)',
+  'nm-gut': 'clamp(20px, 4.6vw, 64px)',
+  'nm-container': '1440px',
+  'bg': '#F3F5F8',
+  'bg-2': '#F7F9FB',
+  'bg-3': '#EFF2F6',
+  'card': '#FFFFFF',
+  'ink': '#16202B',
+  'muted': '#6B7685',
+  'line': '#E6EAF0',
+  'wine': '#E4762F',
+  'wine-soft': '#FFF1E8',
+  'gold': '#E4762F',
+  'green': '#12945F',
+  'green-soft': '#E6F6EE',
+  'red': '#E02B2B',
+  'red-soft': '#FDECEC',
+  'amber': '#C27A10',
+  'amber-soft': '#FFF5E1',
+  'blue': '#1F5BFF',
+  'blue-soft': '#EAF0FF',
+  'purple': '#7B4FE0',
+  'purple-soft': '#F2EDFF',
+  'radius': '14px',
+  'sh': '0 1px 2px rgba(11,23,36,.05), 0 2px 8px rgba(11,23,36,.05)',
+  'sans': '-apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif',
+  'font-wordmark': '"wordmarkFont","wordmarkFont Fallback"',
+  'font-manrope': '"manropeFont","manropeFont Fallback"',
+  'bg': '#F8F7F4',
+  'card': '#FFFFFF',
+  'ink': '#2B2620',
+  'muted': '#8F8A80',
+  'line': '#EAE6DF',
+  'wine': '#F25E00',
+  'wine-soft': '#FFF0E4',
+  'gold': '#E05800',
+  'green': '#2E7D5B',
+  'green-soft': '#EAF4EF',
+  'red': '#B84038',
+  'red-soft': '#FCEDEA',
+  'amber': '#B4720E',
+  'amber-soft': '#FBF3E4',
+  'side': '#282420',
+  'me': '#95EC69',
+  'radius': '18px',
+  'ev-seat-color': '#2F8A63',
+  'ev-seat-track': '#DCEBE3',
+  'ev-seat-color': '#C28A24',
+  'ev-seat-track': '#F1E4C7',
+  'ev-seat-color': '#B84B43',
+  'ev-seat-track': '#F0D7D4',
+  'persona-bg': 'none',
+  'persona-bg': 'none',
+  'persona-bg': 'none',
+  'ch-space-xs': '8px',
+  'ch-space-sm': '12px',
+  'ch-space-md': '20px',
+  'ch-space-lg': '32px',
+  'ch-space-xl': '52px',
+  'ch-space-lg': '26px',
+  'ch-space-xl': '40px',
+  'skeleton-base': '#214e70',
+  'skeleton-highlight': '#3b7397',
+  'skeleton-panel': '#153d5d',
+  'skeleton-cover': '#123650',
+  'skeleton-border': 'rgba(79,157,207,.26)',
+  'ev-seat-color': '#5bd9a0',
+  'ev-seat-track': '#2b5269',
+  'ev-seat-color': '#ffcc7a',
+  'ev-seat-track': '#574d3b',
+  'ev-seat-color': '#ff8f87',
+  'ev-seat-track': '#5a4147',
+  'bg': '#f8f7f4',
+  'bg2': '#f8f7f4',
+  'card': '#fff',
+  'ink': '#2b2620',
+  'text': '#2b2620',
+  'muted': '#8f8a80',
+  'line': '#eae6df',
+  'gold': '#e05800',
+  'orange': '#e05800',
+  'wine': '#f25e00',
+  'wine-soft': '#fff0e4',
+  'product-motion-fast': '120ms',
+  'product-motion-medium': '260ms',
+  'product-ease-out': 'cubic-bezier(.25,1,.5,1)',
+  'product-inset-surface': 'color-mix(in srgb,#F8F7F4 48%,#FFFFFF)',
+  'product-panel-radius': '14px',
+  'product-inset-radius': '10px',
+  'product-text-caption': '.65625rem',
+  'product-text-supporting': '.75rem',
+  'product-text-body': '.8125rem',
+  'bg': '#102f49',
+  'bg2': '#102f49',
+  'card': '#173f60',
+  'ink': '#f3f6f8',
+  'text': '#f3f6f8',
+  'muted': '#a7bbc9',
+  'line': '#345f7e',
+  'gold': '#f47a38',
+  'orange': '#f47a38',
+  'wine': '#f47a38',
+  'wine-soft': 'rgba(244,122,56,.14)',
+  'bg': '#102f49',
+  'card': '#173f60',
+  'ink': '#f3f6f8',
+  'muted': '#a7bbc9',
+  'line': '#345f7e',
+  'gold': '#f47a38',
+  'wine-soft': 'rgba(244,122,56,.14)',
+  'panel': '#fff',
+  'bg2': '#f8f7f4',
+  'text': '#2b2620',
+  'accent': '#e05800',
+  'csm-red': '#B42318',
+  'csm-red-soft': '#FDECEC',
+  'csm-neutral': '#8F8A80',
+  'csm-neutral-soft': '#F1ECE3',
+  'csm-lead': '#3D6B8E',
+  'csm-lead-soft': '#EDF3F8',
+  'csm-toact': '#B4720E',
+  'csm-toact-soft': '#FBF3E4',
+  'csm-active': '#2E7D5B',
+  'csm-active-soft': '#EAF4EF',
+  'csm-high': '#F25E00',
+  'csm-high-soft': '#FFF0E4',
+  'csm-text-2': '#75706A',
+  'csm-accent-ink': '#C05A0E',
+  'csm-field': '#FFFFFF',
+  'csm-hover': '#F6F4F0',
+  'csm-th': '#FCFBF9',
+  'csm-row-hover': '#FCFAF7',
+  'csm-track': '#F1ECE3',
+  'csm-line-2': '#DDD6CA',
+  'csm-stripe': '#FAF8F4',
+  'csm-hover-border': '#E4DACB',
+  'csm-hover-shadow': '0 2px 5px -2px rgba(90,70,45,.06),0 26px 50px -30px rgba(90,70,45,.3)',
+  'csm-active-shadow': '0 0 0 1px #8F8A80,0 18px 38px -26px rgba(90,70,45,.35)',
+  'csm-pick-shadow': '0 0 0 2px #FFF0E4,0 18px 38px -26px rgba(90,70,45,.35)',
+  'csm-act-hover': '#D95400',
+  'csm-warn-border': '#F2D9C4',
+  'csm-tier-family': '#8A6FB0',
+  'csm-tier-family-bg': '#F2EEF8',
+  'csm-tier-family-ink': '#6B4E96',
+  'csm-tier-black': '#3A3A3A',
+  'csm-tier-black-bg': '#F2F1EF',
+  'csm-tier-black-ink': '#2A2A2A',
+  'csm-tier-diamond': '#A8C2D6',
+  'csm-tier-diamond-bg': '#EDF3F8',
+  'csm-tier-diamond-ink': '#3D6B8E',
+  'csm-tier-gold': '#DCC48A',
+  'csm-tier-gold-bg': '#FBF3E4',
+  'csm-tier-gold-ink': '#B4720E',
+  'csm-tier-ivory': '#DED6C6',
+  'csm-tier-ivory-bg': '#F8F5EE',
+  'csm-tier-ivory-ink': '#93856A',
+  'csm-tone': '#8F8A80',
+  'csm-tone': '#1F5BFF',
+  'csm-tone': '#8F8A80',
+  'csm-tone': '#B4720E',
+  'csm-tone': '#2E7D5B',
+  'csm-tone': '#F6C453',
+  'csm-tone': '#8F8A80',
+  'csm-tone': '#B4720E',
+  'csm-tone': '#2E7D5B',
+  'csm-tone': '#F6C453',
+  'csm-tone': '#8F8A80',
+  'csm-tone-soft': '#12345C',
+  'csm-tone': '#2E7D5B',
+  'csm-tone-soft': 'rgba(16,185,129,.14)',
+  'csm-tone': '#F6C453',
+  'csm-tone-soft': 'rgba(246,196,83,.14)',
+  'crec-radius': '18px',
+  'bg': '#102A43',
+  'bg-2': '#0D253D',
+  'bg-3': '#12345C',
+  'card': '#1B456A',
+  'ink': '#F7FBFF',
+  'muted': '#A9BDD3',
+  'muted-2': '#A9BDD3',
+  'line': 'rgba(41,168,255,.28)',
+  'line-2': 'rgba(41,168,255,.16)',
+  'wine': '#FF6900',
+  'wine-soft': 'rgba(255,105,0,.14)',
+  'gold': '#FF6900',
+  'blue': '#29A8FF',
+  'blue-soft': 'rgba(41,168,255,.14)',
+  'green': '#10B981',
+  'green-soft': 'rgba(16,185,129,.1)',
+  'red': '#F87171',
+  'red-soft': 'rgba(248,113,113,.12)',
+  'amber': '#F59E0B',
+  'amber-soft': 'rgba(245,158,11,.12)',
+  'side': '#0D253D',
+  'me': '#FF6900',
+  'radius': '8px',
+  'grad-orange': 'linear-gradient(135deg,#FF6900,#FF6900)',
+  'grad-purple': 'linear-gradient(135deg,#29A8FF,#29A8FF)',
+  'grad-brand': 'linear-gradient(135deg,#FF6900,#29A8FF)',
+  'glow-orange': '0 0 32px rgba(255,105,0,.14)',
+  'glow-purple': '0 0 28px rgba(41,168,255,.18)',
+  'ev-seat-color': '#10B981',
+  'ev-seat-track': 'rgba(16,185,129,.18)',
+  'ev-seat-color': '#F59E0B',
+  'ev-seat-track': 'rgba(245,158,11,.18)',
+  'ev-seat-color': '#EF4444',
+  'ev-seat-track': 'rgba(239,68,68,.18)',
+  'csm-red': '#FF7B72',
+  'csm-red-soft': 'rgba(255,123,114,.14)',
+  'csm-neutral': '#8F8A80',
+  'csm-neutral-soft': '#12345C',
+  'csm-lead': '#1F5BFF',
+  'csm-lead-soft': '#EAF0FF',
+  'csm-active': '#2E7D5B',
+  'csm-active-soft': 'rgba(16,185,129,.14)',
+  'csm-high': '#F6C453',
+  'csm-high-soft': 'rgba(246,196,83,.14)',
+  'csm-text-2': '#A9BDD3',
+  'csm-accent-ink': '#F25E00',
+  'csm-field': '#FFFFFF',
+  'csm-hover': '#12345C',
+  'csm-th': '#0D253D',
+  'csm-row-hover': '#12345C',
+  'csm-track': '#12345C',
+  'csm-line-2': '#EAE6DF',
+  'csm-stripe': '#12345C',
+  'csm-hover-border': '#1F5BFF',
+  'csm-hover-shadow': '0 0 28px rgba(41,168,255,.18)',
+  'csm-active-shadow': '0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14)',
+  'csm-pick-shadow': '0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14)',
+  'csm-act-hover': '#F25E00',
+  'csm-warn-border': '#F25E00',
+  'csm-tier-family': '#B79BE0',
+  'csm-tier-family-bg': 'rgba(183,155,224,.14)',
+  'csm-tier-family-ink': '#B79BE0',
+  'csm-tier-black': '#8F8A80',
+  'csm-tier-black-bg': '#12345C',
+  'csm-tier-black-ink': '#2B2620',
+  'csm-tier-diamond': '#EAE6DF',
+  'csm-tier-diamond-bg': '#EAF0FF',
+  'csm-tier-diamond-ink': '#1F5BFF',
+  'csm-tier-gold': '#F6C453',
+  'csm-tier-gold-bg': 'rgba(246,196,83,.14)',
+  'csm-tier-gold-ink': '#F6C453',
+  'csm-tier-ivory': '#EAE6DF',
+  'csm-tier-ivory-bg': '#0D253D',
+  'csm-tier-ivory-ink': '#A9BDD3',
+  'product-detail-dark-surface': 'color-mix(in srgb,#FFFFFF 64%,#0D253D)',
+  'product-inset-surface': 'color-mix(in srgb,#12345C 54%,#0D253D)',
+  'surface': '#0D253D',
+  'card2': '#12345C',
+  'ink2': '#D7E5F2',
+  'ink3': '#8F8A80',
+  'goldline': '#E05800',
+  'goldbg': '#FFF0E4',
+  'ok': '#2E7D5B',
+  'warn': '#B4720E',
+  'crit': '#FF6B6B',
+  'lock': '#8F8A80',
+  'a1': '#29A8FF',
+  'a2': '#A855F7',
+  'a3': '#E05800',
+  'p0': '#FF6B6B',
+  'p1': '#FF9B54',
+  'p2': '#F5C451',
+  'p3': '#29A8FF',
+  'p4': '#8F8A80',
+  'ch-whatsapp': '#2E7D5B',
+  'ch-email': '#29A8FF',
+  'ch-wechat': '#A855F7',
+  'ch-sms': '#F5C451',
+  's1': '#3987e5',
+  's2': '#d95926',
+  's3': '#199e70',
+  's4': '#c98500',
+  's5': '#d55181',
+  's6': '#008300',
+  's7': '#9085e9',
+  'lineink': '#29A8FF',
+  'sans': '"HarmonyOS Sans SC","PingFang SC","Microsoft YaHei","manropeFont","manropeFont Fallback",-apple-system,sans-serif',
+  'serif': '-apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif',
+  'mono': '"SF Mono",ui-monospace,Menlo,Consolas,monospace',
+  'sh': '0 12px 32px rgba(2,16,31,.18)',
+  'r': '8px',
+  'rs': '6px',
+  'surface': '#F7F3ED',
+  'card2': '#F3EEE6',
+  'ink2': '#5C5C5C',
+  'crit': '#E04545',
+  'a1': '#5B6FA8',
+  'a2': '#805AD5',
+  'p0': '#E04545',
+  'p1': '#E87050',
+  'p2': '#D4A537',
+  'p3': '#5B6FA8',
+  'ch-whatsapp': '#5B8A55',
+  'ch-email': '#5B6FA8',
+  'ch-wechat': '#805AD5',
+  'ch-sms': '#D4A537',
+  's1': '#2a78d6',
+  's2': '#eb6834',
+  's3': '#1baf7a',
+  's4': '#eda100',
+  's5': '#e87ba4',
+  's6': '#008300',
+  's7': '#4a3aa7',
+  'lineink': '#5B6FA8',
+  'sh': '0 8px 24px rgba(95,72,54,.08)',
+  'toolbar-control-height': '34px',
+  'compact-tag-height': '20px',
+  'compact-tag-font-size': '10.5px',
+  'compact-tag-pad-x': '8px',
+  'compact-tag-gap': '8px',
+  'tag-copy-gap': '10px',
+  'bg-main': 'hsl(42,22%,96.5%)',
+  'bg-300': 'hsl(42,15%,92%)',
+  'bg-input': '#ffffff',
+  'bg-hover': 'hsl(42,14%,90%)',
+  'brand': 'hsl(14.8,55%,48%)',
+  'text-0': 'hsl(40,8%,12%)',
+  'text-1': 'hsl(40,6%,28%)',
+  'text-2': 'hsl(40,5%,52%)',
+  'text-3': 'hsl(40,5%,36%)',
+  'border': 'hsl(42,12%,85%)',
+  'font-serif': 'Georgia,"Times New Roman",serif',
+  'font-sans': 'system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif',
+  'sidebar-w': '288px',
+  'task-bg': '#f5f3ee',
+  'task-panel': '#fff',
+  'task-side': '#fbfaf7',
+  'task-border': '#eae6dd',
+  'task-border-strong': '#ded8cc',
+  'task-ink': '#211e19',
+  'task-text': '#575144',
+  'task-muted': '#8b8578',
+  'task-faint': '#b3ada0',
+  'task-orange': '#a94f24',
+  'task-orange-soft': '#fbefe6',
+  'task-bg': '#f5f3ee',
+  'task-panel': '#fff',
+  'task-side': '#fbfaf7',
+  'task-border': '#eae6dd',
+  'task-border-strong': '#ded8cc',
+  'task-ink': '#211e19',
+  'task-text': '#575144',
+  'task-muted': '#8b8578',
+  'task-faint': '#b3ada0',
+  'task-orange': '#a94f24',
+  'task-orange-soft': '#fbefe6',
+  'stack-pad': '18px',
+  'stack-pad': '30px',
+  'stack-pad': '0px',
+  'task-orange': '#ff6900',
+  'task-orange-soft': '#fff1e6',
+  'task-border-strong': '#efcfb8',
+  'holding-action-gradient': 'linear-gradient(135deg, #ff8a00 0%, #ff6900 52%, #ff4f00 100%)',
+  'holding-action-gradient-hover': 'linear-gradient(135deg, #ff9a1f 0%, #ff7214 48%, #f05a00 100%)',
+  'stack-pad': '10px',
+  'stack-pad': '16px',
+  'stack-pad': '0px',
+  'bg': '#F8F7F4',
+  'card': '#FFFFFF',
+  'card2': '#FFFFFF',
+  'line': '#EAE6DF',
+  'line2': '#DDD7CD',
+  'ink': '#2B2620',
+  'mut': '#8F8A80',
+  'dim': '#A9A298',
+  'org': '#D45400',
+  'blu': '#2F6FD0',
+  'pur': '#7B5BD0',
+  'grn': '#2E7D5B',
+  'yel': '#D9A62B',
+  'red': '#B84038',
+  'pnk': '#C2557E',
+  'cyn': '#1F8A9E',
+  'v2-navy': '#0B1724',
+  'v2-or': '#E4762F',
+  'v2-or2': '#FF9A4D',
+  'v2-or-soft': '#FFF1E8',
+  'v2-ink': '#16202B',
+  'v2-sub': '#6B7685',
+  'v2-line': '#E6EAF0',
+  'v2-soft': '#F7F9FB',
+  'v2-green': '#12945F',
+  'v2-green-soft': '#E6F6EE',
+  'v2-red': '#E02B2B',
+  'v2-red-soft': '#FDECEC',
+  'v2-amber': '#C27A10',
+  'v2-amber-soft': '#FFF5E1',
+  'v2-blue': '#1F5BFF',
+  'v2-blue-soft': '#EAF0FF',
+  'v2-violet': '#7B4FE0',
+  'v2-violet-soft': '#F2EDFF',
+  'nm-gut': 'clamp(20px, 4.6vw, 72px)',
+  'nm-gut': 'clamp(20px, 4.6vw, 64px)',
+  'nm-container': '1440px',
+  'hr-bg': '#fbfaf7',
+  'hr-panel': '#fff',
+  'hr-nested': '#fff',
+  'hr-line': '#e5e1d8',
+  'hr-line-strong': '#d6cfbf',
+  'hr-ink': '#1c1c1c',
+  'hr-text': '#4a4a4a',
+  'hr-muted': '#8a8478',
+  'hr-brand': '#8b2c1d',
+  'hr-brand-soft': '#f6efe6',
+  'hr-green': '#4a7c59',
+  'hr-red': '#a05050',
+  'hr-gold': '#b08a4c',
+  'hr-shadow': '0 1px 2px rgba(28,28,28,.04),0 4px 16px rgba(28,28,28,.04)',
+  'bg': '#F8F7F4',
+  'card': '#FFFFFF',
+  'ink': '#2B2620',
+  'muted': '#8F8A80',
+  'line': '#EAE6DF',
+  'wine': '#F25E00',
+  'wine-soft': '#FFF0E4',
+  'gold': '#E05800',
+  'green': '#2E7D5B',
+  'green-soft': '#EAF4EF',
+  'red': '#B84038',
+  'red-soft': '#FCEDEA',
+  'amber': '#B4720E',
+  'amber-soft': '#FBF3E4',
+  'blue': '#28618F',
+  'blue-soft': '#EAF2FA',
+  'purple': '#6A4F92',
+  'purple-soft': '#F2EDFA',
+  'radius': '18px',
+  'bg-2': '#F3F0EB',
+  'bg-3': '#EDE9E2',
+  'sans': '-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif',
+  'sh': '0 2px 5px rgba(30,37,47,.025)',
+  'nm-color-bg': '#f8f7f4',
+  'nm-color-surface': '#ffffff',
+  'nm-color-text': '#2b2620',
+  'nm-color-text-secondary': '#8f8a80',
+  'nm-color-border': '#eae6df',
+  'nm-color-brand-fill': '#f25e00',
+  'nm-color-brand-accent': '#e05800',
+  'nm-color-on-brand': '#ffffff',
+  'nm-color-success': '#2e7d5b',
+  'nm-color-success-soft': '#eaf4ef',
+  'nm-color-warning': '#b4720e',
+  'nm-color-warning-soft': '#fbf3e4',
+  'nm-color-danger': '#b84038',
+  'nm-color-danger-soft': '#fcedea',
+  'nm-color-brand-fill-hover': '#ee6000',
+  'nm-color-on-brand-track': 'rgba(255, 255, 255, 0.35)',
+  'nm-shadow-brand': '0 12px 28px -14px rgba(242, 94, 0, 0.55)',
+  'nm-shadow-brand-hover': '0 16px 34px -14px rgba(242, 94, 0, 0.6)',
+  'nm-shadow-card': '0 1px 1px rgba(90, 70, 45, 0.03),
+    0 3px 8px -4px rgba(90, 70, 45, 0.05),
+    0 26px 54px -40px rgba(90, 70, 45, 0.22)',
+  'nm-opacity-disabled': '0.35',
+  'nm-opacity-loading': '0.92',
+  'nm-radius-button': '6px',
+  'nm-background-button': 'linear-gradient(165deg, #ff8a2e 0%, #f96a00 52%, #e85800 100%)',
+  'nm-background-button-hover': 'linear-gradient(165deg, #ff7e1b 0%, #ee6000 55%, #db5300 100%)',
+  'nm-radius-sm': '8px',
+  'nm-radius-md': '12px',
+  'nm-radius-lg': '16px',
+  'nm-radius-modal': '16px',
+  'nm-radius-pill': '999px',
+  'nm-space-1': '2px',
+  'nm-space-2': '4px',
+  'nm-space-3': '8px',
+  'nm-space-4': '12px',
+  'nm-space-5': '16px',
+  'nm-space-6': '24px',
+  'nm-space-7': '32px',
+  'nm-font-sans': ''Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'',
+  'nm-font-number': ''Space Grotesk', 'Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'',
+  'nm-font-size-eyebrow': '12px',
+  'nm-line-height-eyebrow': '1.4',
+  'nm-font-size-subtitle': '16px',
+  'nm-line-height-subtitle': '1.5',
+  'nm-font-size-title': '28px',
+  'nm-line-height-title': '1.35',
+  'nm-font-size-title-narrow': '24px',
+  'nm-line-height-title-narrow': '1.3',
+  'nm-color-bg': '#102a43',
+  'nm-color-surface': '#1b456a',
+  'nm-color-text': '#f7fbff',
+  'nm-color-text-secondary': '#a9bdd3',
+  'nm-color-border': 'rgba(41, 168, 255, 0.28)',
+  'nm-color-brand-fill': '#ff6900',
+  'nm-color-brand-accent': '#ff6900',
+  'nm-color-on-brand': '#ffffff',
+  'nm-color-success': '#10b981',
+  'nm-color-success-soft': 'rgba(16, 185, 129, 0.1)',
+  'nm-color-warning': '#f59e0b',
+  'nm-color-warning-soft': 'rgba(245, 158, 11, 0.12)',
+  'nm-color-danger': '#f87171',
+  'nm-color-danger-soft': 'rgba(248, 113, 113, 0.12)',
+  'nm-color-brand-fill-hover': '#ff6900',
+  'nm-shadow-brand': '0 4px 16px -4px rgba(255, 105, 0, 0.3)',
+  'nm-shadow-brand-hover': '0 6px 24px -4px rgba(255, 105, 0, 0.45)',
+  'nm-shadow-card': '0 1px 2px rgba(0, 0, 0, 0.2)',
+  'nm-opacity-disabled': '0.4',
+  'nm-background-button': '#ff6900',
+  'nm-background-button-hover': '#ff6900',
+  'nm-radius-sm': '4px',
+  'nm-radius-md': '6px',
+  'nm-radius-lg': '8px',
+  'nm-radius-modal': '10px',
+  'bg': '#102a43',
+  'card': '#1b456a',
+  'ink': '#f7fbff',
+  'muted': '#a9bdd3',
+  'line': 'rgba(41, 168, 255, 0.28)',
+  'wine': '#ff6900',
+  'wine-soft': '#fff0e4',
+  'bg-2': '#fcfbf9',
+  'bg-3': '#f6f4f0',
+  'blue': '#3d6b8e',
+  'blue-soft': '#edf3f8',
+  'green': '#10b981',
+  'green-soft': 'rgba(16, 185, 129, 0.1)',
+  'red': '#f87171',
+  'red-soft': 'rgba(248, 113, 113, 0.12)',
+  'amber': '#f59e0b',
+  'amber-soft': 'rgba(245, 158, 11, 0.12)',
+  'btn': '#ff6900',
+  'font': ''Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'',
+  'bg-2': '#0d253d',
+  'bg-3': '#12345c',
+  'blue': '#29a8ff',
+  'blue-soft': 'rgba(41,168,255,.14)',
+  'wine-soft': 'rgba(255,105,0,.14)',
+  'np-ink': '#2B2620',
+  'np-muted': '#8F8A80',
+  'np-line': '#EAE6DF',
+  'np-card': '#FFFFFF',
+  'np-orange': '#F25E00',
+  'np-orange-soft': '#FFF0E4',
+  'np-green': '#2E7D5B',
+  'np-green-soft': '#EAF4EF',
+  'np-amber': '#B4720E',
+  'np-amber-soft': '#FBF3E4',
+  'np-gray': '#8F8A80',
+  'np-gray-soft': '#F3F1EC',
+  'np-red': '#B84038',
+  'np-red-soft': '#FCEDEA',
+  'radius': '11px',
+  'nm-color-bg': '#f8f7f4',
+  'nm-color-surface': '#fff',
+  'nm-color-text': '#2b2620',
+  'nm-color-text-secondary': '#8f8a80',
+  'nm-color-border': '#eae6df',
+  'nm-color-brand-fill': '#f25e00',
+  'nm-color-brand-accent': '#e05800',
+  'nm-radius-button': '6px',
+  'nm-radius-lg': '18px',
+  'nm-font-sans': ''Manrope','PingFang SC','Microsoft YaHei',sans-serif',
+  'nm-shadow-card': '0 1px 1px rgba(90,70,45,.03),0 3px 8px -4px rgba(90,70,45,.05),0 26px 54px -40px rgba(90,70,45,.22)',
+  'soft': '#fff1e6',
+  'sidebar': '212px',
+  'nm-background-button': 'linear-gradient(165deg,#ff8a2e,#f96a00 52%,#e85800)',
+  'sidebar': '72px',
+  'sidebar': '180px',
+  'sidebar': '64px',
+  'nm-font-sans': '-apple-system,"PingFang SC","Microsoft YaHei",sans-serif',
+  'nm-radius-lg': '11px',
+  'nm-background-button': '#ef6815',
+  'nb-gut': 'max(26px,calc((100% - 1228px) / 2))',
+  'navy': '#0B1724',
+  'or': '#E4762F',
+  'or2': '#FF9A4D',
+  'or-soft': '#FFF1E8',
+  'bg': '#F3F5F8',
+  'ink': '#16202B',
+  'sub': '#6B7685',
+  'line': '#E6EAF0',
+  'soft': '#F7F9FB',
+  'green': '#12945F',
+  'green-soft': '#E6F6EE',
+  'red': '#E02B2B',
+  'red-soft': '#FDECEC',
+  'amber': '#C27A10',
+  'amber-soft': '#FFF5E1',
+  'blue': '#1F5BFF',
+  'blue-soft': '#EAF0FF',
+  'violet': '#7B4FE0',
+  'violet-soft': '#F2EDFF',
+  'font-wordmark': '"wordmarkFont","wordmarkFont Fallback"',
+  'font-manrope': '"manropeFont","manropeFont Fallback"',
+  'bg': '#F8F7F4',
+  'card': '#FFFFFF',
+  'ink': '#2B2620',
+  'muted': '#8F8A80',
+  'line': '#EAE6DF',
+  'wine': '#F25E00',
+  'wine-soft': '#FFF0E4',
+  'gold': '#E05800',
+  'green': '#2E7D5B',
+  'green-soft': '#EAF4EF',
+  'red': '#B84038',
+  'red-soft': '#FCEDEA',
+  'amber': '#B4720E',
+  'amber-soft': '#FBF3E4',
+  'side': '#282420',
+  'me': '#95EC69',
+  'radius': '18px',
+  'ev-seat-color': '#2F8A63',
+  'ev-seat-track': '#DCEBE3',
+  'ev-seat-color': '#C28A24',
+  'ev-seat-track': '#F1E4C7',
+  'ev-seat-color': '#B84B43',
+  'ev-seat-track': '#F0D7D4',
+  'persona-bg': 'none',
+  'persona-bg': 'none',
+  'persona-bg': 'none',
+  'ch-space-xs': '8px',
+  'ch-space-sm': '12px',
+  'ch-space-md': '20px',
+  'ch-space-lg': '32px',
+  'ch-space-xl': '52px',
+  'ch-space-lg': '26px',
+  'ch-space-xl': '40px',
+  'skeleton-base': '#214e70',
+  'skeleton-highlight': '#3b7397',
+  'skeleton-panel': '#153d5d',
+  'skeleton-cover': '#123650',
+  'skeleton-border': 'rgba(79,157,207,.26)',
+  'ev-seat-color': '#5bd9a0',
+  'ev-seat-track': '#2b5269',
+  'ev-seat-color': '#ffcc7a',
+  'ev-seat-track': '#574d3b',
+  'ev-seat-color': '#ff8f87',
+  'ev-seat-track': '#5a4147',
+  'bg': '#f8f7f4',
+  'bg2': '#f8f7f4',
+  'card': '#fff',
+  'ink': '#2b2620',
+  'text': '#2b2620',
+  'muted': '#8f8a80',
+  'line': '#eae6df',
+  'gold': '#e05800',
+  'orange': '#e05800',
+  'wine': '#f25e00',
+  'wine-soft': '#fff0e4',
+  'product-motion-fast': '120ms',
+  'product-motion-medium': '260ms',
+  'product-ease-out': 'cubic-bezier(.25,1,.5,1)',
+  'product-inset-surface': 'color-mix(in srgb,#F8F7F4 48%,#FFFFFF)',
+  'product-panel-radius': '14px',
+  'product-inset-radius': '10px',
+  'product-text-caption': '.65625rem',
+  'product-text-supporting': '.75rem',
+  'product-text-body': '.8125rem',
+  'bg': '#102f49',
+  'bg2': '#102f49',
+  'card': '#173f60',
+  'ink': '#f3f6f8',
+  'text': '#f3f6f8',
+  'muted': '#a7bbc9',
+  'line': '#345f7e',
+  'gold': '#f47a38',
+  'orange': '#f47a38',
+  'wine': '#f47a38',
+  'wine-soft': 'rgba(244,122,56,.14)',
+  'bg': '#102f49',
+  'card': '#173f60',
+  'ink': '#f3f6f8',
+  'muted': '#a7bbc9',
+  'line': '#345f7e',
+  'gold': '#f47a38',
+  'wine-soft': 'rgba(244,122,56,.14)',
+  'panel': '#fff',
+  'bg2': '#f8f7f4',
+  'text': '#2b2620',
+  'accent': '#e05800',
+  'csm-red': '#B42318',
+  'csm-red-soft': '#FDECEC',
+  'csm-neutral': '#8F8A80',
+  'csm-neutral-soft': '#F1ECE3',
+  'csm-lead': '#3D6B8E',
+  'csm-lead-soft': '#EDF3F8',
+  'csm-toact': '#B4720E',
+  'csm-toact-soft': '#FBF3E4',
+  'csm-active': '#2E7D5B',
+  'csm-active-soft': '#EAF4EF',
+  'csm-high': '#F25E00',
+  'csm-high-soft': '#FFF0E4',
+  'csm-text-2': '#75706A',
+  'csm-accent-ink': '#C05A0E',
+  'csm-field': '#FFFFFF',
+  'csm-hover': '#F6F4F0',
+  'csm-th': '#FCFBF9',
+  'csm-row-hover': '#FCFAF7',
+  'csm-track': '#F1ECE3',
+  'csm-line-2': '#DDD6CA',
+  'csm-stripe': '#FAF8F4',
+  'csm-hover-border': '#E4DACB',
+  'csm-hover-shadow': '0 2px 5px -2px rgba(90,70,45,.06),0 26px 50px -30px rgba(90,70,45,.3)',
+  'csm-active-shadow': '0 0 0 1px #8F8A80,0 18px 38px -26px rgba(90,70,45,.35)',
+  'csm-pick-shadow': '0 0 0 2px #FFF0E4,0 18px 38px -26px rgba(90,70,45,.35)',
+  'csm-act-hover': '#D95400',
+  'csm-warn-border': '#F2D9C4',
+  'csm-tier-family': '#8A6FB0',
+  'csm-tier-family-bg': '#F2EEF8',
+  'csm-tier-family-ink': '#6B4E96',
+  'csm-tier-black': '#3A3A3A',
+  'csm-tier-black-bg': '#F2F1EF',
+  'csm-tier-black-ink': '#2A2A2A',
+  'csm-tier-diamond': '#A8C2D6',
+  'csm-tier-diamond-bg': '#EDF3F8',
+  'csm-tier-diamond-ink': '#3D6B8E',
+  'csm-tier-gold': '#DCC48A',
+  'csm-tier-gold-bg': '#FBF3E4',
+  'csm-tier-gold-ink': '#B4720E',
+  'csm-tier-ivory': '#DED6C6',
+  'csm-tier-ivory-bg': '#F8F5EE',
+  'csm-tier-ivory-ink': '#93856A',
+  'csm-tone': '#8F8A80',
+  'csm-tone': '#1F5BFF',
+  'csm-tone': '#8F8A80',
+  'csm-tone': '#B4720E',
+  'csm-tone': '#2E7D5B',
+  'csm-tone': '#F6C453',
+  'csm-tone': '#8F8A80',
+  'csm-tone': '#B4720E',
+  'csm-tone': '#2E7D5B',
+  'csm-tone': '#F6C453',
+  'csm-tone': '#8F8A80',
+  'csm-tone-soft': '#12345C',
+  'csm-tone': '#2E7D5B',
+  'csm-tone-soft': 'rgba(16,185,129,.14)',
+  'csm-tone': '#F6C453',
+  'csm-tone-soft': 'rgba(246,196,83,.14)',
+  'crec-radius': '18px',
+  'bg': '#102A43',
+  'bg-2': '#0D253D',
+  'bg-3': '#12345C',
+  'card': '#1B456A',
+  'ink': '#F7FBFF',
+  'muted': '#A9BDD3',
+  'muted-2': '#A9BDD3',
+  'line': 'rgba(41,168,255,.28)',
+  'line-2': 'rgba(41,168,255,.16)',
+  'wine': '#FF6900',
+  'wine-soft': 'rgba(255,105,0,.14)',
+  'gold': '#FF6900',
+  'blue': '#29A8FF',
+  'blue-soft': 'rgba(41,168,255,.14)',
+  'green': '#10B981',
+  'green-soft': 'rgba(16,185,129,.1)',
+  'red': '#F87171',
+  'red-soft': 'rgba(248,113,113,.12)',
+  'amber': '#F59E0B',
+  'amber-soft': 'rgba(245,158,11,.12)',
+  'side': '#0D253D',
+  'me': '#FF6900',
+  'radius': '8px',
+  'grad-orange': 'linear-gradient(135deg,#FF6900,#FF6900)',
+  'grad-purple': 'linear-gradient(135deg,#29A8FF,#29A8FF)',
+  'grad-brand': 'linear-gradient(135deg,#FF6900,#29A8FF)',
+  'glow-orange': '0 0 32px rgba(255,105,0,.14)',
+  'glow-purple': '0 0 28px rgba(41,168,255,.18)',
+  'ev-seat-color': '#10B981',
+  'ev-seat-track': 'rgba(16,185,129,.18)',
+  'ev-seat-color': '#F59E0B',
+  'ev-seat-track': 'rgba(245,158,11,.18)',
+  'ev-seat-color': '#EF4444',
+  'ev-seat-track': 'rgba(239,68,68,.18)',
+  'csm-red': '#FF7B72',
+  'csm-red-soft': 'rgba(255,123,114,.14)',
+  'csm-neutral': '#8F8A80',
+  'csm-neutral-soft': '#12345C',
+  'csm-lead': '#1F5BFF',
+  'csm-lead-soft': '#EAF0FF',
+  'csm-active': '#2E7D5B',
+  'csm-active-soft': 'rgba(16,185,129,.14)',
+  'csm-high': '#F6C453',
+  'csm-high-soft': 'rgba(246,196,83,.14)',
+  'csm-text-2': '#A9BDD3',
+  'csm-accent-ink': '#F25E00',
+  'csm-field': '#FFFFFF',
+  'csm-hover': '#12345C',
+  'csm-th': '#0D253D',
+  'csm-row-hover': '#12345C',
+  'csm-track': '#12345C',
+  'csm-line-2': '#EAE6DF',
+  'csm-stripe': '#12345C',
+  'csm-hover-border': '#1F5BFF',
+  'csm-hover-shadow': '0 0 28px rgba(41,168,255,.18)',
+  'csm-active-shadow': '0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14)',
+  'csm-pick-shadow': '0 0 0 2px #FFF0E4,0 0 32px rgba(255,105,0,.14)',
+  'csm-act-hover': '#F25E00',
+  'csm-warn-border': '#F25E00',
+  'csm-tier-family': '#B79BE0',
+  'csm-tier-family-bg': 'rgba(183,155,224,.14)',
+  'csm-tier-family-ink': '#B79BE0',
+  'csm-tier-black': '#8F8A80',
+  'csm-tier-black-bg': '#12345C',
+  'csm-tier-black-ink': '#2B2620',
+  'csm-tier-diamond': '#EAE6DF',
+  'csm-tier-diamond-bg': '#EAF0FF',
+  'csm-tier-diamond-ink': '#1F5BFF',
+  'csm-tier-gold': '#F6C453',
+  'csm-tier-gold-bg': 'rgba(246,196,83,.14)',
+  'csm-tier-gold-ink': '#F6C453',
+  'csm-tier-ivory': '#EAE6DF',
+  'csm-tier-ivory-bg': '#0D253D',
+  'csm-tier-ivory-ink': '#A9BDD3',
+  'product-detail-dark-surface': 'color-mix(in srgb,#FFFFFF 64%,#0D253D)',
+  'product-inset-surface': 'color-mix(in srgb,#12345C 54%,#0D253D)',
+  'surface': '#0D253D',
+  'card2': '#12345C',
+  'ink2': '#D7E5F2',
+  'ink3': '#8F8A80',
+  'goldline': '#E05800',
+  'goldbg': '#FFF0E4',
+  'ok': '#2E7D5B',
+  'warn': '#B4720E',
+  'crit': '#FF6B6B',
+  'lock': '#8F8A80',
+  'a1': '#29A8FF',
+  'a2': '#A855F7',
+  'a3': '#E05800',
+  'p0': '#FF6B6B',
+  'p1': '#FF9B54',
+  'p2': '#F5C451',
+  'p3': '#29A8FF',
+  'p4': '#8F8A80',
+  'ch-whatsapp': '#2E7D5B',
+  'ch-email': '#29A8FF',
+  'ch-wechat': '#A855F7',
+  'ch-sms': '#F5C451',
+  's1': '#3987e5',
+  's2': '#d95926',
+  's3': '#199e70',
+  's4': '#c98500',
+  's5': '#d55181',
+  's6': '#008300',
+  's7': '#9085e9',
+  'lineink': '#29A8FF',
+  'sans': '"HarmonyOS Sans SC","PingFang SC","Microsoft YaHei","manropeFont","manropeFont Fallback",-apple-system,sans-serif',
+  'serif': '-apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif',
+  'mono': '"SF Mono",ui-monospace,Menlo,Consolas,monospace',
+  'sh': '0 12px 32px rgba(2,16,31,.18)',
+  'r': '8px',
+  'rs': '6px',
+  'surface': '#F7F3ED',
+  'card2': '#F3EEE6',
+  'ink2': '#5C5C5C',
+  'crit': '#E04545',
+  'a1': '#5B6FA8',
+  'a2': '#805AD5',
+  'p0': '#E04545',
+  'p1': '#E87050',
+  'p2': '#D4A537',
+  'p3': '#5B6FA8',
+  'ch-whatsapp': '#5B8A55',
+  'ch-email': '#5B6FA8',
+  'ch-wechat': '#805AD5',
+  'ch-sms': '#D4A537',
+  's1': '#2a78d6',
+  's2': '#eb6834',
+  's3': '#1baf7a',
+  's4': '#eda100',
+  's5': '#e87ba4',
+  's6': '#008300',
+  's7': '#4a3aa7',
+  'lineink': '#5B6FA8',
+  'sh': '0 8px 24px rgba(95,72,54,.08)',
+  'toolbar-control-height': '34px',
+  'compact-tag-height': '20px',
+  'compact-tag-font-size': '10.5px',
+  'compact-tag-pad-x': '8px',
+  'compact-tag-gap': '8px',
+  'tag-copy-gap': '10px',
+  'bg-main': 'hsl(42,22%,96.5%)',
+  'bg-300': 'hsl(42,15%,92%)',
+  'bg-input': '#ffffff',
+  'bg-hover': 'hsl(42,14%,90%)',
+  'brand': 'hsl(14.8,55%,48%)',
+  'text-0': 'hsl(40,8%,12%)',
+  'text-1': 'hsl(40,6%,28%)',
+  'text-2': 'hsl(40,5%,52%)',
+  'text-3': 'hsl(40,5%,36%)',
+  'border': 'hsl(42,12%,85%)',
+  'font-serif': 'Georgia,"Times New Roman",serif',
+  'font-sans': 'system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif',
+  'sidebar-w': '288px',
+  'task-bg': '#f5f3ee',
+  'task-panel': '#fff',
+  'task-side': '#fbfaf7',
+  'task-border': '#eae6dd',
+  'task-border-strong': '#ded8cc',
+  'task-ink': '#211e19',
+  'task-text': '#575144',
+  'task-muted': '#8b8578',
+  'task-faint': '#b3ada0',
+  'task-orange': '#a94f24',
+  'task-orange-soft': '#fbefe6',
+  'task-bg': '#f5f3ee',
+  'task-panel': '#fff',
+  'task-side': '#fbfaf7',
+  'task-border': '#eae6dd',
+  'task-border-strong': '#ded8cc',
+  'task-ink': '#211e19',
+  'task-text': '#575144',
+  'task-muted': '#8b8578',
+  'task-faint': '#b3ada0',
+  'task-orange': '#a94f24',
+  'task-orange-soft': '#fbefe6',
+  'stack-pad': '18px',
+  'stack-pad': '30px',
+  'stack-pad': '0px',
+  'task-orange': '#ff6900',
+  'task-orange-soft': '#fff1e6',
+  'task-border-strong': '#efcfb8',
+  'holding-action-gradient': 'linear-gradient(135deg, #ff8a00 0%, #ff6900 52%, #ff4f00 100%)',
+  'holding-action-gradient-hover': 'linear-gradient(135deg, #ff9a1f 0%, #ff7214 48%, #f05a00 100%)',
+  'stack-pad': '10px',
+  'stack-pad': '16px',
+  'stack-pad': '0px',
+  'bg': '#F8F7F4',
+  'card': '#FFFFFF',
+  'card2': '#FFFFFF',
+  'line': '#EAE6DF',
+  'line2': '#DDD7CD',
+  'ink': '#2B2620',
+  'mut': '#8F8A80',
+  'dim': '#A9A298',
+  'org': '#D45400',
+  'blu': '#2F6FD0',
+  'pur': '#7B5BD0',
+  'grn': '#2E7D5B',
+  'yel': '#D9A62B',
+  'red': '#B84038',
+  'pnk': '#C2557E',
+  'cyn': '#1F8A9E',
+  'hr-bg': '#fbfaf7',
+  'hr-panel': '#fff',
+  'hr-nested': '#fff',
+  'hr-line': '#e5e1d8',
+  'hr-line-strong': '#d6cfbf',
+  'hr-ink': '#1c1c1c',
+  'hr-text': '#4a4a4a',
+  'hr-muted': '#8a8478',
+  'hr-brand': '#8b2c1d',
+  'hr-brand-soft': '#f6efe6',
+  'hr-green': '#4a7c59',
+  'hr-red': '#a05050',
+  'hr-gold': '#b08a4c',
+  'hr-shadow': '0 1px 2px rgba(28,28,28,.04),0 4px 16px rgba(28,28,28,.04)',
+  'bg': '#F8F7F4',
+  'card': '#FFFFFF',
+  'ink': '#2B2620',
+  'muted': '#8F8A80',
+  'line': '#EAE6DF',
+  'wine': '#F25E00',
+  'wine-soft': '#FFF0E4',
+  'gold': '#E05800',
+  'green': '#2E7D5B',
+  'green-soft': '#EAF4EF',
+  'red': '#B84038',
+  'red-soft': '#FCEDEA',
+  'amber': '#B4720E',
+  'amber-soft': '#FBF3E4',
+  'blue': '#28618F',
+  'blue-soft': '#EAF2FA',
+  'purple': '#6A4F92',
+  'purple-soft': '#F2EDFA',
+  'radius': '18px',
+  'bg-2': '#F3F0EB',
+  'bg-3': '#EDE9E2',
+  'sans': '-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif',
+  'sh': '0 2px 5px rgba(30,37,47,.025)',
+  'nm-color-bg': '#f8f7f4',
+  'nm-color-surface': '#ffffff',
+  'nm-color-text': '#2b2620',
+  'nm-color-text-secondary': '#8f8a80',
+  'nm-color-border': '#eae6df',
+  'nm-color-brand-fill': '#f25e00',
+  'nm-color-brand-accent': '#e05800',
+  'nm-color-on-brand': '#ffffff',
+  'nm-color-success': '#2e7d5b',
+  'nm-color-success-soft': '#eaf4ef',
+  'nm-color-warning': '#b4720e',
+  'nm-color-warning-soft': '#fbf3e4',
+  'nm-color-danger': '#b84038',
+  'nm-color-danger-soft': '#fcedea',
+  'nm-color-brand-fill-hover': '#ee6000',
+  'nm-color-on-brand-track': 'rgba(255, 255, 255, 0.35)',
+  'nm-shadow-brand': '0 12px 28px -14px rgba(242, 94, 0, 0.55)',
+  'nm-shadow-brand-hover': '0 16px 34px -14px rgba(242, 94, 0, 0.6)',
+  'nm-shadow-card': '0 1px 1px rgba(90, 70, 45, 0.03),
+    0 3px 8px -4px rgba(90, 70, 45, 0.05),
+    0 26px 54px -40px rgba(90, 70, 45, 0.22)',
+  'nm-opacity-disabled': '0.35',
+  'nm-opacity-loading': '0.92',
+  'nm-radius-button': '6px',
+  'nm-background-button': 'linear-gradient(165deg, #ff8a2e 0%, #f96a00 52%, #e85800 100%)',
+  'nm-background-button-hover': 'linear-gradient(165deg, #ff7e1b 0%, #ee6000 55%, #db5300 100%)',
+  'nm-radius-sm': '8px',
+  'nm-radius-md': '12px',
+  'nm-radius-lg': '16px',
+  'nm-radius-modal': '16px',
+  'nm-radius-pill': '999px',
+  'nm-space-1': '2px',
+  'nm-space-2': '4px',
+  'nm-space-3': '8px',
+  'nm-space-4': '12px',
+  'nm-space-5': '16px',
+  'nm-space-6': '24px',
+  'nm-space-7': '32px',
+  'nm-font-sans': ''Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'',
+  'nm-font-number': ''Space Grotesk', 'Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'',
+  'nm-font-size-eyebrow': '12px',
+  'nm-line-height-eyebrow': '1.4',
+  'nm-font-size-subtitle': '16px',
+  'nm-line-height-subtitle': '1.5',
+  'nm-font-size-title': '28px',
+  'nm-line-height-title': '1.35',
+  'nm-font-size-title-narrow': '24px',
+  'nm-line-height-title-narrow': '1.3',
+  'nm-color-bg': '#102a43',
+  'nm-color-surface': '#1b456a',
+  'nm-color-text': '#f7fbff',
+  'nm-color-text-secondary': '#a9bdd3',
+  'nm-color-border': 'rgba(41, 168, 255, 0.28)',
+  'nm-color-brand-fill': '#ff6900',
+  'nm-color-brand-accent': '#ff6900',
+  'nm-color-on-brand': '#ffffff',
+  'nm-color-success': '#10b981',
+  'nm-color-success-soft': 'rgba(16, 185, 129, 0.1)',
+  'nm-color-warning': '#f59e0b',
+  'nm-color-warning-soft': 'rgba(245, 158, 11, 0.12)',
+  'nm-color-danger': '#f87171',
+  'nm-color-danger-soft': 'rgba(248, 113, 113, 0.12)',
+  'nm-color-brand-fill-hover': '#ff6900',
+  'nm-shadow-brand': '0 4px 16px -4px rgba(255, 105, 0, 0.3)',
+  'nm-shadow-brand-hover': '0 6px 24px -4px rgba(255, 105, 0, 0.45)',
+  'nm-shadow-card': '0 1px 2px rgba(0, 0, 0, 0.2)',
+  'nm-opacity-disabled': '0.4',
+  'nm-background-button': '#ff6900',
+  'nm-background-button-hover': '#ff6900',
+  'nm-radius-sm': '4px',
+  'nm-radius-md': '6px',
+  'nm-radius-lg': '8px',
+  'nm-radius-modal': '10px',
+  'bg': '#102a43',
+  'card': '#1b456a',
+  'ink': '#f7fbff',
+  'muted': '#a9bdd3',
+  'line': 'rgba(41, 168, 255, 0.28)',
+  'wine': '#ff6900',
+  'wine-soft': '#fff0e4',
+  'bg-2': '#fcfbf9',
+  'bg-3': '#f6f4f0',
+  'blue': '#3d6b8e',
+  'blue-soft': '#edf3f8',
+  'green': '#10b981',
+  'green-soft': 'rgba(16, 185, 129, 0.1)',
+  'red': '#f87171',
+  'red-soft': 'rgba(248, 113, 113, 0.12)',
+  'amber': '#f59e0b',
+  'amber-soft': 'rgba(245, 158, 11, 0.12)',
+  'btn': '#ff6900',
+  'font': ''Manrope', ui-sans-serif, system-ui,
+    'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'',
+  'bg-2': '#0d253d',
+  'bg-3': '#12345c',
+  'blue': '#29a8ff',
+  'blue-soft': 'rgba(41,168,255,.14)',
+  'wine-soft': 'rgba(255,105,0,.14)',
+  'np-ink': '#2B2620',
+  'np-muted': '#8F8A80',
+  'np-line': '#EAE6DF',
+  'np-card': '#FFFFFF',
+  'np-orange': '#F25E00',
+  'np-orange-soft': '#FFF0E4',
+  'np-green': '#2E7D5B',
+  'np-green-soft': '#EAF4EF',
+  'np-amber': '#B4720E',
+  'np-amber-soft': '#FBF3E4',
+  'np-gray': '#8F8A80',
+  'np-gray-soft': '#F3F1EC',
+  'np-red': '#B84038',
+  'np-red-soft': '#FCEDEA',
+  'radius': '11px',
+  'nm-color-bg': '#f8f7f4',
+  'nm-color-surface': '#fff',
+  'nm-color-text': '#2b2620',
+  'nm-color-text-secondary': '#8f8a80',
+  'nm-color-border': '#eae6df',
+  'nm-color-brand-fill': '#f25e00',
+  'nm-color-brand-accent': '#e05800',
+  'nm-radius-button': '6px',
+  'nm-radius-lg': '18px',
+  'nm-font-sans': ''Manrope','PingFang SC','Microsoft YaHei',sans-serif',
+  'nm-shadow-card': '0 1px 1px rgba(90,70,45,.03),0 3px 8px -4px rgba(90,70,45,.05),0 26px 54px -40px rgba(90,70,45,.22)',
+  'soft': '#fff1e6',
+  'sidebar': '212px',
+  'nm-background-button': 'linear-gradient(165deg,#ff8a2e,#f96a00 52%,#e85800)',
+  'sidebar': '72px',
+  'sidebar': '180px',
+  'sidebar': '64px',
+  'nm-font-sans': '-apple-system,"PingFang SC","Microsoft YaHei",sans-serif',
+  'nm-radius-lg': '11px',
+  'nm-background-button': '#ef6815'
+};

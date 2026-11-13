@@ -1,0 +1,38 @@
+{
+  "name": "@design-tokens/polish",
+  "version": "1.0.0",
+  "description": "Design token superpower tool: extract · critique · apply · publish via npm",
+  "type": "module",
+  "bin": {
+    "polish": "./bin/polish.mjs"
+  },
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./scan": "./src/scan.js",
+    "./cross": "./src/cross.js",
+    "./parse": "./src/parse.js",
+    "./diff": "./src/diff.js",
+    "./apply": "./src/apply.js",
+    "./plan": "./src/plan.js",
+    "./mcp": "./src/mcp-server.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "node bin/polish.mjs",
+    "mcp": "node src/mcp-server.js"
+  },
+  "keywords": ["design-tokens", "css-variables", "token-audit", "mcp"],
+  "license": "MIT",
+  "repository": "https://github.com/your-username/polish",
+  "bugs": "https://github.com/your-username/polish/issues",
+  "homepage": "https://github.com/your-username/polish#readme",
+  "engines": {
+    "node": ">=18"
+  }
+}

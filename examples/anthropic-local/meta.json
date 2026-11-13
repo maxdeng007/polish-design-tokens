@@ -1,0 +1,28 @@
+{
+  "job_id": "306a3075-770f-c924-434b-bf40aee442b29cd2b0d24c8be44bd760fde69630ce90",
+  "target": {
+    "kind": "path",
+    "value": "/Users/dengzhou/Desktop/08-Noah-Project/03-AI AI/page-enhanced/Noah mind 2.0/anthropic-design-system.html"
+  },
+  "status": "complete",
+  "summary": {
+    "declarations": 14,
+    "uniqueTokens": 14,
+    "runtimeVariables": 0,
+    "runtimeDocuments": 0,
+    "findings": 1,
+    "bySeverity": {
+      "info": 1
+    }
+  },
+  "findings_by_severity": {
+    "error": 0,
+    "warn": 0,
+    "info": 1
+  },
+  "findings_by_rule": {
+    "namespace": 1
+  },
+  "declarations_total": 14,
+  "generated_at": "2026-10-30"
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "name": "--paper",
+    "raw": "#faf9f5",
+    "resolved": "#faf9f5",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 16
+  },
+  {
+    "name": "--band",
+    "raw": "#f5f4ed",
+    "resolved": "#f5f4ed",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 17
+  },
+  {
+    "name": "--card",
+    "raw": "#ffffff",
+    "resolved": "#ffffff",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 17
+  },
+  {
+    "name": "--ink",
+    "raw": "#141413",
+    "resolved": "#141413",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 17
+  },
+  {
+    "name": "--ink-2",
+    "raw": "#30302e",
+    "resolved": "#30302e",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 18
+  },
+  {
+    "name": "--ink-3",
+    "raw": "#5e5d59",
+    "resolved": "#5e5d59",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 18
+  },
+  {
+    "name": "--ink-4",
+    "raw": "#87867f",
+    "resolved": "#87867f",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 18
+  },
+  {
+    "name": "--rule",
+    "raw": "#e8e6dc",
+    "resolved": "#e8e6dc",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 18
+  },
+  {
+    "name": "--rule-2",
+    "raw": "#dedcd1",
+    "resolved": "#dedcd1",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 19
+  },
+  {
+    "name": "--rule-3",
+    "raw": "#c2c0b6",
+    "resolved": "#c2c0b6",
+    "kind": "color",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 19
+  },
+  {
+    "name": "--sans",
+    "raw": "'Anthropic Sans','Helvetica Neue',Helvetica,Arial,sans-serif",
+    "resolved": "'Anthropic Sans','Helvetica Neue',Helvetica,Arial,sans-serif",
+    "kind": "font-family",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 19
+  },
+  {
+    "name": "--serif",
+    "raw": "'Anthropic Serif','Iowan Old Style',Palatino,Georgia,serif",
+    "resolved": "'Anthropic Serif','Iowan Old Style',Palatino,Georgia,serif",
+    "kind": "font-family",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 20
+  },
+  {
+    "name": "--mono",
+    "raw": "'Anthropic Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace",
+    "resolved": "'Anthropic Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace",
+    "kind": "font-family",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 21
+  },
+  {
+    "name": "--shadow",
+    "raw": "0 1px 2px rgba(20,20,19,.04),0 8px 24px rgba(20,20,19,.05)",
+    "resolved": "0 1px 2px rgba(20,20,19,.04),0 8px 24px rgba(20,20,19,.05)",
+    "kind": "other",
+    "scope": "root",
+    "themes": [],
+    "file": "anthropic-design-system.html",
+    "line": 22
+  }
+]

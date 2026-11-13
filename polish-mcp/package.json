@@ -1,0 +1,13 @@
+{
+  "name": "polish-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing polish plan + diff tools",
+  "type": "module",
+  "main": "src/mcp-server.js",
+  "bin": {
+    "polish-mcp": "src/mcp-server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

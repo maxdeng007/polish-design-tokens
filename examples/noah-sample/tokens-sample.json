@@ -1,0 +1,2178 @@
+[
+  {
+    "name": "--nm-gut",
+    "value": "clamp(20px, 4.6vw, 72px)",
+    "count": 4,
+    "files": [
+      "_cockpit-v3.css",
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--nm-container",
+    "value": "1440px",
+    "count": 2,
+    "files": [
+      "_cockpit-v3.css",
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--bg",
+    "value": "#F3F5F8",
+    "count": 18,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--bg-2",
+    "value": "#F7F9FB",
+    "count": 9,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--bg-3",
+    "value": "#EFF2F6",
+    "count": 9,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--card",
+    "value": "#FFFFFF",
+    "count": 17,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ink",
+    "value": "#16202B",
+    "count": 18,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--muted",
+    "value": "#6B7685",
+    "count": 15,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--line",
+    "value": "#E6EAF0",
+    "count": 18,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--wine",
+    "value": "#E4762F",
+    "count": 13,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--wine-soft",
+    "value": "#FFF1E8",
+    "count": 17,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--gold",
+    "value": "#E4762F",
+    "count": 13,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--green",
+    "value": "#12945F",
+    "count": 10,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--green-soft",
+    "value": "#E6F6EE",
+    "count": 10,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--red",
+    "value": "#E02B2B",
+    "count": 12,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--red-soft",
+    "value": "#FDECEC",
+    "count": 10,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--amber",
+    "value": "#C27A10",
+    "count": 10,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--amber-soft",
+    "value": "#FFF5E1",
+    "count": 10,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--blue",
+    "value": "#1F5BFF",
+    "count": 10,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--blue-soft",
+    "value": "#EAF0FF",
+    "count": 10,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "dashboard.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--purple",
+    "value": "#7B4FE0",
+    "count": 3,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--purple-soft",
+    "value": "#F2EDFF",
+    "count": 3,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--radius",
+    "value": "14px",
+    "count": 9,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--sh",
+    "value": "0 1px 2px rgba(11,23,36,.05), 0 2px 8px rgba(11,23,36,.05)",
+    "count": 7,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--sans",
+    "value": "-apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+    "count": 5,
+    "files": [
+      "_services-v3.css",
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--font-wordmark",
+    "value": "\"wordmarkFont\",\"wordmarkFont Fallback\"",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--font-manrope",
+    "value": "\"manropeFont\",\"manropeFont Fallback\"",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--side",
+    "value": "#282420",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--me",
+    "value": "#95EC69",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ev-seat-color",
+    "value": "#2F8A63",
+    "count": 18,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ev-seat-track",
+    "value": "#DCEBE3",
+    "count": 18,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--persona-bg",
+    "value": "none",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ch-space-xs",
+    "value": "8px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ch-space-sm",
+    "value": "12px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ch-space-md",
+    "value": "20px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ch-space-lg",
+    "value": "32px",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ch-space-xl",
+    "value": "52px",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--skeleton-base",
+    "value": "#214e70",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--skeleton-highlight",
+    "value": "#3b7397",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--skeleton-panel",
+    "value": "#153d5d",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--skeleton-cover",
+    "value": "#123650",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--skeleton-border",
+    "value": "rgba(79,157,207,.26)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--bg2",
+    "value": "#f8f7f4",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--text",
+    "value": "#2b2620",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--orange",
+    "value": "#e05800",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-motion-fast",
+    "value": "120ms",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-motion-medium",
+    "value": "260ms",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-ease-out",
+    "value": "cubic-bezier(.25,1,.5,1)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-inset-surface",
+    "value": "color-mix(in srgb,#F8F7F4 48%,#FFFFFF)",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-panel-radius",
+    "value": "14px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-inset-radius",
+    "value": "10px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-text-caption",
+    "value": ".65625rem",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-text-supporting",
+    "value": ".75rem",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-text-body",
+    "value": ".8125rem",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--panel",
+    "value": "#fff",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--accent",
+    "value": "#e05800",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-red",
+    "value": "#B42318",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-red-soft",
+    "value": "#FDECEC",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-neutral",
+    "value": "#8F8A80",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-neutral-soft",
+    "value": "#F1ECE3",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-lead",
+    "value": "#3D6B8E",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-lead-soft",
+    "value": "#EDF3F8",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-toact",
+    "value": "#B4720E",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-toact-soft",
+    "value": "#FBF3E4",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-active",
+    "value": "#2E7D5B",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-active-soft",
+    "value": "#EAF4EF",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-high",
+    "value": "#F25E00",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-high-soft",
+    "value": "#FFF0E4",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-text-2",
+    "value": "#75706A",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-accent-ink",
+    "value": "#C05A0E",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-field",
+    "value": "#FFFFFF",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-hover",
+    "value": "#F6F4F0",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-th",
+    "value": "#FCFBF9",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-row-hover",
+    "value": "#FCFAF7",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-track",
+    "value": "#F1ECE3",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-line-2",
+    "value": "#DDD6CA",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-stripe",
+    "value": "#FAF8F4",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-hover-border",
+    "value": "#E4DACB",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-hover-shadow",
+    "value": "0 2px 5px -2px rgba(90,70,45,.06),0 26px 50px -30px rgba(90,70,45,.3)",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-active-shadow",
+    "value": "0 0 0 1px #8F8A80,0 18px 38px -26px rgba(90,70,45,.35)",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-pick-shadow",
+    "value": "0 0 0 2px #FFF0E4,0 18px 38px -26px rgba(90,70,45,.35)",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-act-hover",
+    "value": "#D95400",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-warn-border",
+    "value": "#F2D9C4",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-family",
+    "value": "#8A6FB0",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-family-bg",
+    "value": "#F2EEF8",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-family-ink",
+    "value": "#6B4E96",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-black",
+    "value": "#3A3A3A",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-black-bg",
+    "value": "#F2F1EF",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-black-ink",
+    "value": "#2A2A2A",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-diamond",
+    "value": "#A8C2D6",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-diamond-bg",
+    "value": "#EDF3F8",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-diamond-ink",
+    "value": "#3D6B8E",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-gold",
+    "value": "#DCC48A",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-gold-bg",
+    "value": "#FBF3E4",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-gold-ink",
+    "value": "#B4720E",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-ivory",
+    "value": "#DED6C6",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-ivory-bg",
+    "value": "#F8F5EE",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tier-ivory-ink",
+    "value": "#93856A",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tone",
+    "value": "#8F8A80",
+    "count": 26,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--csm-tone-soft",
+    "value": "#12345C",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--crec-radius",
+    "value": "18px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--muted-2",
+    "value": "#A9BDD3",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--line-2",
+    "value": "rgba(41,168,255,.16)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--grad-orange",
+    "value": "linear-gradient(135deg,#FF6900,#FF6900)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--grad-purple",
+    "value": "linear-gradient(135deg,#29A8FF,#29A8FF)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--grad-brand",
+    "value": "linear-gradient(135deg,#FF6900,#29A8FF)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--glow-orange",
+    "value": "0 0 32px rgba(255,105,0,.14)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--glow-purple",
+    "value": "0 0 28px rgba(41,168,255,.18)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--product-detail-dark-surface",
+    "value": "color-mix(in srgb,#FFFFFF 64%,#0D253D)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--surface",
+    "value": "#0D253D",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--card2",
+    "value": "#12345C",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ink2",
+    "value": "#D7E5F2",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ink3",
+    "value": "#8F8A80",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--goldline",
+    "value": "#E05800",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--goldbg",
+    "value": "#FFF0E4",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ok",
+    "value": "#2E7D5B",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--warn",
+    "value": "#B4720E",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--crit",
+    "value": "#FF6B6B",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--lock",
+    "value": "#8F8A80",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--a1",
+    "value": "#29A8FF",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--a2",
+    "value": "#A855F7",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--a3",
+    "value": "#E05800",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--p0",
+    "value": "#FF6B6B",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--p1",
+    "value": "#FF9B54",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--p2",
+    "value": "#F5C451",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--p3",
+    "value": "#29A8FF",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--p4",
+    "value": "#8F8A80",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ch-whatsapp",
+    "value": "#2E7D5B",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ch-email",
+    "value": "#29A8FF",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ch-wechat",
+    "value": "#A855F7",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--ch-sms",
+    "value": "#F5C451",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--s1",
+    "value": "#3987e5",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--s2",
+    "value": "#d95926",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--s3",
+    "value": "#199e70",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--s4",
+    "value": "#c98500",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--s5",
+    "value": "#d55181",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--s6",
+    "value": "#008300",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--s7",
+    "value": "#9085e9",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--lineink",
+    "value": "#29A8FF",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--serif",
+    "value": "-apple-system, BlinkMacSystemFont, \"PingFang SC\", \"Microsoft YaHei\", \"Noto Sans CJK SC\", \"Segoe UI\", sans-serif",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--mono",
+    "value": "\"SF Mono\",ui-monospace,Menlo,Consolas,monospace",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--r",
+    "value": "8px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--rs",
+    "value": "6px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--toolbar-control-height",
+    "value": "34px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--compact-tag-height",
+    "value": "20px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--compact-tag-font-size",
+    "value": "10.5px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--compact-tag-pad-x",
+    "value": "8px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--compact-tag-gap",
+    "value": "8px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--tag-copy-gap",
+    "value": "10px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--bg-main",
+    "value": "hsl(42,22%,96.5%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--bg-300",
+    "value": "hsl(42,15%,92%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--bg-input",
+    "value": "#ffffff",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--bg-hover",
+    "value": "hsl(42,14%,90%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--brand",
+    "value": "hsl(14.8,55%,48%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--text-0",
+    "value": "hsl(40,8%,12%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--text-1",
+    "value": "hsl(40,6%,28%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--text-2",
+    "value": "hsl(40,5%,52%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--text-3",
+    "value": "hsl(40,5%,36%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--border",
+    "value": "hsl(42,12%,85%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--font-serif",
+    "value": "Georgia,\"Times New Roman\",serif",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--font-sans",
+    "value": "system-ui,-apple-system,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--sidebar-w",
+    "value": "288px",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-bg",
+    "value": "#f5f3ee",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-panel",
+    "value": "#fff",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-side",
+    "value": "#fbfaf7",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-border",
+    "value": "#eae6dd",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-border-strong",
+    "value": "#ded8cc",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-ink",
+    "value": "#211e19",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-text",
+    "value": "#575144",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-muted",
+    "value": "#8b8578",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-faint",
+    "value": "#b3ada0",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-orange",
+    "value": "#a94f24",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--task-orange-soft",
+    "value": "#fbefe6",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--stack-pad",
+    "value": "18px",
+    "count": 12,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--holding-action-gradient",
+    "value": "linear-gradient(135deg, #ff8a00 0%, #ff6900 52%, #ff4f00 100%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--holding-action-gradient-hover",
+    "value": "linear-gradient(135deg, #ff9a1f 0%, #ff7214 48%, #f05a00 100%)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--line2",
+    "value": "#DDD7CD",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--mut",
+    "value": "#8F8A80",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--dim",
+    "value": "#A9A298",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--org",
+    "value": "#D45400",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--blu",
+    "value": "#2F6FD0",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--pur",
+    "value": "#7B5BD0",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--grn",
+    "value": "#2E7D5B",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--yel",
+    "value": "#D9A62B",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--pnk",
+    "value": "#C2557E",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--cyn",
+    "value": "#1F8A9E",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--v2-navy",
+    "value": "#0B1724",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-or",
+    "value": "#E4762F",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-or2",
+    "value": "#FF9A4D",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-or-soft",
+    "value": "#FFF1E8",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-ink",
+    "value": "#16202B",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-sub",
+    "value": "#6B7685",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-line",
+    "value": "#E6EAF0",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-soft",
+    "value": "#F7F9FB",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-green",
+    "value": "#12945F",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-green-soft",
+    "value": "#E6F6EE",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-red",
+    "value": "#E02B2B",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-red-soft",
+    "value": "#FDECEC",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-amber",
+    "value": "#C27A10",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-amber-soft",
+    "value": "#FFF5E1",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-blue",
+    "value": "#1F5BFF",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-blue-soft",
+    "value": "#EAF0FF",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-violet",
+    "value": "#7B4FE0",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--v2-violet-soft",
+    "value": "#F2EDFF",
+    "count": 1,
+    "files": [
+      "cockpit.html"
+    ]
+  },
+  {
+    "name": "--hr-bg",
+    "value": "#fbfaf7",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-panel",
+    "value": "#fff",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-nested",
+    "value": "#fff",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-line",
+    "value": "#e5e1d8",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-line-strong",
+    "value": "#d6cfbf",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-ink",
+    "value": "#1c1c1c",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-text",
+    "value": "#4a4a4a",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-muted",
+    "value": "#8a8478",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-brand",
+    "value": "#8b2c1d",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-brand-soft",
+    "value": "#f6efe6",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-green",
+    "value": "#4a7c59",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-red",
+    "value": "#a05050",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-gold",
+    "value": "#b08a4c",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--hr-shadow",
+    "value": "0 1px 2px rgba(28,28,28,.04),0 4px 16px rgba(28,28,28,.04)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-bg",
+    "value": "#f8f7f4",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-surface",
+    "value": "#ffffff",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-text",
+    "value": "#2b2620",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-text-secondary",
+    "value": "#8f8a80",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-border",
+    "value": "#eae6df",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-brand-fill",
+    "value": "#f25e00",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-brand-accent",
+    "value": "#e05800",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-on-brand",
+    "value": "#ffffff",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-success",
+    "value": "#2e7d5b",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-success-soft",
+    "value": "#eaf4ef",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-warning",
+    "value": "#b4720e",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-warning-soft",
+    "value": "#fbf3e4",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-danger",
+    "value": "#b84038",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-danger-soft",
+    "value": "#fcedea",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-brand-fill-hover",
+    "value": "#ee6000",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-color-on-brand-track",
+    "value": "rgba(255, 255, 255, 0.35)",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-shadow-brand",
+    "value": "0 12px 28px -14px rgba(242, 94, 0, 0.55)",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-shadow-brand-hover",
+    "value": "0 16px 34px -14px rgba(242, 94, 0, 0.6)",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-shadow-card",
+    "value": "0 1px 1px rgba(90, 70, 45, 0.03),\n    0 3px 8px -4px rgba(90, 70, 45, 0.05),\n    0 26px 54px -40px rgba(90, 70, 45, 0.22)",
+    "count": 6,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-opacity-disabled",
+    "value": "0.35",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-opacity-loading",
+    "value": "0.92",
+    "count": 2,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  },
+  {
+    "name": "--nm-radius-button",
+    "value": "6px",
+    "count": 4,
+    "files": [
+      "cockpit.html",
+      "services.html"
+    ]
+  }
+]

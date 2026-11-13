@@ -1,0 +1,4874 @@
+[
+  {
+    "name": "--grid-columns",
+    "value": "4",
+    "count": 154,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--grid-margin",
+    "value": "32px",
+    "count": 153,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--grid-gutter",
+    "value": "16px",
+    "count": 153,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--grid-max-width",
+    "value": "1920px",
+    "count": 50,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--grid-reading-max-width",
+    "value": "720px",
+    "count": 50,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--page-top-spacer",
+    "value": "48px",
+    "count": 153,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--grid-col",
+    "value": "calc(( min(100vw, 1920px) - 2 * 32px - (4 - 1) * 16px ) / 4)",
+    "count": 50,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--grid-edge",
+    "value": "calc((100vw - min(100vw, 1920px)) / 2 + 32px)",
+    "count": 50,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--size-base",
+    "value": "20px",
+    "count": 290,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--size-desktop",
+    "value": "22px",
+    "count": 290,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--slide-gap",
+    "value": "16px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css"
+    ]
+  },
+  {
+    "name": "--spacing-2",
+    "value": "2px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-4",
+    "value": "4px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-8",
+    "value": "8px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-12",
+    "value": "12px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-16",
+    "value": "16px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-24",
+    "value": "24px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-32",
+    "value": "32px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-48",
+    "value": "48px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-64",
+    "value": "64px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-80",
+    "value": "80px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-96",
+    "value": "96px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-128",
+    "value": "128px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-200",
+    "value": "200px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--spacing-radius-full",
+    "value": "999999px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--radius-xs",
+    "value": "4px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--theme-foreground-body",
+    "value": "#141413",
+    "count": 187,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--lightningcss-light",
+    "value": "initial",
+    "count": 166,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--lightningcss-dark",
+    "count": 166,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-background-primary",
+    "value": "#faf9f5",
+    "count": 210,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-background-secondary",
+    "value": "#f5f4ed",
+    "count": 209,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-background-tertiary",
+    "value": "#e8e6dc",
+    "count": 209,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-background-quaternary",
+    "value": "#d1cfc5",
+    "count": 209,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-foreground-primary",
+    "value": "#141413",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-foreground-secondary",
+    "value": "#30302e",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-foreground-tertiary",
+    "value": "#5e5d59",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-foreground-quaternary",
+    "value": "#87867f",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-border-primary",
+    "value": "#c2c0b6",
+    "count": 166,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-border-secondary",
+    "value": "#dedcd1",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-border-tertiary",
+    "value": "#f0eee6",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-button-primary-background",
+    "value": "#141413",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-button-primary-foreground",
+    "value": "#faf9f5",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-button-primary-border",
+    "value": "#141413",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-button-secondary-background",
+    "value": "#e8e6dc",
+    "count": 168,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-button-secondary-foreground",
+    "value": "#30302e",
+    "count": 172,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-button-secondary-border",
+    "value": "#dedcd1",
+    "count": 170,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-button-tertiary-background",
+    "value": "#f5f4ed",
+    "count": 176,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-button-tertiary-foreground",
+    "value": "#3d3d3a",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-button-tertiary-border",
+    "value": "#e8e6dc",
+    "count": 165,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--theme-focus-ring",
+    "value": "#154c92",
+    "count": 176,
+    "files": [
+      "__next_static_chunks_0hpfgvivairw9.css",
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--responsive-scale-min-breakpoint",
+    "value": "390px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--responsive-scale-max-breakpoint",
+    "value": "1920px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--font-weight-regular",
+    "value": "400",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--font-weight-medium",
+    "value": "500",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--font-weight-semibold",
+    "value": "600",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--font-weight-bold",
+    "value": "700",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-100",
+    "value": "100%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-104",
+    "value": "104%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-108",
+    "value": "108%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-112",
+    "value": "112%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-114",
+    "value": "114%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-116",
+    "value": "116%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-120",
+    "value": "120%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-125",
+    "value": "125%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-130",
+    "value": "130%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-135",
+    "value": "135%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-145",
+    "value": "145%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-150",
+    "value": "150%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-153",
+    "value": "153%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--line-height-154",
+    "value": "154%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--font-opsz-display",
+    "value": "48",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--font-opsz-text",
+    "value": "16",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--anthropic-sans",
+    "value": "\"anthropicSans\", \"anthropicSans Fallback\", \"Apple SD Gothic Neo\", \"Malgun Gothic\", \"Noto Sans KR\"",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_3lfhvsoi4d4vt.css"
+    ]
+  },
+  {
+    "name": "--anthropic-serif",
+    "value": "\"anthropicSerif\", \"anthropicSerif Fallback\", \"Apple SD Gothic Neo\", \"Malgun Gothic\", \"Noto Sans KR\"",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_3lfhvsoi4d4vt.css"
+    ]
+  },
+  {
+    "name": "--color-gray-000",
+    "value": "#fff",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-050",
+    "value": "#faf9f5",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-100",
+    "value": "#f5f4ed",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-150",
+    "value": "#f0eee6",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-200",
+    "value": "#e8e6dc",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-250",
+    "value": "#dedcd1",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-300",
+    "value": "#d1cfc5",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-350",
+    "value": "#c2c0b6",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-400",
+    "value": "#b0aea5",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-450",
+    "value": "#9c9a92",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-500",
+    "value": "#87867f",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-550",
+    "value": "#73726c",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-600",
+    "value": "#5e5d59",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-650",
+    "value": "#4d4c48",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-700",
+    "value": "#3d3d3a",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-750",
+    "value": "#30302e",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-800",
+    "value": "#262624",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-850",
+    "value": "#1f1e1d",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-900",
+    "value": "#1a1918",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-950",
+    "value": "#141413",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-gray-1000",
+    "value": "#000",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-oat",
+    "value": "#e3dacc",
+    "count": 13,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-olive",
+    "value": "#788c5d",
+    "count": 13,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-cactus",
+    "value": "#bcd1ca",
+    "count": 13,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-sky",
+    "value": "#6a9bcc",
+    "count": 13,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-heather",
+    "value": "#cbcadb",
+    "count": 13,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-fig",
+    "value": "#c46686",
+    "count": 13,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-coral",
+    "value": "#ebcece",
+    "count": 13,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-clay-primary",
+    "value": "#d97757",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-clay-interactive",
+    "value": "#c6613f",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-iris",
+    "value": "#dfdbfd",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-iris-deep",
+    "value": "#4a3aa7",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-periwinkle",
+    "value": "#cde2fb",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-periwinkle-deep",
+    "value": "#184f95",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-periwinkle-interactive",
+    "value": "#154c92",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--color-sky-interactive",
+    "value": "#90c3f6",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--gutter-x",
+    "value": "32px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--gutter-y",
+    "value": "32px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--header-nav-height",
+    "value": "84px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--z-index-nav",
+    "value": "100",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--z-index-search",
+    "value": "calc(100 - 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--z-index-nav-menu",
+    "value": "101",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--z-tooltip",
+    "value": "200",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-1000",
+    "value": "#0f0f0e",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-950",
+    "value": "#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-900",
+    "value": "#1a1918",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-850",
+    "value": "#1f1e1d",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-800",
+    "value": "#262624",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-750",
+    "value": "#30302e",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-700",
+    "value": "#3d3d3a",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-650",
+    "value": "#4d4c48",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-600",
+    "value": "#5e5d59",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-550",
+    "value": "#73726c",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-500",
+    "value": "#87867f",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-450",
+    "value": "#9c9a92",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-400",
+    "value": "#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-350",
+    "value": "#c2c0b6",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-300",
+    "value": "#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-250",
+    "value": "#dedcd1",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-200",
+    "value": "#e8e6dc",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-150",
+    "value": "#f0eee6",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-100",
+    "value": "#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-050",
+    "value": "#faf9f5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-000",
+    "value": "#fff",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-clay",
+    "value": "#d97757",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-tint-10",
+    "value": "#1919191a",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-tint-20",
+    "value": "#19191933",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-focus",
+    "value": "#2c84db",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-error",
+    "value": "#bf4d43",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-dark",
+    "value": "#0f0f0e",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-light",
+    "value": "#fff",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-dark",
+    "value": "#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-medium",
+    "value": "#3d3d3a",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-slate-light",
+    "value": "#5e5d59",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-cloud-dark",
+    "value": "#87867f",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-cloud-medium",
+    "value": "#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-cloud-light",
+    "value": "#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-ivory-dark",
+    "value": "#e8e6dc",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-ivory-medium",
+    "value": "#f0eee6",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--color-ivory-light",
+    "value": "#faf9f5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-2",
+    "value": "2px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-4",
+    "value": "4px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-6",
+    "value": "6px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-8",
+    "value": "8px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-12",
+    "value": "12px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-16",
+    "value": "16px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-20",
+    "value": "20px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-24",
+    "value": "24px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-32",
+    "value": "32px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-40",
+    "value": "40px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-48",
+    "value": "48px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-56",
+    "value": "56px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-64",
+    "value": "64px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-80",
+    "value": "80px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-96",
+    "value": "96px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-128",
+    "value": "128px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--sp-200",
+    "value": "200px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-01",
+    "value": "4px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-02",
+    "value": "8px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-03",
+    "value": "12px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-04",
+    "value": "16px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-05",
+    "value": "24px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-06",
+    "value": "32px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-07",
+    "value": "40px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-08",
+    "value": "48px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-09",
+    "value": "64px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-10",
+    "value": "80px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-11",
+    "value": "96px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-12",
+    "value": "128px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--br-2",
+    "value": "2px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--br-4",
+    "value": "4px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--br-6",
+    "value": "6px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--br-8",
+    "value": "8px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--br-12",
+    "value": "12px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--br-16",
+    "value": "16px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--br-24",
+    "value": "24px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--br-32",
+    "value": "32px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--border-xs",
+    "value": ".5px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--border-sm",
+    "value": "1px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--border-md",
+    "value": "1.5px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--border-lg",
+    "value": "2px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--breakpoint-mobile",
+    "value": "567px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--breakpoint-tablet",
+    "value": "992px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--breakpoint-desktop",
+    "value": "1024px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--ease-in-quart",
+    "value": "cubic-bezier(.895, .03, .685, .22)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--ease-out-quart",
+    "value": "cubic-bezier(.165, .84, .44, 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--ease-in-out-quart",
+    "value": "cubic-bezier(.77, 0, .175, 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--ease-in-out-expo",
+    "value": "cubic-bezier(1, 0, 0, 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--weight-text-regular",
+    "value": "400",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--weight-text-medium",
+    "value": "500",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--weight-text-semibold",
+    "value": "600",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--weight-text-bold",
+    "value": "700",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--weight-display-regular",
+    "value": "400",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--weight-display-medium",
+    "value": "500",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--weight-display-semibold",
+    "value": "600",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--weight-display-bold",
+    "value": "700",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--weight-mono-regular",
+    "value": "400",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--leading-100",
+    "value": "100%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--leading-120",
+    "value": "120%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--leading-125",
+    "value": "125%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--leading-140",
+    "value": "140%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--leading-155",
+    "value": "155%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--radius-sm",
+    "value": "8px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--radius-md",
+    "value": "12px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--radius-lg",
+    "value": "16px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--radius-max",
+    "value": "1000px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--gap-xxs",
+    "value": "4px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--gap-xs",
+    "value": "12px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--gap-sm",
+    "value": "16px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--gap-md",
+    "value": "24px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--gap-lg",
+    "value": "32px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--gap-xl",
+    "value": "48px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--container-max-width",
+    "value": "1400px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--page-margins",
+    "value": "32px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--gutter",
+    "value": "24px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--section-spacer-lg",
+    "value": "64px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--section-spacer-sm",
+    "value": "32px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--section-spacer-0",
+    "value": "0",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--media-max-width",
+    "value": "880px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--media-max-height",
+    "value": "560px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--text-column-max-width",
+    "value": "640px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--card-padding-xs",
+    "value": "12px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--card-padding-sm",
+    "value": "16px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--card-padding-md",
+    "value": "24px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--card-padding-lg",
+    "value": "48px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--display-1",
+    "value": "42px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--display-2",
+    "value": "36px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--headline-1",
+    "value": "32px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--headline-2",
+    "value": "30px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--headline-3",
+    "value": "28px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--headline-4",
+    "value": "23px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--headline-5",
+    "value": "20px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--headline-6",
+    "value": "17px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--body-large-1",
+    "value": "22px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--body-large-2",
+    "value": "20px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--body-1",
+    "value": "19px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--body-2",
+    "value": "17px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--body-3",
+    "value": "15px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--body-4",
+    "value": "12px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--mono",
+    "value": "15px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--caption",
+    "value": "14px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--micro",
+    "value": "10px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--column-count",
+    "value": "2",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--foreground-primary",
+    "value": "#141413",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--foreground-secondary",
+    "value": "#30302e",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--foreground-tertiary",
+    "value": "#5e5d59",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--background-primary",
+    "value": "#faf9f5",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--background-secondary",
+    "value": "#f0eee6",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--background-tertiary",
+    "value": "#e8e6dc",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--background-clay",
+    "value": "#d97757",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--background-oat",
+    "value": "#e3dacc",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--border-strong",
+    "value": "#141413",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--border-subtle",
+    "value": "#d1cfc5",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--border-faint",
+    "value": "#f0eee6",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-primary-background",
+    "value": "#141413",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-primary-foreground",
+    "value": "#faf9f5",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-primary-background-hover",
+    "value": "#3d3d3a",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-primary-foreground-hover",
+    "value": "#faf9f5",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-secondary-stroke",
+    "value": "#141413",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-secondary-foreground",
+    "value": "#141413",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-secondary-background-hover",
+    "value": "#141413",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-secondary-foreground-hover",
+    "value": "#faf9f5",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-tertiary-background",
+    "value": "#f0eee6",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-tertiary-stroke",
+    "value": "#d1cfc5",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-tertiary-foreground",
+    "value": "#5e5d59",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-tertiary-background-hover",
+    "value": "#e8e6dc",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--text-color",
+    "value": "#141413",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--background",
+    "value": "#faf9f5",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--secondary-background",
+    "value": "#f0eee6",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--secondary-background-hover",
+    "value": "#dedcd1",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--secondary-text",
+    "value": "#141413",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-color",
+    "value": "#141413",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-hover",
+    "value": "#3d3d3a",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--button-text",
+    "value": "#faf9f5",
+    "count": 14,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css",
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css",
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--border-dark",
+    "value": "#141413",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--border-light",
+    "value": "#b0aea5",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--text-agate",
+    "value": "#b0aea5",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--card-color",
+    "value": "#fff",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-micro",
+    "value": "8px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-small",
+    "value": "16px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-medium",
+    "value": "32px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-large",
+    "value": "64px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--spacer-huge",
+    "value": "128px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_0zjrix53pdagy.css"
+    ]
+  },
+  {
+    "name": "--header-actions-column",
+    "value": "8",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--header-logo-inline-size",
+    "value": "170px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--header-logo-fade-duration",
+    "value": ".2s",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--button-text-hover",
+    "value": "#faf9f5",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_3_0qx9s-ohsdh.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--button-background",
+    "value": "#141413",
+    "count": 10,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css",
+      "__next_static_chunks_3_0qx9s-ohsdh.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--button-border",
+    "value": "#141413",
+    "count": 12,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_20y336fy0c2fa.css",
+      "__next_static_chunks_3_0qx9s-ohsdh.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--nav-dropdown-column-min-inline-size",
+    "value": "140px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--nav-dropdown-row-block-size",
+    "value": "28px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--nav-dropdown-row-padding",
+    "value": "4px 16px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--nav-dropdown-inset",
+    "value": "10px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--site-menu-z-index",
+    "value": "999",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--site-menu-fade-size",
+    "value": "40px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--scroll-area-overflow-y-start",
+    "value": "inherit",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--scroll-area-overflow-y-end",
+    "value": "inherit",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--search-swap-duration",
+    "value": ".3s",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--search-swap-ease",
+    "value": "cubic-bezier(.25, 1, .5, 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--site-search-min-inline-size",
+    "value": "240px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--site-search-block-size",
+    "value": "30px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--focus-logo-inline-size",
+    "value": "39px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--menu-group-link-color",
+    "value": "#87867f",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--site-menu-inset-start",
+    "value": "calc((100vw - min(100vw, 1920px)) / 2 + 32px)",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--site-menu-main-font-size",
+    "value": "30px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--site-menu-main-line-height",
+    "value": "38px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--nav-dropdown-background",
+    "value": "#1f1e1d",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--nav-dropdown-border",
+    "value": "#dedcd1",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--nav-dropdown-heading",
+    "value": "#87867f",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--fade-lead",
+    "value": "80px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--footer-logo-block-size",
+    "value": "24px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--trigger-height",
+    "value": "52px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--link-icon-color",
+    "value": "#87867f",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--scrolling-text-fade-start",
+    "value": "0px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--scrolling-text-fade-end",
+    "value": "var(--fade-width)",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--fade",
+    "value": "linear-gradient(to right, transparent 0, #000 0px, #000 calc(100% - var(--fade-width)), transparent 100%)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--s",
+    "value": "clamp(.75px, calc(100vw / 1440), 1px)",
+    "count": 7,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-bg",
+    "value": "#141413",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-fg",
+    "value": "#faf9f5",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-accent",
+    "value": "#d97757",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-muted",
+    "value": "#5e5d59",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-focus-ring",
+    "value": "#6b5ce7",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-headline",
+    "value": "22px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-body",
+    "value": "14px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-caption",
+    "value": "12px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--terminal-bg",
+    "value": "#faf9f5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--tc-fg",
+    "value": "#1a1a18",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--tc-muted",
+    "value": "#73726c",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--tc-accent",
+    "value": "#6b5ce7",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--tc-orange",
+    "value": "#c0582e",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--tc-green",
+    "value": "#2a7d3f",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--tc-bg",
+    "value": "#faf9f5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--tc-titlebar-bg",
+    "value": "#f0eee6",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--tc-divider",
+    "value": "#0000001f",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-fg-secondary",
+    "value": "#30302e",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-fg-tertiary",
+    "value": "#5e5d59",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-fg-quaternary",
+    "value": "#87867f",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-border",
+    "value": "#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--history-border-strong",
+    "value": "#dedcd1",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--article-content-padding-block",
+    "value": "64px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_16bfh721-emix.css"
+    ]
+  },
+  {
+    "name": "--constellation-line",
+    "value": "initial#5e5d59",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--caption-line",
+    "value": "calc(13px * 1.54)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--container-height",
+    "value": "calc(13px * 1.54)",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_20y336fy0c2fa.css",
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--button-width",
+    "value": "fit-content",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_20y336fy0c2fa.css",
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--media-surface",
+    "value": "#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_20y336fy0c2fa.css"
+    ]
+  },
+  {
+    "name": "--css-grid-gap-y",
+    "value": "16px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_20y336fy0c2fa.css",
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--hero-bg",
+    "value": "#faf9f5",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--hero-ink",
+    "value": "#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--hero-ease",
+    "value": "cubic-bezier(.2, .8, .2, 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--hero-serif",
+    "value": "\"anthropicSerif\", \"anthropicSerif Fallback\", \"Apple SD Gothic Neo\", \"Malgun Gothic\", \"Noto Sans KR\", \"Anthropic Serif\", georgia, serif",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--hero-sans",
+    "value": "\"anthropicSans\", \"anthropicSans Fallback\", \"Apple SD Gothic Neo\", \"Malgun Gothic\", \"Noto Sans KR\", \"Anthropic Sans\", system-ui, sans-serif",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--hero-mono",
+    "value": "\"anthropicMono\", \"anthropicMono Fallback\", \"Anthropic Mono\", ui-monospace, monospace",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--i",
+    "value": "1",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--fs",
+    "value": "calc(clamp(34px, 6.6vw, 112px) * .94)",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--body-border-radius",
+    "value": "0",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--media-gallery-video-aspect-ratio",
+    "value": "auto",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--padding",
+    "value": "0px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--radius",
+    "value": "0",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--card-inset",
+    "value": "24px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--grid-content-row",
+    "value": "1",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--row-gap",
+    "value": "32px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--col-width",
+    "value": "calc(100% / 2)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--grid-compensation",
+    "value": "calc(16px * (2 - 1) / 2)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--grid-item-width",
+    "value": "calc(calc(100% / 2) - calc(16px * (2 - 1) / 2))",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--columns",
+    "value": "1",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--carousel-fade-width",
+    "value": "80px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--carousel-fade-start",
+    "value": "min(80px, var(--featured-teams-snap-distance))",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--carousel-fade",
+    "value": "linear-gradient(to right, transparent 0, #000 min(80px, var(--featured-teams-snap-distance)), #000 calc(100% - 80px), transparent 100%)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--card-inset-inline",
+    "value": "0px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--card-inset-block",
+    "value": "24px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--carousel-columns",
+    "value": "calc((100% - 16px) / 2) 1fr",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css"
+    ]
+  },
+  {
+    "name": "--illustration-padding",
+    "value": "32px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_2uzdzei5vni2y.css",
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--hero-light",
+    "value": "#f2ede4",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--hero-name-scale",
+    "value": ".94",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--hero-cue-inset",
+    "value": "32px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--apex",
+    "value": "53vh",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--tsize",
+    "value": "calc(clamp(34px, 6.6vw, 112px) * 1.06)",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--ttop",
+    "value": "calc(53vh - calc(clamp(34px, 6.6vw, 112px) * 1.06) * 2)",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css",
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--grid-ink",
+    "value": "initial#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-paper",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-muted",
+    "value": "initial#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-line",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-highlight",
+    "value": "#ced6bf",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-sibling",
+    "value": "initialcolor-mix(in srgb, #ebc9b7 6%, #f5f4ed)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-rival",
+    "value": "#e8e6dc",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-subject-edge",
+    "value": "#788c5d",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-reference",
+    "value": "color-mix(in srgb, initial#141413 5%, initial#f5f4ed)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-gap-w",
+    "value": "16px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-label-w",
+    "value": "200px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-fade-w",
+    "value": "28px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--grid-rest",
+    "value": "84px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-ink",
+    "value": "initial#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-paper",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-muted",
+    "value": "initial#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-grid",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-matcha",
+    "value": "#ced6bf",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-cloud",
+    "value": "#c5d3e0",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-cactus",
+    "value": "#bcd1ca",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-gray",
+    "value": "initial#4d4c48",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-heather",
+    "value": "#cbcadb",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-coral",
+    "value": "#ebcece",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-orchid",
+    "value": "#e5cada",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-peach",
+    "value": "#ebc9b7",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-orange",
+    "value": "#eb6834",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-aqua",
+    "value": "#1baf7a",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-sky",
+    "value": "#6a9bcc",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-fig",
+    "value": "#c46686",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-plum",
+    "value": "#827dbd",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-olive",
+    "value": "#788c5d",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-mineral",
+    "value": "#629987",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-yellow",
+    "value": "#eda100",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-pencil",
+    "value": "#f0ac54",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-gray-550",
+    "value": "#73726c",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-gray-300",
+    "value": "initial#3d3d3a",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-slate",
+    "value": "initial#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-line-shade",
+    "value": "10%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-tooltip-label",
+    "value": "initial#73726c",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-draw",
+    "value": ".7s",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-fade",
+    "value": ".3s",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-delay",
+    "value": "0s",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--chart-border",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--cc-border-strong",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--cc-background-primary",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--cc-foreground-primary",
+    "value": "initial#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--cc-foreground-secondary",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--cc-foreground-tertiary",
+    "value": "initial#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--width",
+    "value": "80%",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--collapsed-height",
+    "value": "calc(calc(13px * 1.54) + 16px * 2 + 2px)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--fade-background",
+    "value": "#f5f4ed",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--related-card-active",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_2y6g9_1fokilo.css"
+    ]
+  },
+  {
+    "name": "--pf-ivory",
+    "value": "#faf9f5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--pf-ink",
+    "value": "#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--pf-pull",
+    "value": "min(6rem, 25vh)",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bleed",
+    "value": "32px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--column-min-width",
+    "value": "188px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--rule-width",
+    "value": "1px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--table-ground",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--expandable-ground",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--expandable-inset",
+    "value": "initial#e8e6dc",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--code-controls-bg",
+    "value": "color-mix(in srgb, initial#e8e6dc 96%, black)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--carousel-bleed",
+    "value": "32px",
+    "count": 6,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--icon-size",
+    "value": "24px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--aspect",
+    "value": "1",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--cycle",
+    "value": "18s",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--ease",
+    "value": "cubic-bezier(.65, 0, .35, 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--fade-direction",
+    "value": "to left",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-card",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-rule",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-muted",
+    "value": "initial#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-subtle",
+    "value": "initial#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-empty",
+    "value": "initial#73726c",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-chip-border",
+    "value": "initial#87867f",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-chip-hover",
+    "value": "initial#3d3d3a",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-chip-selected",
+    "value": "initial#faf9f5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-chip-ink",
+    "value": "initial#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-arrow",
+    "value": "initial#e8e6dc",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--bt-arrow-hover",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_35uako10vtsya.css"
+    ]
+  },
+  {
+    "name": "--button-height",
+    "value": "18px",
+    "count": 8,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--button-padding-x",
+    "value": "12px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--button-padding-y",
+    "value": "4px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--button-separator-color",
+    "value": "#5e5d59",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--button-padding-left",
+    "value": "8px",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--button-padding-right",
+    "value": "4px",
+    "count": 6,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--css-grid-cols",
+    "value": "4",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--css-grid-col-max",
+    "value": "calc(( 1920px - (4 - 1) * 16px ) / 4)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--table-card-bleed",
+    "value": "32px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--full-width-bleed",
+    "value": "calc(32px - 16px)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--play-pause-icon-size",
+    "value": "14px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--play-nudge",
+    "value": "1px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css",
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--play-icon-size",
+    "value": "24px",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--col-count",
+    "value": "12",
+    "count": 3,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--slide-size",
+    "value": "calc(12 / 12 * 100%)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--slide-spacing",
+    "value": "16px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css",
+      "__next_static_chunks_3h_9qsz5evtuq.css"
+    ]
+  },
+  {
+    "name": "--track-size",
+    "value": "6px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3_0qx9s-ohsdh.css"
+    ]
+  },
+  {
+    "name": "--spacing-date-height",
+    "value": "4rem",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3h_9qsz5evtuq.css"
+    ]
+  },
+  {
+    "name": "--carousel-max-width",
+    "value": "none",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3h_9qsz5evtuq.css"
+    ]
+  },
+  {
+    "name": "--anthropic-mono",
+    "value": "\"anthropicMono\", \"anthropicMono Fallback\"",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3lfhvsoi4d4vt.css"
+    ]
+  },
+  {
+    "name": "--jetbrains-mono",
+    "value": "\"jetBrainsMono\", \"jetBrainsMono Fallback\"",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3lfhvsoi4d4vt.css"
+    ]
+  },
+  {
+    "name": "--hero-top",
+    "value": "84px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--screens",
+    "value": "3",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--grain-strength",
+    "value": "1",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--ground",
+    "value": "0",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--cue",
+    "value": "1",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--word-stagger",
+    "value": "34ms",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--ink",
+    "value": "#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--emphasis-ink",
+    "value": "#0a0a0b",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--beat-ink",
+    "value": "#0a0a0b99",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--page-ground",
+    "value": "#1f1e1d",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--ease-in-opacity",
+    "value": "cubic-bezier(.2, .7, .1, 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--ease-in-rise",
+    "value": "cubic-bezier(.16, 1, .3, 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--span-6",
+    "value": "49.085%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--span-8",
+    "value": "66.057%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--span-10",
+    "value": "83.028%",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--delay",
+    "value": "calc(1 * 34ms)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--toc-row-inset",
+    "value": "0",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--toc-bar-top",
+    "value": "84px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--toc-downloads-flow",
+    "value": "column",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--toc-downloads-column",
+    "value": "200px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--toc-downloads-max-width",
+    "value": "none",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--toc-header-height",
+    "value": "84px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--vs-foreground-secondary",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--vs-foreground-primary",
+    "value": "initial#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--vs-border-subtle",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--vs-color-white",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--vs-color-text",
+    "value": "initial#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--vs-background-secondary",
+    "value": "initial#e8e6dc",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--vs-border-strong",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--vs-background-primary",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--vs-foreground-tertiary",
+    "value": "initial#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--form-error",
+    "value": "#de6262",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--icon-arrow-right",
+    "value": "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M11.1465 4.64648C11.3417 4.45127 11.6582 4.45136 11.8535 4.64648L16.8535 9.64649L16.916 9.72267C16.9703 9.80418 17 9.90061 17 10C17 10.1326 16.9473 10.2598 16.8535 10.3535L11.8535 15.3535C11.6583 15.5486 11.3417 15.5487 11.1465 15.3535C10.9513 15.1583 10.9514 14.8418 11.1465 14.6465L15.293 10.5H3.5C3.2239 10.5 3.00006 10.2761 3 10C3 9.72387 3.22386 9.50001 3.5 9.50001H15.293L11.1465 5.35352C10.9514 5.15826 10.9513 4.8417 11.1465 4.64648Z'/%3E%3C/svg%3E\")",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--icon-caret-down",
+    "value": "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M16.1338 6.16015C16.3217 5.95783 16.6375 5.94599 16.8399 6.13378C17.0421 6.32166 17.054 6.6375 16.8662 6.83984L10.3662 13.8398L10.2891 13.9082C10.2053 13.9675 10.1043 14 9.99999 14C9.86101 14 9.72836 13.9417 9.63377 13.8398L3.13374 6.83984L3.07221 6.75976C2.95129 6.56111 2.98312 6.29824 3.16011 6.13378C3.33708 5.96954 3.60085 5.95776 3.78999 6.09277L3.86616 6.16015L9.99999 12.7666L16.1338 6.16015Z'/%3E%3C/svg%3E\")",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--carousel-card",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--drawer-size",
+    "value": "100%",
+    "count": 7,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--card-line",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--card-max",
+    "value": "640px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--card-ground",
+    "value": "#c5d3e0",
+    "count": 5,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--slide-gutter",
+    "value": "32px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-hairline",
+    "value": "initial#faf9f533",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-hairline-hover",
+    "value": "initial#faf9f566",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-fill",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-added-fill",
+    "value": "initial#788c5d38",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-added-ink",
+    "value": "initial#b5c99a",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-removed-fill",
+    "value": "initial#d977572e",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-removed-ink",
+    "value": "initial#eba58f",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-ink",
+    "value": "initial#141413",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-ink-soft",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-caption",
+    "value": "initial#b0aea5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-muted",
+    "value": "initial#87867f",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-button",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-hover",
+    "value": "initial#e8e6dc",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-file-fill",
+    "value": "initial#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-file-rule",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-frame",
+    "value": "initial#d1cfc5",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-radius",
+    "value": "0",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-button-size",
+    "value": "32px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-row-gap",
+    "value": "12px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-row-space",
+    "value": "16px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-fade",
+    "value": ".28s cubic-bezier(.2, .7, .2, 1)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-panel-ratio",
+    "value": "16 / 10",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--comparison-new-model-color",
+    "value": "#4f8ccf",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--scroller-fade-start",
+    "value": "0px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--scroller-fade-end",
+    "value": "0px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--title-floor",
+    "value": "28px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--title-shift",
+    "value": "1.25em",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--title-spacing",
+    "value": "24px",
+    "count": 6,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--rest-block",
+    "value": "32px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--radius-rest",
+    "value": "4px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--radius-grown",
+    "value": "0px",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--copy-block",
+    "value": "calc(96px + 16px)",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--grown-height",
+    "value": "90svh",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--min-height",
+    "value": "calc(100lvh - 84px)",
+    "count": 4,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--grow",
+    "value": "0",
+    "count": 6,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--toggle-size",
+    "value": "36px",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--edge",
+    "value": "calc(32px * (1 - 1) + 16px)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--toggle-clearance",
+    "value": "calc(calc(32px * (1 - 1) + 16px) + 36px + 8px)",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--toc-list-offset",
+    "value": "32px",
+    "count": 2,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--signoff-surface",
+    "value": "#f5f4ed",
+    "count": 1,
+    "files": [
+      "__next_static_chunks_3o9di1p9cgo-l.css"
+    ]
+  },
+  {
+    "name": "--scroll-grow",
+    "value": "0",
+    "count": 1,
+    "files": [
+      "index.html"
+    ]
+  }
+]
