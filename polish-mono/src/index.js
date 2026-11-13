@@ -1,24 +1,24 @@
 /**
  * polish — Design token superpower tool: extract · critique · apply
  *
- * Public API. Import from 'polish' in your project.
+ * Public API. Import from '@design-tokens/polish' in your project.
  */
 
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+import { scan } from './scan.js';
+import { cross } from './cross.js';
+import { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS } from './plan.js';
+import { generateDiffs } from './diff.js';
+import { apply } from './apply.js';
 
-export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS } from './plan.js';
-export { generateDiffs } from './diff.js';
-export { apply } from './apply.js';
+export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, apply };
 
 /**
- * Extract tokens from a directory using token-audit's scan.
+ * Extract tokens from a directory.
  * @param {string} target - directory path to scan
  * @param {string[]} [ignore=[]] - path fragments to skip
  * @returns {object} DeclarationGraph
  */
 export function extract(target, ignore = []) {
-  const { scan } = require('../../token-audit/src/scan.js');
   return scan(target, ignore);
 }
 
@@ -29,8 +29,6 @@ export function extract(target, ignore = []) {
  * @returns {object} AuditReport with findings array
  */
 export function audit(target, ignore = []) {
-  const { scan } = require('../../token-audit/src/scan.js');
-  const { cross } = require('../../token-audit/src/cross.js');
   const graph = scan(target, ignore);
   return cross(graph);
 }
@@ -43,11 +41,9 @@ export function audit(target, ignore = []) {
  * @returns {{graph: object, findings: Array, plan: Array, patches: Array}}
  */
 export function runPipeline(target, ignore = []) {
-  const graph = extract(target, ignore);
-  const report = audit(target, ignore);
-  const { plan: planFn } = require('./plan.js');
-  const { generateDiffs } = require('./diff.js');
-  const actions = planFn(report.findings || []);
+  const graph = scan(target, ignore);
+  const report = cross(graph);
+  const actions = plan(report.findings || []);
   const patches = generateDiffs(actions);
   return { graph, findings: report.findings, plan: actions, patches };
 }
