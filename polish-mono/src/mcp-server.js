@@ -16,6 +16,7 @@ import { polish_diff } from './handlers/polish-diff.js';
 import { polish_apply } from './handlers/polish-apply.js';
 import { polish_doctor } from './handlers/polish-doctor.js';
 import { polish_style_lookup } from './handlers/polish-style-lookup.js';
+import { measure } from './measure.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
@@ -30,6 +31,10 @@ tools['polish_diff'] = async (args) => { return await polish_diff(args, {}); };
 tools['polish_apply'] = async (args) => { return await polish_apply(args, {}); };
 tools['polish_doctor'] = async (args) => { return await polish_doctor(args, {}); };
 tools['polish_style_lookup'] = async (args) => { return await polish_style_lookup(args, {}); };
+tools['polish_measure'] = async (args) => {
+  const docs = args.documents || [];
+  return measure(docs);
+};
 
 const toolDefinitions = [
   {
@@ -50,7 +55,7 @@ const toolDefinitions = [
   },
   {
     name: 'polish_audit',
-    description: 'Full critique: scan a directory and cross-reference tokens. Returns findings with severity levels.',
+    description: 'Full critique: scan a directory and cross-reference tokens. Returns findings with severity levels. Pass observation data to enable runtime-drift and hardcoded detection.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -59,9 +64,57 @@ const toolDefinitions = [
           type: 'array',
           items: { type: 'string' },
           description: 'Path fragments to skip during scan'
+        },
+        observation: {
+          type: 'object',
+          description: 'Optional runtime observation for detecting runtime-drift and hardcoded values. Use polish_measure to build this.',
+          properties: {
+            documents: {
+              type: 'array',
+              description: 'Runtime-observed documents, each with label, theme, and variables',
+              items: {
+                type: 'object',
+                properties: {
+                  label: { type: 'string', description: 'Document identifier (page name or URL)' },
+                  theme: { type: 'string', description: 'Theme name (e.g. "light", "dark")' },
+                  variables: {
+                    type: 'object',
+                    description: 'Map of token name to resolved runtime value',
+                    additionalProperties: { type: 'string' }
+                  }
+                }
+              }
+            }
+          }
         }
       },
       required: ['target']
+    }
+  },
+  {
+    name: 'polish_measure',
+    description: 'Normalize runtime observation data (from browser DevTools or similar) into the format polish_audit expects. Call this before polish_audit with observation data to enable runtime-drift and hardcoded detection.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        documents: {
+          type: 'array',
+          description: 'Raw runtime document observations. Each document should have a label, theme, and variables map.',
+          items: {
+            type: 'object',
+            properties: {
+              label: { type: 'string', description: 'Document identifier (page name or URL)' },
+              theme: { type: 'string', description: 'Theme name (e.g. "light", "dark")' },
+              variables: {
+                type: 'object',
+                description: 'Map of token name to resolved runtime value',
+                additionalProperties: { type: 'string' }
+              }
+            }
+          }
+        }
+      },
+      required: ['documents']
     }
   },
   {
@@ -158,7 +211,7 @@ const toolDefinitions = [
   },
   {
     name: 'polish_doctor',
-    description: 'Check that all dependencies (dembrandt, taste, awesome-design-md, impeccable) are installed. Returns install commands for missing ones.',
+    description: 'Check that required and optional dependencies are installed. dembrandt is required; skills (taste, awesome-design-md, impeccable) are optional. Returns install commands for missing ones.',
     inputSchema: {
       type: 'object',
       properties: {}
