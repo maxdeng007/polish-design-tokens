@@ -5,9 +5,10 @@ node_modules/
 .workflow/
 fonts/
 plates/
-*.png
-*.jpg
 *.woff2
 *.pdf
 dist/
 .env
+coverage/
+*.backup
+test/.apply-tmp/
