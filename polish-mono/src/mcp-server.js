@@ -5,6 +5,10 @@
  * Full pipeline: extract → audit → plan → diff → apply.
  */
 
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { readFileSync } from 'fs';
+
 import { polish_extract } from './handlers/polish-extract.js';
 import { polish_audit } from './handlers/polish-audit.js';
 import { polish_plan } from './handlers/polish-plan.js';
@@ -12,6 +16,10 @@ import { polish_diff } from './handlers/polish-diff.js';
 import { polish_apply } from './handlers/polish-apply.js';
 import { polish_doctor } from './handlers/polish-doctor.js';
 import { polish_style_lookup } from './handlers/polish-style-lookup.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf8'));
+const VERSION = pkg.version || '0.0.0';
 
 const tools = {};
 
@@ -185,7 +193,7 @@ async function handleMessage(msg) {
     sendResult(id, {
       protocolVersion: '2024-11-05',
       capabilities: { tools: {} },
-      serverInfo: { name: 'polish', version: '0.1.0' }
+      serverInfo: { name: 'polish', version: VERSION }
     });
     return;
   }
