@@ -1,8 +1,8 @@
 /**
  * Handle polish_style_lookup tool call.
  * Look up a style target from awesome-design-md's DESIGN.md collection.
- * Degrades gracefully: if the skill is not installed, returns a clear
- * "not found" message with install guidance instead of an error.
+ * Falls back to bundled design token references when the skill is not
+ * installed, so the tool is useful on fresh machines.
  * @param {object} params - Tool parameters
  * @param {string} [params.brand] - Brand name to look up (e.g. "vercel", "stripe")
  * @param {object} deps - Dependencies
@@ -10,12 +10,21 @@
  */
 import fs from 'fs';
 import path from 'path';
+import { BUNDLED_BRANDS, bundledBrandToContent } from './bundled-design-md.js';
 
 const SKILL_CANDIDATES = [
   path.join(process.env.HOME || '', '.qoder/skills/awesome-design-md'),
   path.join(process.env.HOME || '', '.claude/skills/awesome-design-md'),
   path.join(process.env.HOME || '', '.config/qoder/skills/awesome-design-md')
 ];
+
+function bundledBrandNames() {
+  return BUNDLED_BRANDS.map(b => b.name);
+}
+
+function findBundledBrand(brand) {
+  return BUNDLED_BRANDS.find(b => b.name === brand || b.name.includes(brand));
+}
 
 function findSkillDir() {
   for (const d of SKILL_CANDIDATES) {
@@ -63,56 +72,121 @@ function findDesignFiles(dir) {
 }
 
 export async function polish_style_lookup(params, deps) {
+  const brand = (params.brand || '').toLowerCase().trim();
   const skillDir = findSkillDir();
-  if (!skillDir) {
-    return {
-      found: false,
-      available: false,
-      error: 'awesome-design-md skill is not installed on this machine',
-      searched: SKILL_CANDIDATES,
-      install: 'Clone the awesome-design-md skill and add it to your skills directory (~/.qoder/skills/awesome-design-md or ~/.claude/skills/awesome-design-md)',
-      note: 'This is an optional skill. Without it, style lookup cannot find DESIGN.md references. All other polish tools work without it.'
-    };
-  }
 
-  const files = findDesignFiles(skillDir);
-  if (files.length === 0) {
+  if (!skillDir) {
+    // No skill installed — use bundled fallback data
+    if (!brand) {
+      return {
+        found: false,
+        available: true,
+        source: 'bundled',
+        error: 'brand parameter is required (skill not installed; showing bundled brands)',
+        availableBrands: bundledBrandNames()
+      };
+    }
+
+    const bundled = findBundledBrand(brand);
+    if (bundled) {
+      return {
+        found: true,
+        available: true,
+        source: 'bundled',
+        brand: bundled.name,
+        content: bundledBrandToContent(bundled)
+      };
+    }
+
     return {
       found: false,
       available: true,
-      error: 'No DESIGN.md files found in awesome-design-md skill',
-      skillDir,
-      note: 'The skill is installed but contains no DESIGN.md files. Check the skill repository for the correct structure.'
+      source: 'bundled',
+      error: `No design reference found for brand "${brand}" (skill not installed; showing bundled brands)`,
+      availableBrands: bundledBrandNames(),
+      note: 'Install the awesome-design-md skill for the full DESIGN.md collection: git clone into ~/.qoder/skills/awesome-design-md'
     };
   }
 
-  const brand = (params.brand || '').toLowerCase().trim();
+  // Skill is installed — search its DESIGN.md files first
+  const files = findDesignFiles(skillDir);
+
+  if (files.length === 0) {
+    // Skill installed but no files — fall back to bundled
+    if (!brand) {
+      return {
+        found: false,
+        available: true,
+        source: 'bundled',
+        error: 'No DESIGN.md files in skill; showing bundled brands',
+        skillDir,
+        availableBrands: bundledBrandNames()
+      };
+    }
+
+    const bundled = findBundledBrand(brand);
+    if (bundled) {
+      return {
+        found: true,
+        available: true,
+        source: 'bundled',
+        brand: bundled.name,
+        skillDir,
+        content: bundledBrandToContent(bundled)
+      };
+    }
+
+    return {
+      found: false,
+      available: true,
+      source: 'bundled',
+      error: `No design reference found for brand "${brand}"`,
+      skillDir,
+      availableBrands: bundledBrandNames()
+    };
+  }
 
   if (!brand) {
     return {
       found: false,
       available: true,
+      source: 'skill',
       error: 'brand parameter is required',
-      available: files.map(f => f.name).sort()
+      availableBrands: files.map(f => f.name).sort()
     };
   }
 
   const match = files.find(f => f.name === brand || f.name.includes(brand));
-  if (!match) {
+  if (match) {
+    const content = fs.readFileSync(match.path, 'utf8');
     return {
-      found: false,
+      found: true,
       available: true,
-      error: `No DESIGN.md found for brand "${brand}"`,
-      available: files.map(f => f.name).sort()
+      source: 'skill',
+      brand: match.name,
+      path: match.path,
+      content
     };
   }
 
-  const content = fs.readFileSync(match.path, 'utf8');
+  // Brand not in skill files — try bundled fallback
+  const bundled = findBundledBrand(brand);
+  if (bundled) {
+    return {
+      found: true,
+      available: true,
+      source: 'bundled',
+      brand: bundled.name,
+      skillDir,
+      content: bundledBrandToContent(bundled)
+    };
+  }
+
   return {
-    found: true,
+    found: false,
     available: true,
-    brand: match.name,
-    path: match.path,
-    content
+    source: 'skill',
+    error: `No DESIGN.md found for brand "${brand}"`,
+    availableBrands: files.map(f => f.name).sort()
   };
 }
