@@ -26,7 +26,8 @@
   ],
   "scripts": {
     "start": "node bin/polish.mjs",
-    "mcp": "node src/mcp-server.js"
+    "mcp": "node src/mcp-server.js",
+    "test": "node --test test/*.test.js"
   },
   "keywords": ["design-tokens", "css-variables", "token-audit", "mcp"],
   "license": "MIT",
