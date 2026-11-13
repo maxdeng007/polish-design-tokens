@@ -1,6 +1,6 @@
 {
   "name": "polish-design-tokens",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Design token superpower tool: extract · critique · apply · publish via npm",
   "type": "module",
   "bin": {
@@ -12,6 +12,7 @@
     "./scan": "./src/scan.js",
     "./cross": "./src/cross.js",
     "./parse": "./src/parse.js",
+    "./measure": "./src/measure.js",
     "./diff": "./src/diff.js",
     "./apply": "./src/apply.js",
     "./plan": "./src/plan.js",
