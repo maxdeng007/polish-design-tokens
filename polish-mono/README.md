@@ -126,7 +126,7 @@ polish mcp                     # Start MCP server (JSON-RPC over stdin/stdout)
 
 ## MCP Server
 
-polish exposes 7 tools via the Model Context Protocol, so any AI coding agent (Qoder, Claude, etc.) can drive the full pipeline.
+polish exposes 8 tools via the Model Context Protocol, so any AI coding agent (Qoder, Claude, etc.) can drive the full pipeline.
 
 Add to your MCP config (`mcp.json`, `.mcp.json`, or your agent's config):
 
