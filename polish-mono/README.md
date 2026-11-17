@@ -289,7 +289,7 @@ The scanner is zero-dependency and single-threaded. For projects with thousands 
 | Directory | Description |
 |-----------|-------------|
 | `polish/` | Core tool: `plan.js`, `diff.js`, `apply.js` + CLI (`bin/polish.mjs`) |
-| `polish-mcp/` | MCP server with 7 tool handlers |
+| `polish-mcp/` | MCP server with 8 tool handlers |
 | `polish-mono/` | Unified npm package for distribution (`polish-design-tokens`) |
 | `token-audit-mcp/` | Token audit MCP server (static scan + runtime measurement) |
 | `examples/` | Sample projects with known token issues |
