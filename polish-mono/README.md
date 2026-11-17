@@ -42,6 +42,28 @@ npm install -g .
 
 Requires Node.js ≥ 18.
 
+## Install via AI (No Coding Required)
+
+If you're not comfortable with the command line above, you can skip it entirely. Copy the prompt below, paste it into any AI chat (ChatGPT, Claude, etc.), and the AI will install polish and audit your project for you — no coding required.
+
+```text
+Please help me audit the design tokens in my project using the "polish" tool.
+
+1. Install the polish tool globally by running:
+   npm install -g polish-design-tokens
+
+2. Run an audit on my project directory at:
+   [PASTE YOUR PROJECT PATH HERE]
+
+3. Report what you find in plain language a designer can understand:
+   - What token problems exist (hardcoded colors, duplicate values,
+     dangling references, conflicts, etc.)
+   - Which issues can be auto-fixed and which need my decision
+   - A clear summary — not raw JSON
+
+Do NOT apply any fixes or modify any files. Install, audit, and report only.
+```
+
 ## Quick Start
 
 ```bash
