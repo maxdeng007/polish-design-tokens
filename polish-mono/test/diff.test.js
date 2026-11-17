@@ -7,14 +7,14 @@ const SAMPLE_FINDINGS = [
   {
     id: 'dangling',
     severity: 'error',
-    title: '--btn-bg 被引用但未声明',
+    title: '--btn-bg is referenced but not declared',
     detail: 'refs dangling',
     evidence: [{ name: '--btn-bg', count: 1, file: 'src/tokens.css', line: 29 }]
   },
   {
     id: 'duplicate-value',
     severity: 'warn',
-    title: '2 组颜色被多个令牌名重复表达',
+    title: '2 color values are expressed by multiple token names',
     detail: '#1a1a2e = --bg = --background',
     evidence: [
       {
@@ -32,14 +32,14 @@ const SAMPLE_FINDINGS = [
   {
     id: 'conflict',
     severity: 'error',
-    title: '--card 在 root 作用域内有 2 个不同的值',
+    title: '--card has 2 different values in root scope',
     detail: 'conflict',
     evidence: [{ file: 'src/tokens.css', line: 14 }]
   },
   {
     id: 'orphan',
     severity: 'warn',
-    title: '4 个令牌声明了却从未被引用',
+    title: '4 tokens are declared but never referenced',
     detail: 'orphans',
     evidence: [{ name: '--nm-bg', file: 'src/tokens.css', line: 8 }]
   }

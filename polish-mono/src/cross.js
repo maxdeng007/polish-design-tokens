@@ -84,10 +84,10 @@ function cross(graph, observation) {
       push({
         id: 'dynamic-variable',
         severity: 'info',
-        title: `${c.name} 有 ${variants.length} 个取值，是逐元素动态变量而非令牌`,
-        detail: `全部来自内联样式或 JS 对象，值域为 ${variants.map(v => v.value).slice(0, 6).join(', ')}${variants.length > 6 ? ' …' : ''}。这是把数据写进 CSS 变量的常见手法，不是设计令牌冲突。`,
+        title: `${c.name} has ${variants.length} values — a per-element dynamic variable, not a token`,
+        detail: `All come from inline styles or JS objects, with values ${variants.map(v => v.value).slice(0, 6).join(', ')}${variants.length > 6 ? ' …' : ''}. This is a common technique for writing data into CSS variables — not a design token conflict.`,
         evidence: variants[0].locations.slice(0, 3),
-        suggestion: '保留即可；如需治理，可改用 data-* 属性或 CSS 计数器，避免与令牌体系混淆。'
+        suggestion: 'Keep as-is. If you want to clean up, switch to data-* attributes or CSS counters to avoid confusing data with the token system.'
       });
       continue;
     }
@@ -113,19 +113,19 @@ function cross(graph, observation) {
         push({
           id: 'theme-variation',
           severity: 'info',
-          title: `${c.name} 在不同作用域/主题下有 ${variants.length} 个值`,
+          title: `${c.name} has ${variants.length} values across different scopes/themes`,
           detail: variants.map(v => `${v.value} @ ${v.scopes.join('/')}${v.themes.length ? '[' + v.themes.join(',') + ']' : ''}`).join('；'),
           evidence: variants.flatMap(v => v.locations.slice(0, 1)).slice(0, 4),
-          suggestion: '主题差异是有意为之。可考虑把明暗两套收进结构化的主题令牌组，让"主题"成为体系的一部分而不是散落的例外。'
+          suggestion: 'Theme differences are intentional. Consider structuring light/dark pairs into a dedicated theme token group so themes become part of the system rather than scattered exceptions.'
         });
       } else {
         push({
           id: 'cascade-override',
           severity: 'info',
-          title: `${c.name} 被 ${kinds.join(' 与 ')} 作用域分别定义`,
+          title: `${c.name} is defined separately in ${kinds.join(' and ')} scopes`,
           detail: variants.map(v => `${v.value} @ ${v.scopes.join('/')}`).join('；'),
           evidence: variants.flatMap(v => v.locations.slice(0, 1)).slice(0, 4),
-          suggestion: 'CSS 级联下的正常覆盖。若覆盖频繁，可提升为独立令牌减少隐性依赖。'
+          suggestion: 'Normal CSS cascading override. If overrides are frequent, promote them to dedicated tokens to reduce hidden dependencies.'
         });
       }
       continue;
@@ -144,10 +144,10 @@ function cross(graph, observation) {
           push({
             id: 'state-variation',
             severity: 'info',
-            title: `${c.name} 按状态类切换 ${group.length} 个值`,
-            detail: `选择器差异只来自状态修饰类（${[...new Set(group.flatMap(v => v.selectors))].slice(0, 4).join(' / ')}），是状态色语义，不是令牌冲突。`,
+            title: `${c.name} switches between ${group.length} values by state class`,
+            detail: `Selector differences come only from state modifier classes (${[...new Set(group.flatMap(v => v.selectors))].slice(0, 4).join(' / ')}), which is state-color semantics, not a token conflict.`,
             evidence: group.flatMap(v => v.locations.slice(0, 1)).slice(0, 4),
-            suggestion: '建议为每种状态建独立令牌（--seat-color-ok / --seat-color-warn / --seat-color-busy），而不是让同一个变量承担多态。'
+            suggestion: 'Create a dedicated token per state (--seat-color-ok / --seat-color-warn / --seat-color-busy) instead of making one variable carry multiple states.'
           });
           continue;
         }
@@ -161,10 +161,10 @@ function cross(graph, observation) {
         push({
           id: 'tailwind-utility-var',
           severity: 'info',
-          title: `${c.name} 是 Tailwind v4 的逐工具变量（per-utility）`,
-          detail: `Tailwind v4 的每个工具类（.leading-tight、.shadow-md 等）在自己的选择器下设自己的 ${c.name}。多个值是框架的正常机制，不是令牌冲突。`,
+          title: `${c.name} is a Tailwind v4 per-utility variable`,
+          detail: `Each Tailwind v4 utility class (.leading-tight, .shadow-md, etc.) sets its own ${c.name} under its own selector. Multiple values are the framework's intended mechanism, not a token conflict.`,
           evidence: group.flatMap(v => v.locations.slice(0, 2)).slice(0, 6),
-          suggestion: '无需处理。若令牌面膨胀造成困扰，可考虑用 Tailwind v4 的 @theme 指令统一管理。'
+          suggestion: 'No action needed. If the token surface becomes overwhelming, consider managing them via Tailwind v4\'s @theme directive.'
         });
         continue;
       }
@@ -173,12 +173,12 @@ function cross(graph, observation) {
       push({
         id: 'conflict',
         severity,
-        title: `${c.name} 在 ${ctxKind} 作用域内有 ${group.length} 个不同的值`,
-        detail: group.map(v => `${v.value}（${v.count} 处，如 ${v.locations[0] ? v.locations[0].file + ':' + v.locations[0].line : '?'}）`).join('；'),
+        title: `${c.name} has ${group.length} different values within the ${ctxKind} scope`,
+        detail: group.map(v => `${v.value} (${v.count} occurrences, e.g. ${v.locations[0] ? v.locations[0].file + ':' + v.locations[0].line : '?'})`).join('; '),
         evidence: group.flatMap(v => v.locations.slice(0, 3)).slice(0, 8),
         suggestion: ctxKind === 'root'
-          ? '根作用域应只有一个真值——合并后其余位置改为引用。'
-          : '同一作用域内出现多个值，选中哪条取决于选择器匹配顺序，很难排查。建议合并或拆成不同令牌。'
+          ? 'The root scope should have a single canonical value — merge and reference it everywhere else.'
+          : 'Multiple values in the same scope make it hard to tell which one wins — it depends on selector matching order. Merge them or split into separate tokens.'
       });
     }
   }
@@ -192,7 +192,7 @@ function cross(graph, observation) {
     const byFamily = new Map();
     for (const d of danglingList) {
       const fam = familyOf(d.name);
-      if (!fam) { byFamily.set('(无族)', byFamily.get('(无族)') || []); byFamily.get('(无族)').push(d); continue; }
+      if (!fam) { byFamily.set('(no-family)', byFamily.get('(no-family)') || []); byFamily.get('(no-family)').push(d); continue; }
       if (!byFamily.has(fam)) byFamily.set(fam, []);
       byFamily.get(fam).push(d);
     }
@@ -209,13 +209,13 @@ function cross(graph, observation) {
       push({
         id: 'dangling',
         severity: 'error',
-        title: `${fam}-* 家族有 ${ds.length} 个悬空引用（占全部 ${danglingList.length} 个的 ${Math.round(ds.length / danglingList.length * 100)}%）`,
-        detail: `整个命名族被引用却从未声明——这是生成端的系统性缺口，不是 ${ds.length} 个独立 bug。最可能的原因是该组件库的页面级样式按需生成但输出不完整。`,
+        title: `${fam}-* family has ${ds.length} dangling references (${Math.round(ds.length / danglingList.length * 100)}% of all ${danglingList.length})`,
+        detail: `The entire naming family is referenced but never declared — this is a systematic gap in the generator, not ${ds.length} independent bugs. The most likely cause is that the component library's page-level styles are generated on demand but output incompletely.`,
         evidence: ds.slice(0, 15).map(d => {
           const loc = refMap.get(d.name) || {};
           return { name: d.name, count: d.count, file: loc.file, line: loc.line };
         }),
-        suggestion: `排查 ${fam}-* 的生成器配置，重新导出页面样式。其余 ${danglingList.length - ds.length} 个非 ${fam}-* 的悬空引用见下方。`,
+        suggestion: `Investigate the ${fam}-* generator configuration and re-export page styles. The remaining ${danglingList.length - ds.length} non-${fam}-* dangling references are listed below.`,
         refCount: totalRefs
       });
       for (const d of danglingList) {
@@ -224,10 +224,10 @@ function cross(graph, observation) {
         push({
           id: 'dangling',
           severity: 'error',
-          title: `${d.name} 被引用了 ${d.count} 次，但没有任何声明`,
-          detail: '引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。',
+          title: `${d.name} is referenced ${d.count} times but never declared`,
+          detail: 'References will receive an invalid value (most browsers fall back to the initial/inherited value).',
           evidence: [{ name: d.name, count: d.count, file: loc.file, line: loc.line }],
-          suggestion: '补上声明，或把引用改成已存在的令牌。',
+          suggestion: 'Add a declaration, or change the reference to an existing token.',
           refCount: d.count
         });
       }
@@ -237,10 +237,10 @@ function cross(graph, observation) {
         push({
           id: 'dangling',
           severity: 'error',
-          title: `${d.name} 被引用了 ${d.count} 次，但没有任何声明`,
-          detail: '引用它的地方会拿到无效值（多数浏览器回退为初始值/继承值）。',
+          title: `${d.name} is referenced ${d.count} times but never declared`,
+          detail: 'References will receive an invalid value (most browsers fall back to the initial/inherited value).',
           evidence: [{ name: d.name, count: d.count, file: loc.file, line: loc.line }],
-          suggestion: '补上声明，或把引用改成已存在的令牌。',
+          suggestion: 'Add a declaration, or change the reference to an existing token.',
           refCount: d.count
         });
       }
@@ -258,13 +258,13 @@ function cross(graph, observation) {
     push({
       id: 'orphan',
       severity: 'warn',
-      title: `${orphanList.length} 个令牌声明了却从未被引用`,
-      detail: '按作用域分布：' + Object.entries(byScope).map(([k, v]) => `${k} ${v} 个`).join('，') + '。典型来源是共享样式表被另一个页面的变量体系取代了。',
+      title: `${orphanList.length} tokens are declared but never referenced`,
+      detail: 'Distribution by scope: ' + Object.entries(byScope).map(([k, v]) => `${k}: ${v}`).join(', ') + '. A common cause is a shared stylesheet being replaced by another page\'s variable system.',
       evidence: orphanList.slice(0, 10).map(o => {
         const loc = declMap.get(o.name) || {};
         return { name: o.name, declarations: o.declarations, scopes: o.scopes, file: loc.file, line: loc.line };
       }),
-      suggestion: '逐个确认：删掉，或让真正的消费方引用它。'
+      suggestion: 'Review each one: delete it, or have the real consumer reference it.'
     });
   }
 
@@ -280,7 +280,7 @@ function cross(graph, observation) {
     push({
       id: 'namespace',
       severity: 'info',
-      title: `并存 ${families.size} 个命名族`,
+      title: `${families.size} naming families coexist`,
       detail: [...families.entries()].sort((a, b) => b[1].size - a[1].size)
         .map(([f, names]) => `--${f}-*（${names.size}）`).join('，'),
       evidence: [...families.entries()].map(([f, names]) => {
@@ -288,7 +288,7 @@ function cross(graph, observation) {
         const loc = declMap.get(sample) || {};
         return { family: f, tokens: [...names].slice(0, 6), count: names.size, file: loc.file, line: loc.line };
       }),
-      suggestion: '选定一到两个命名族作为主体系，其余降级为别名或逐步废弃。'
+      suggestion: 'Choose one or two naming families as the primary system, and demote the rest to aliases or phase them out.'
     });
   }
 
@@ -302,7 +302,7 @@ function cross(graph, observation) {
     if (!byValue.has(key)) byValue.set(key, new Map());
     const m = byValue.get(key);
     if (!m.has(d.name)) m.set(d.name, new Set());
-    m.get(d.name).add(familyOf(d.name) || '(无族)');
+    m.get(d.name).add(familyOf(d.name) || '(no-family)');
   }
   const dupes = [];
   for (const [value, names] of byValue) {
@@ -316,7 +316,7 @@ function cross(graph, observation) {
     push({
       id: 'duplicate-value',
       severity: 'warn',
-      title: `${dupes.length} 组颜色被多个令牌名重复表达`,
+      title: `${dupes.length} color values are expressed by multiple token names`,
       detail: dupes.slice(0, 8).map(d => `${d.value} = ${d.names.join(' = ')}`).join('；'),
       evidence: dupes.slice(0, 8).map(d => {
         const locs = d.names.map(n => declMap.get(n)).filter(Boolean);
@@ -332,7 +332,7 @@ function cross(graph, observation) {
           secondaryLine: locs[1] ? locs[1].line : first.line
         };
       }),
-      suggestion: '同一颜色保留一个主名，其余改成别名引用，减少"该用哪个"的猜测。'
+      suggestion: 'Keep one canonical name per color and alias the rest to it, reducing guesswork about which one to use.'
     });
   }
 
@@ -364,10 +364,10 @@ function cross(graph, observation) {
       push({
         id: 'hardcoded',
         severity: 'warn',
-        title: `${hardcoded.length} 个颜色在同一主题下被跨文档直接写死，没有对应令牌`,
-        detail: hardcoded.slice(0, 10).map(d => `${d.value}（${d.theme}）出现在 ${d.documents.slice(0, 3).join('、')}`).join('；'),
+        title: `${hardcoded.length} colors are hardcoded across documents in the same theme with no matching token`,
+        detail: hardcoded.slice(0, 10).map(d => `${d.value} (${d.theme}) appears in ${d.documents.slice(0, 3).join(', ')}`).join('; '),
         evidence: hardcoded.slice(0, 10).map(d => ({ value: d.value, theme: d.theme, documents: d.documents.slice(0, 5) })),
-        suggestion: '这些是"该收进令牌体系"的候选：先给品牌色与语义色建名，再逐个替换。'
+        suggestion: 'These are candidates for the token system: name the brand and semantic colors first, then replace them one by one.'
       });
     }
   }
@@ -401,10 +401,10 @@ function cross(graph, observation) {
       push({
         id: 'runtime-drift',
         severity: 'error',
-        title: `${drifting.length} 个令牌在同一主题下于不同文档解析出不同值`,
-        detail: drifting.slice(0, 10).map(d => `${d.name} [${d.theme}]: ${d.values.join(' / ')}（${d.where.length} 个文档）`).join('；'),
+        title: `${drifting.length} tokens resolve to different values across documents in the same theme`,
+        detail: drifting.slice(0, 10).map(d => `${d.name} [${d.theme}]: ${d.values.join(' / ')} (${d.where.length} documents)`).join('; '),
         evidence: drifting.slice(0, 12).map(d => ({ name: d.name, theme: d.theme, values: d.values, documents: d.where.slice(0, 6) })),
-        suggestion: '运行时漂移是用户能看见的 bug：同一个令牌在不同页面渲染成不同颜色。按文档逐个定位来源——通常是每个内嵌应用各自定义了一套 :root。'
+        suggestion: 'Runtime drift is a user-visible bug: the same token renders as different colors on different pages. Locate the source per document — usually each embedded app defines its own :root.'
       });
     }
   }

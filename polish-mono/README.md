@@ -181,6 +181,51 @@ const patches = generateDiffs(actions);
 const result = await apply(patches);
 ```
 
+### API Reference
+
+| Function | Signature | Description |
+|----------|-----------|-------------|
+| `extract` | `(target: string, ignore?: string[]) → DeclarationGraph` | Scan a directory for token declarations and references |
+| `audit` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → AuditReport` | Scan + cross-reference to produce findings |
+| `runPipeline` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → PipelineResult` | Full pipeline: extract → audit → plan → diff (no apply) |
+| `scan` | `(target: string, opts?: { ignore?: string }) → DeclarationGraph` | Low-level scan, same as `extract` |
+| `cross` | `(graph: DeclarationGraph, observation?: RuntimeObservation) → AuditReport` | Judge findings from a declaration graph |
+| `measure` | `(docs?: unknown[]) → RuntimeObservation` | Normalize runtime observation data for audit |
+| `plan` | `(findings: Finding[]) → PlanAction[]` | Rank and classify findings into an action queue |
+| `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | Generate mechanical patches from a plan |
+| `apply` | `(patches: Patch[]) → Promise<ApplyResult>` | Apply patches with backup protection |
+
+TypeScript definitions are bundled — no `@types` package needed. All types are exported from the package root.
+
+### Format Support
+
+polish scans the following file types. Each is parsed for CSS custom property declarations and `var()` references:
+
+| File Type | Extensions | What is Extracted |
+|-----------|-----------|-------------------|
+| CSS | `.css` | All `--name: value` declarations and `var(--name)` references |
+| SCSS / LESS | `.scss`, `.less` | Same as CSS |
+| HTML | `.html`, `.htm` | `<style>` blocks, inline `style=""` attributes, `<script>` style objects |
+| JavaScript / TypeScript | `.js`, `.ts`, `.jsx`, `.tsx`, `.mjs`, `.cjs` | Inline style objects and `setProperty()` calls |
+| Vue / Svelte | `.vue`, `.svelte` | Component-scoped CSS and inline styles |
+
+Files inside `node_modules`, `dist`, `build`, `.git`, `.next`, `.cache`, and other common build/dependency directories are automatically skipped. Use the `ignore` option to exclude additional path fragments.
+
+### MCP Integration Details
+
+All 8 MCP tools accept and return JSON. Key parameters:
+
+- **`polish_extract`** — `{ target: string, ignore?: string }` → `DeclarationGraph`
+- **`polish_audit`** — `{ target: string, ignore?: string, observation?: object }` → `AuditReport`
+- **`polish_measure`** — `{ documents: unknown[] }` → `RuntimeObservation`
+- **`polish_plan`** — `{ findings: Finding[] }` → `PlanAction[]`
+- **`polish_diff`** — `{ plan: PlanAction[] }` → `Patch[]`
+- **`polish_apply`** — `{ patches: Patch[] }` → `ApplyResult`
+- **`polish_doctor`** — `{ target?: string }` → dependency health check
+- **`polish_style_lookup`** — `{ brand?: string }` → brand design token reference
+
+The `polish_style_lookup` tool falls back to bundled brand data (Vercel, Stripe, Linear, Notion, Anthropic, GitHub, shadcn, Figma) when no external skill files are found, making it work on any machine without additional setup.
+
 ## Static vs Runtime Analysis
 
 **polish-design-tokens** performs **static analysis** — it scans source files (CSS, SCSS, HTML, JS/TS) to find token declarations, references, and conflicts. This works on any project, any environment, no extra setup required.
@@ -204,6 +249,30 @@ For most use cases — auditing a project's source, fixing mechanical issues, an
 - **`namespace`** — Multiple naming conventions coexist (e.g. `--color-*` and `--bg-*`). Requires unifying naming.
 - **`orphan`** — Declared but never referenced. Requires deciding to remove or keep.
 - **`runtime-drift`** — Token values differ across pages when measured at runtime. Requires investigating the source.
+
+## Troubleshooting
+
+**CI workflow fails with `require is not defined` or `missing export named 'scan'`**
+The repository on GitHub has stale CommonJS source files. Ensure the ESM versions (`import`/`export`) are pushed. The CI checks for ESM-only exports.
+
+**`polish_style_lookup` returns `found: false`**
+No external design-md skill files were found, and no brand name was provided. Pass a `brand` parameter (e.g. `"vercel"`, `"stripe"`) to use the bundled brand data, or install the awesome-design-md skill for full coverage.
+
+**`polish apply` reports `before text not found`**
+The patch's `before` string doesn't match the file content exactly — whitespace, quotes, or line content may differ. Check the `.backup` file (created before each apply) and regenerate patches from a fresh audit.
+
+**`runtime-drift` findings appear with no observation data**
+Runtime findings (`runtime-drift`, `hardcoded`) require a `RuntimeObservation` from `measure()`. Static-only audits won't produce them. Use the `token-audit-mcp` companion for browser-based measurement.
+
+**Large projects scan slowly**
+The scanner is zero-dependency and single-threaded. For projects with thousands of files, use the `ignore` option to exclude directories that don't contain tokens. Binary files (detected by null bytes) are skipped automatically.
+
+## Performance Notes
+
+- **Scan** is O(n × m) where n is the number of files and m is the average file size. The parser uses a single-pass state machine for CSS and regex-based extraction for HTML/JS — no AST parsing overhead.
+- **Cross** is O(d²) in the worst case for conflict detection, where d is the number of declarations per token name. In practice, most tokens have fewer than 10 declarations, so this is negligible.
+- **Apply** reads each file once and writes it once, regardless of how many patches target it. Backups are created once per file.
+- The tool has **zero runtime dependencies** — no npm install required at runtime beyond the package itself.
 
 ## Why Use It
 
