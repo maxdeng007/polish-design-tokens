@@ -6,6 +6,8 @@ Works as a CLI, an MCP server for AI coding agents, or a Node.js module.
 
 **Repository**: [https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
+![polish — Design Token Superpower Tool](banner.jpg)
+
 ## Problem
 
 Design tokens — CSS custom properties like `--color-primary` — are powerful but fragile. As projects grow, tokens drift: hardcoded colors creep in, duplicate values appear under different names, references dangle, and cascade overrides silently break consistency. Detecting these issues manually is tedious; fixing them is even more so.

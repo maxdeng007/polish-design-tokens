@@ -6,6 +6,8 @@ Works as a CLI, an MCP server for AI coding agents, or a Node.js module.
 
 **Repository**: [https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
+![polish — Design Token Superpower Tool](banner.jpg)
+
 ![polish pipeline flow](examples/walkthrough/pipeline-flow.png)
 
 ## Problem
