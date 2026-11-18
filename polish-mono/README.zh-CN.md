@@ -66,7 +66,7 @@ npm install -g .
 不要应用任何修复或修改任何文件。只安装、审计并汇报。
 ```
 
-**下一步：** 审计完成后，polish 会持续保留在你的系统上——无需重新安装。如果你想应用机械性修复（硬编码颜色、重复值、悬空引用），只需给 AI 发送一条后续提示，例如：*"现在对我的项目应用机械性修复，带备份。"* AI 会重新运行审计、生成补丁，并自动带备份应用。
+**下一步：** 审计完成后，polish 会持续保留在你的系统上——无需重新安装。如果你想应用机械性修复（重复值、悬空引用），只需给 AI 发送一条后续提示，例如：*"现在对我的项目应用机械性修复，带备份。"* AI 会重新运行审计、生成补丁，并自动带备份应用。
 
 ## 快速开始
 
@@ -118,13 +118,13 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 | 4 | `orphan` | 已声明但从未被引用 | 判断性 |
 | 5 | `duplicate-value` | 多个令牌名共享同一值 | 机械性 |
 | 6 | `namespace` | 多种命名族共存 | 判断性 |
-| 7 | `hardcoded` | 直接使用原始颜色/间距值而非令牌引用 | 机械性 |
+| 7 | `hardcoded` | 直接使用原始颜色/间距值而非令牌引用 | 判断性 |
 | 8 | `cascade-override` | CSS 层叠产生非预期的变异 | 判断性 |
 | 9 | `state-variation` | 令牌值在不同组件状态间变化 | 判断性 |
 | 10 | `theme-variation` | 令牌值在不同主题间变化 | 判断性 |
 | 11 | `dynamic-variable` | 具有动态（非静态）值的令牌 | 判断性 |
 
-只有**机械性**发现（`hardcoded`、`duplicate-value`、`dangling`）会在下一阶段生成补丁。
+只有**机械性**发现（`duplicate-value`、`dangling`）会在下一阶段生成补丁。
 
 ### 2. 差异 — 生成补丁
 
@@ -144,6 +144,7 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 ## CLI 用法
 
 ```bash
+polish audit  <target> [--ignore=a,b]  # 扫描目录并输出发现 JSON
 polish plan  <findings.json>   # 将发现转换为有序操作列表
 polish diff  <plan.json>       # 从计划生成机械性补丁
 polish apply <patches.json>    # 应用补丁（创建 .backup 文件）
@@ -266,12 +267,12 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 
 **机械性（可通过 `polish diff` + `polish apply` 自动修复）：**
 
-- **`hardcoded`** — 直接使用原始颜色或间距值而非令牌引用。修复：替换为 `var(--token-name)`。
 - **`duplicate-value`** — 两个或更多令牌名共享同一值。修复：将次要令牌别名到主要令牌。
-- **`dangling`** — 令牌被引用但从未声明。修复：添加带默认值的声明。
+- **`dangling`** — 令牌被引用但从未声明。修复：添加带 `inherit` 回退值的声明。
 
 **判断性（标记供人工审查，不自动生成补丁）：**
 
+- **`hardcoded`** — 直接使用原始颜色或间距值而非令牌引用。需要选择映射到哪个令牌。
 - **`conflict`** — 同一令牌名以不同值声明。需要选择规范值。
 - **`cascade-override`** — 普通 CSS 层叠产生非预期的值变异。需要决定重构还是接受。
 - **`namespace`** — 多种命名约定共存（如 `--color-*` 和 `--bg-*`）。需要统一命名。

@@ -4,6 +4,11 @@
  * Takes plan items (ranked + classified) and produces concrete patches:
  * what to replace, where, and what it becomes. Only mechanical items
  * produce patches; judgmental items are left for the agent to handle.
+ *
+ * hardcoded is judgmental: its evidence comes from runtime observation
+ * (value/theme/documents) with no file/line, so there is no location to
+ * patch. The agent must locate the hardcoded value in source and choose
+ * which token to map it to.
  */
 
 /** Extract any color value from text: hex, rgba(), hsl(), or named. */
@@ -17,13 +22,6 @@ function extractColor(text) {
   const hsl = v.match(/hsla?\([^)]+\)/i);
   if (hsl) return hsl[0];
   return null;
-}
-
-/** Extract a CSS value (px, rem, em) from a finding title or detail string. */
-function extractLength(text) {
-  if (!text) return null;
-  const m = String(text).match(/\b\d+(?:\.\d+)?(?:px|rem|em)\b/);
-  return m ? m[0] : null;
 }
 
 /**
@@ -42,27 +40,6 @@ export function generateDiffs(planItems) {
     const firstLoc = evidence[0] || {};
 
     switch (f.id) {
-      case 'hardcoded': {
-        const color = extractColor(f.title + ' ' + (f.detail || ''));
-        const len = extractLength(f.title + ' ' + (f.detail || ''));
-        const rawValue = color || len || '';
-        let tokenName;
-        if (color) tokenName = `var(--color-${color.replace(/^#/, '').replace(/[^a-zA-Z0-9]/g, '')})`;
-        else if (len) tokenName = `var(--space-${len})`;
-        else tokenName = 'var(--token-value)';
-
-        patches.push({
-          type: 'replace',
-          file: firstLoc.file || null,
-          line: firstLoc.line || null,
-          before: rawValue,
-          after: tokenName,
-          reason: f.title,
-          findingId: f.id
-        });
-        break;
-      }
-
       case 'conflict': {
         patches.push({
           type: 'rewrite',
@@ -104,7 +81,7 @@ export function generateDiffs(planItems) {
           file: firstLoc.file || null,
           line: firstLoc.line || null,
           before: '',
-          after: `${name}: var(--token-default);`,
+          after: `${name}: inherit;`,
           reason: f.title,
           findingId: f.id
         });

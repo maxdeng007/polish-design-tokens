@@ -293,9 +293,13 @@ function cross(graph, observation) {
   }
 
   /* ------------------------------------- same value, different names */
+  // Use the raw value, not the resolved one: once a secondary token has been
+  // aliased to var(--primary) its resolved value still equals the primary's
+  // colour, so the pair would keep showing up as a duplicate. Aliased tokens
+  // have a raw value starting with var(--, which isAlias catches.
   const byValue = new Map();
   for (const d of graph.declarations) {
-    const v = d.resolved;
+    const v = d.raw;
     if (!v || isAlias(v) || isKeyword(v)) continue;
     const key = normalizeValue(v);
     if (!key || !/^#/.test(key)) continue; // colours only for this check

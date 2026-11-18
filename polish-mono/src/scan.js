@@ -36,7 +36,8 @@ function walk(root, out) {
 /**
  * @param {string} target file or directory to scan
  * @param {object} [opts]
- * @param {string} [opts.ignore] comma-separated glob-ish substrings to skip
+ * @param {string} [opts.ignore] comma-separated glob-ish substrings to skip,
+ *                              or an array of such substrings
  * @returns {object} DeclarationGraph
  */
 function scan(target, opts) {
@@ -46,7 +47,15 @@ function scan(target, opts) {
     ? walk(target)
     : [target];
 
-  const ignore = (opts.ignore || '').split(',').map(s => s.trim()).filter(Boolean);
+  // Accept both a comma-separated string and an array of fragments, so
+  // MCP handlers (which pass an array) and the CLI (which passes a string)
+  // both work.
+  let ignore;
+  if (Array.isArray(opts.ignore)) {
+    ignore = opts.ignore.map(s => String(s).trim()).filter(Boolean);
+  } else {
+    ignore = (opts.ignore || '').split(',').map(s => s.trim()).filter(Boolean);
+  }
 
   const declarations = [];
   const references = [];

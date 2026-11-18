@@ -24,7 +24,6 @@ const PRIORITY_ORDER = [
 ];
 
 const MECHANICAL_IDS = new Set([
-  'hardcoded',
   'duplicate-value',
   'dangling'
 ]);
@@ -35,6 +34,11 @@ const JUDGMENTAL_IDS = new Set([
   'namespace',
   'runtime-drift',
   'orphan',
+  'hardcoded',
+  'state-variation',
+  'theme-variation',
+  'dynamic-variable',
+  'tailwind-utility-var',
   'typography',
   'layout',
   'spacing',

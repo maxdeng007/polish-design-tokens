@@ -66,7 +66,7 @@ Please help me audit the design tokens in my project using the "polish" tool.
 Do NOT apply any fixes or modify any files. Install, audit, and report only.
 ```
 
-**What's next:** polish stays installed on your system after the audit — no reinstall needed. If you want to apply the mechanical fixes (hardcoded colors, duplicate values, dangling references), just give your AI a follow-up prompt like: *"Now apply the mechanical fixes to my project with backups."* The AI will re-run the audit, generate patches, and apply them with automatic backups.
+**What's next:** polish stays installed on your system after the audit — no reinstall needed. If you want to apply the mechanical fixes (duplicate values, dangling references), just give your AI a follow-up prompt like: *"Now apply the mechanical fixes to my project with backups."* The AI will re-run the audit, generate patches, and apply them with automatic backups.
 
 ## Quick Start
 
@@ -118,13 +118,13 @@ Findings are ranked by priority:
 | 4 | `orphan` | Declared but never referenced | Judgmental |
 | 5 | `duplicate-value` | Multiple token names sharing the same value | Mechanical |
 | 6 | `namespace` | Multiple naming families coexist | Judgmental |
-| 7 | `hardcoded` | Raw color/space values used instead of token references | Mechanical |
+| 7 | `hardcoded` | Raw color/space values used instead of token references | Judgmental |
 | 8 | `cascade-override` | CSS cascading produces unintended variation | Judgmental |
 | 9 | `state-variation` | Token values differ across component states | Judgmental |
 | 10 | `theme-variation` | Token values differ across themes | Judgmental |
 | 11 | `dynamic-variable` | Tokens with dynamic (non-static) values | Judgmental |
 
-Only **mechanical** findings (`hardcoded`, `duplicate-value`, `dangling`) produce patches in the next phase.
+Only **mechanical** findings (`duplicate-value`, `dangling`) produce patches in the next phase.
 
 ### 2. Diff — generate patches
 
@@ -144,6 +144,7 @@ Applies patches to files with automatic backup protection. Each file is backed u
 ## CLI Usage
 
 ```bash
+polish audit  <target> [--ignore=a,b]  # Scan a directory and output findings JSON
 polish plan  <findings.json>   # Convert findings to an ordered action list
 polish diff  <plan.json>       # Generate mechanical patches from a plan
 polish apply <patches.json>    # Apply patches (creates .backup files)
@@ -266,12 +267,12 @@ For most use cases — auditing a project's source, fixing mechanical issues, an
 
 **Mechanical (auto-fixable by `polish diff` + `polish apply`):**
 
-- **`hardcoded`** — Raw color or space values used directly instead of token references. Fix: replace with `var(--token-name)`.
 - **`duplicate-value`** — Two or more token names share the same value. Fix: make secondary tokens alias the primary.
-- **`dangling`** — A token is referenced but never declared. Fix: add a declaration with a default value.
+- **`dangling`** — A token is referenced but never declared. Fix: add a declaration with `inherit` as the fallback.
 
 **Judgmental (flagged for human review, no auto-patch):**
 
+- **`hardcoded`** — Raw color or space values used directly instead of token references. Requires choosing the right token to map to.
 - **`conflict`** — Same token name declared with different values. Requires choosing a canonical value.
 - **`cascade-override`** — Normal CSS cascading produces unintended value variation. Requires deciding whether to refactor or accept.
 - **`namespace`** — Multiple naming conventions coexist (e.g. `--color-*` and `--bg-*`). Requires unifying naming.

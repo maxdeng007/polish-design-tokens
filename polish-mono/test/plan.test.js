@@ -60,9 +60,10 @@ test('plan assigns action based on severity', () => {
 });
 
 test('MECHANICAL_IDS contains the right set', () => {
-  assert.ok(MECHANICAL_IDS.has('hardcoded'));
   assert.ok(MECHANICAL_IDS.has('duplicate-value'));
   assert.ok(MECHANICAL_IDS.has('dangling'));
+  assert.ok(!MECHANICAL_IDS.has('hardcoded'), 'hardcoded is judgmental');
+  assert.ok(JUDGMENTAL_IDS.has('hardcoded'));
 });
 
 test('plan handles empty findings array', () => {

@@ -42,12 +42,17 @@ export async function apply(patches) {
       const content = await fs.readFile(file, 'utf8');
       const lines = content.split('\n');
 
-      // Back up once per file
+      // Back up once per file. If a backup already exists (from a previous
+      // apply call), keep it — it holds the original pre-modification content.
       if (!backedUp.has(file)) {
         const backupPath = file + '.backup';
-        await fs.copyFile(file, backupPath);
+        try {
+          await fs.access(backupPath);
+        } catch {
+          await fs.copyFile(file, backupPath);
+          backupCount++;
+        }
         backedUp.add(file);
-        backupCount++;
       }
 
       for (const patch of filePatches) {

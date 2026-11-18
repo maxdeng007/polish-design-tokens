@@ -14,7 +14,7 @@ export async function polish_extract(params, deps) {
   if (!target) throw new Error('target is required');
 
   const ignore = params.ignore || [];
-  const graph = scan(target, ignore);
+  const graph = scan(target, { ignore });
 
   return {
     version: graph.version,

@@ -211,7 +211,7 @@ const toolDefinitions = [
   },
   {
     name: 'polish_doctor',
-    description: 'Check that required and optional dependencies are installed. dembrandt is required; skills (taste, awesome-design-md, impeccable) are optional. Returns install commands for missing ones.',
+    description: 'Check that optional dependencies are installed. dembrandt and skills (taste, awesome-design-md, impeccable) are all optional — they enhance the experience but are not required for token auditing. Returns install commands for missing ones.',
     inputSchema: {
       type: 'object',
       properties: {}
@@ -243,8 +243,9 @@ async function handleMessage(msg) {
   const { id, method, params } = msg;
 
   if (method === 'initialize') {
+    const requested = params && params.protocolVersion;
     sendResult(id, {
-      protocolVersion: '2024-11-05',
+      protocolVersion: requested || '2024-11-05',
       capabilities: { tools: {} },
       serverInfo: { name: 'polish', version: VERSION }
     });

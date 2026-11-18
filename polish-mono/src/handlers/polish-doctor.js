@@ -16,7 +16,7 @@ const DEPENDENCIES = [
   {
     name: 'dembrandt',
     type: 'npm',
-    optional: false,
+    optional: true,
     check: () => {
       const candidates = [
         path.join(process.env.HOME || '', '.npm-global/bin/dembrandt'),
@@ -85,12 +85,10 @@ const DEPENDENCIES = [
 
 export async function polish_doctor(params, deps) {
   const results = [];
-  let requiredMissing = false;
   let optionalMissing = 0;
 
   for (const dep of DEPENDENCIES) {
     const check = dep.check();
-    if (!check.installed && !dep.optional) requiredMissing = true;
     if (!check.installed && dep.optional) optionalMissing++;
     results.push({
       name: dep.name,
@@ -102,15 +100,11 @@ export async function polish_doctor(params, deps) {
     });
   }
 
-  const status = requiredMissing ? 'missing' : 'ok';
-
   return {
-    status,
+    status: 'ok',
     dependencies: results,
-    message: requiredMissing
-      ? 'Required dependency dembrandt is missing. Run the install command above.'
-      : optionalMissing > 0
-        ? `Core dependencies are installed. ${optionalMissing} optional skill(s) not found — these enhance the experience but are not required for token auditing.`
-        : 'All dependencies are installed.'
+    message: optionalMissing > 0
+      ? `Core dependencies are installed. ${optionalMissing} optional dependency/dependencies not found — these enhance the experience but are not required for token auditing.`
+      : 'All dependencies are installed.'
   };
 }

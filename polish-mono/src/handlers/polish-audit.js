@@ -18,7 +18,7 @@ export async function polish_audit(params, deps) {
   const ignore = params.ignore || [];
   const observation = params.observation || null;
 
-  const graph = scan(target, ignore);
+  const graph = scan(target, { ignore });
   const report = cross(graph, observation);
 
   return {

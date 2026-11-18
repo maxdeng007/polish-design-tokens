@@ -286,7 +286,7 @@ interface ApplyResult {
 | `orphan` | warn | Judgmental | Declared but never referenced |
 | `duplicate-value` | warn | Mechanical | Multiple token names sharing the same value |
 | `namespace` | info | Judgmental | Multiple naming families coexist |
-| `hardcoded` | warn | Mechanical | Raw color/space values used instead of token references |
+| `hardcoded` | warn | Judgmental | Raw color/space values used instead of token references |
 | `cascade-override` | info | Judgmental | CSS cascading produces unintended variation |
 | `state-variation` | info | Judgmental | Token values differ across component states |
 | `theme-variation` | info | Judgmental | Token values differ across themes |

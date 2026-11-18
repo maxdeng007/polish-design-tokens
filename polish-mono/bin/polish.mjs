@@ -6,6 +6,8 @@
 
 import { resolve } from 'path';
 import { readFileSync, existsSync } from 'fs';
+import { scan } from '../src/scan.js';
+import { cross } from '../src/cross.js';
 import { plan } from '../src/plan.js';
 import { generateDiffs } from '../src/diff.js';
 import { apply } from '../src/apply.js';
@@ -13,10 +15,11 @@ import { apply } from '../src/apply.js';
 const USAGE = `polish — Design token superpower tool
 
 Usage:
-  polish plan  <findings.json>     Convert findings into ordered action list
-  polish diff  <plan.json>         Generate mechanical patches from a plan
-  polish apply <patches.json>      Execute patches with backup protection
-  polish mcp                       Start MCP server (JSON-RPC over stdin/stdout)
+  polish audit  <target> [--ignore=a,b]  Scan a directory and output findings JSON
+  polish plan   <findings.json>          Convert findings into ordered action list
+  polish diff   <plan.json>              Generate mechanical patches from a plan
+  polish apply  <patches.json>           Execute patches with backup protection
+  polish mcp                             Start MCP server (JSON-RPC over stdin/stdout)
 
 Exit codes:
   0  success
@@ -45,7 +48,28 @@ async function main() {
   }
 
   const cmd = args[0];
-  const file = resolve(args[1] || '');
+
+  // Parse --ignore=a,b style flags from remaining args
+  let ignoreFlag = null;
+  const positional = [];
+  for (let i = 1; i < args.length; i++) {
+    if (args[i].startsWith('--ignore=')) {
+      ignoreFlag = args[i].slice('--ignore='.length);
+    } else {
+      positional.push(args[i]);
+    }
+  }
+
+  if (cmd === 'audit') {
+    const target = resolve(positional[0] || '.');
+    const ignore = ignoreFlag ? ignoreFlag.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const graph = scan(target, { ignore });
+    const report = cross(graph);
+    console.log(JSON.stringify(report, null, 2));
+    process.exit(0);
+  }
+
+  const file = resolve(positional[0] || '');
 
   if (cmd === 'plan') {
     const data = loadJson(file);

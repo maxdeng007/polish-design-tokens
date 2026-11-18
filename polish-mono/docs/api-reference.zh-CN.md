@@ -286,7 +286,7 @@ interface ApplyResult {
 | `orphan` | warn | 判断性 | 已声明但从未被引用 |
 | `duplicate-value` | warn | 机械性 | 多个令牌名共享同一值 |
 | `namespace` | info | 判断性 | 多种命名族共存 |
-| `hardcoded` | warn | 机械性 | 直接使用原始颜色/间距值而非令牌引用 |
+| `hardcoded` | warn | 判断性 | 直接使用原始颜色/间距值而非令牌引用 |
 | `cascade-override` | info | 判断性 | CSS 层叠产生非预期的变异 |
 | `state-variation` | info | 判断性 | 令牌值在不同组件状态间变化 |
 | `theme-variation` | info | 判断性 | 令牌值在不同主题间变化 |
