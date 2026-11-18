@@ -1,3 +1,5 @@
+[English](mcp-integration.md) | [中文](mcp-integration.zh-CN.md)
+
 # MCP Integration Guide
 
 polish exposes 8 tools via the Model Context Protocol (JSON-RPC 2.0 over stdin/stdout). Any AI coding agent that supports MCP can drive the full audit → fix pipeline.

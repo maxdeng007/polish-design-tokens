@@ -1,3 +1,5 @@
+[English](api-reference.md) | [中文](api-reference.zh-CN.md)
+
 # API Reference
 
 Complete type definitions and usage examples for all public API functions in `polish-design-tokens`.

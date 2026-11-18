@@ -1,3 +1,5 @@
+[English](troubleshooting.md) | [中文](troubleshooting.zh-CN.md)
+
 # Troubleshooting
 
 Common issues, error messages, and their solutions.
