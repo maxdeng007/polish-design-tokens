@@ -20,7 +20,7 @@ export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, ap
  * @returns {object} DeclarationGraph
  */
 export function extract(target, ignore = []) {
-  return scan(target, ignore);
+  return scan(target, { ignore });
 }
 
 /**
@@ -31,7 +31,7 @@ export function extract(target, ignore = []) {
  * @returns {object} AuditReport with findings array
  */
 export function audit(target, ignore = [], observation = null) {
-  const graph = scan(target, ignore);
+  const graph = scan(target, { ignore });
   return cross(graph, observation);
 }
 
@@ -44,7 +44,7 @@ export function audit(target, ignore = [], observation = null) {
  * @returns {{graph: object, findings: Array, plan: Array, patches: Array}}
  */
 export function runPipeline(target, ignore = [], observation = null) {
-  const graph = scan(target, ignore);
+  const graph = scan(target, { ignore });
   const report = cross(graph, observation);
   const actions = plan(report.findings || []);
   const patches = generateDiffs(actions);

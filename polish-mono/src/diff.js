@@ -5,10 +5,13 @@
  * what to replace, where, and what it becomes. Only mechanical items
  * produce patches; judgmental items are left for the agent to handle.
  *
- * hardcoded is judgmental: its evidence comes from runtime observation
- * (value/theme/documents) with no file/line, so there is no location to
- * patch. The agent must locate the hardcoded value in source and choose
- * which token to map it to.
+ * Both hardcoded and dangling are judgmental: their fixes depend on
+ * context that the tool cannot determine automatically. Hardcoded needs
+ * a runtime observation to locate the value in source and pick a token
+ * to map it to. Dangling needs a canonical value — `inherit` is not a
+ * safe default because it either produces an invalid top-level custom
+ * property declaration or resolves to guaranteed-invalid when the parent
+ * element has no such variable.
  */
 
 /** Extract any color value from text: hex, rgba(), hsl(), or named. */
@@ -71,20 +74,6 @@ export function generateDiffs(planItems) {
             findingId: f.id
           });
         }
-        break;
-      }
-
-      case 'dangling': {
-        const name = firstLoc.name || '--token';
-        patches.push({
-          type: 'add',
-          file: firstLoc.file || null,
-          line: firstLoc.line || null,
-          before: '',
-          after: `${name}: inherit;`,
-          reason: f.title,
-          findingId: f.id
-        });
         break;
       }
 

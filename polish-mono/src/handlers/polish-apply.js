@@ -21,5 +21,5 @@ export async function polish_apply(params, deps) {
     }
   }
 
-  return await apply(patches);
+  return await apply(patches, target);
 }

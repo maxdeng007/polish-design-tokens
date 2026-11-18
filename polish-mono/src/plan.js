@@ -24,12 +24,12 @@ const PRIORITY_ORDER = [
 ];
 
 const MECHANICAL_IDS = new Set([
-  'duplicate-value',
-  'dangling'
+  'duplicate-value'
 ]);
 
 const JUDGMENTAL_IDS = new Set([
   'conflict',
+  'dangling',
   'cascade-override',
   'namespace',
   'runtime-drift',

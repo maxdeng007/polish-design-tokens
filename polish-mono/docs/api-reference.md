@@ -281,7 +281,7 @@ interface ApplyResult {
 | ID | Severity | Classification | Description |
 |----|----------|----------------|-------------|
 | `conflict` | error | Judgmental | Same token name with different values in root scope |
-| `dangling` | error | Mechanical | Token referenced but never declared |
+| `dangling` | error | Judgmental | Token referenced but never declared |
 | `runtime-drift` | error | Judgmental | Inconsistent token values across pages at runtime |
 | `orphan` | warn | Judgmental | Declared but never referenced |
 | `duplicate-value` | warn | Mechanical | Multiple token names sharing the same value |

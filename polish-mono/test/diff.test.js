@@ -52,19 +52,16 @@ function getPlan() {
 test('generateDiffs only produces patches for mechanical items', () => {
   const patches = generateDiffs(getPlan());
   const findingIds = patches.map(p => p.findingId);
-  assert.ok(findingIds.includes('dangling'), 'should patch dangling');
   assert.ok(findingIds.includes('duplicate-value'), 'should patch duplicate-value');
+  assert.ok(!findingIds.includes('dangling'), 'should not patch dangling (judgmental)');
   assert.ok(!findingIds.includes('conflict'), 'should not patch conflict');
   assert.ok(!findingIds.includes('orphan'), 'should not patch orphan');
 });
 
-test('dangling produces an add patch', () => {
+test('dangling produces no patch', () => {
   const patches = generateDiffs(getPlan());
   const dangling = patches.find(p => p.findingId === 'dangling');
-  assert.equal(dangling.type, 'add');
-  assert.equal(dangling.file, 'src/tokens.css');
-  assert.equal(dangling.line, 29);
-  assert.ok(dangling.after.includes('--btn-bg'), 'after should include token name');
+  assert.equal(dangling, undefined, 'dangling should not produce a patch');
 });
 
 test('duplicate-value produces a replace patch targeting secondary', () => {

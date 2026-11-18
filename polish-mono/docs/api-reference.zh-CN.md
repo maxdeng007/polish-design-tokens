@@ -281,7 +281,7 @@ interface ApplyResult {
 | ID | 严重程度 | 分类 | 描述 |
 |----|----------|----------------|-------------|
 | `conflict` | error | 判断性 | 根作用域内同一令牌名有不同值 |
-| `dangling` | error | 机械性 | 令牌被引用但从未声明 |
+| `dangling` | error | 判断性 | 令牌被引用但从未声明 |
 | `runtime-drift` | error | 判断性 | 运行时跨页面令牌值不一致 |
 | `orphan` | warn | 判断性 | 已声明但从未被引用 |
 | `duplicate-value` | warn | 机械性 | 多个令牌名共享同一值 |

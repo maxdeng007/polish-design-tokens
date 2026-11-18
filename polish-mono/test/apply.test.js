@@ -45,7 +45,7 @@ test('apply creates a backup before modifying', async () => {
 test('apply inserts a new line with add type', async () => {
   const file = makeTempCss(':root {\n  --bg: #1a1a2e;\n}\n');
   const result = await apply([
-    { type: 'add', file, line: 4, before: '', after: '  --btn-bg: var(--token-default);', reason: 'test', findingId: 'dangling' }
+    { type: 'add', file, line: 4, before: '', after: '  --btn-bg: var(--token-default);', reason: 'test', findingId: 'custom' }
   ]);
   assert.equal(result.applied.length, 1);
   const content = fs.readFileSync(file, 'utf8');
@@ -124,5 +124,51 @@ test('apply on demo project produces expected results', async () => {
   assert.ok(content.includes('var(--bg)'), 'should have aliased --background to --bg');
   assert.ok(content.includes('var(--accent)'), 'should have aliased --gold to --accent');
   assert.ok(fs.existsSync(destFile + '.backup'), 'should have backup');
+  cleanup();
+});
+
+test('apply rejects patches outside target directory', async () => {
+  const file = makeTempCss(':root {\n  --bg: #1a1a2e;\n}\n');
+  const outsideFile = path.join(__dirname, '.apply-outside-test.txt');
+  fs.writeFileSync(outsideFile, 'original\n', 'utf8');
+  const result = await apply([
+    { type: 'replace', file: outsideFile, line: 1, before: 'original', after: 'modified', reason: 'test', findingId: 'custom' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 0);
+  assert.equal(result.failed.length, 1);
+  assert.ok(result.failed[0].error.includes('outside target directory'));
+  // Verify the outside file was NOT modified
+  assert.equal(fs.readFileSync(outsideFile, 'utf8'), 'original\n');
+  cleanup();
+  fs.rmSync(outsideFile, { force: true });
+});
+
+test('apply accepts patches within target directory', async () => {
+  const file = makeTempCss(':root {\n  --bg: #1a1a2e;\n}\n');
+  const result = await apply([
+    { type: 'replace', file, line: 2, before: '#1a1a2e', after: 'var(--x)', reason: 'test', findingId: 'custom' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 1);
+  assert.equal(result.failed.length, 0);
+  cleanup();
+});
+
+test('apply sorts patches by line descending so adds do not shift replaces', async () => {
+  // Line 1: :root {
+  // Line 2:   --a: #111;
+  // Line 3:   --b: #222;
+  // Line 4:   --c: #333;
+  // Line 5:   --d: #444;
+  // Line 6: }
+  const file = makeTempCss(':root {\n  --a: #111;\n  --b: #222;\n  --c: #333;\n  --d: #444;\n}\n');
+  const result = await apply([
+    { type: 'add', file, line: 2, before: '', after: '  --new: #000;', reason: 'test', findingId: 'custom' },
+    { type: 'replace', file, line: 5, before: '#444', after: 'var(--d)', reason: 'test', findingId: 'custom' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 2, 'both patches should apply');
+  assert.equal(result.failed.length, 0, 'no patches should fail');
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(content.includes('var(--d)'), 'replace at line 5 should succeed despite add at line 2');
+  assert.ok(content.includes('--new: #000;'), 'add at line 2 should succeed');
   cleanup();
 });

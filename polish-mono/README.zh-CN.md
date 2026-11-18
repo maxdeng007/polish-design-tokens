@@ -71,7 +71,7 @@ npm install -g .
 ## 快速开始
 
 ```bash
-# 1. 审计项目中的令牌问题（通过 MCP 或 Node API——见下文）
+# 1. 审计项目中的令牌问题
 # 2. 将发现转换为排序后的计划
 polish plan findings.json > plan.json
 
@@ -91,7 +91,7 @@ polish apply patches.json
 3. 使用 `polish_audit` 扫描目标项目
 4. 使用 `polish_plan` → `polish_diff` → `polish_apply` 修复机械性问题
 
-所有命令均为幂等且有备份——无数据丢失风险。
+所有 `polish apply` 操作在修改任何文件前都会创建 `.backup` 备份文件。失败的补丁会被记录且不会中断批量操作——请检查 apply 报告以查看失败项。
 
 ## 流水线
 
@@ -113,7 +113,7 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 | 优先级 | 类型 | 描述 | 分类 |
 |----------|------|-------------|----------------|
 | 1 | `conflict` | 根作用域内同一令牌名有不同值 | 判断性 |
-| 2 | `dangling` | 令牌被引用但从未声明 | 机械性 |
+| 2 | `dangling` | 令牌被引用但从未声明 | 判断性 |
 | 3 | `runtime-drift` | 运行时跨页面令牌值不一致 | 判断性 |
 | 4 | `orphan` | 已声明但从未被引用 | 判断性 |
 | 5 | `duplicate-value` | 多个令牌名共享同一值 | 机械性 |
@@ -124,7 +124,7 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 | 10 | `theme-variation` | 令牌值在不同主题间变化 | 判断性 |
 | 11 | `dynamic-variable` | 具有动态（非静态）值的令牌 | 判断性 |
 
-只有**机械性**发现（`duplicate-value`、`dangling`）会在下一阶段生成补丁。
+只有**机械性**发现（`duplicate-value`）会在下一阶段生成补丁。
 
 ### 2. 差异 — 生成补丁
 
@@ -191,7 +191,7 @@ polish 通过 Model Context Protocol 暴露 8 个工具，因此任何 AI 编程
 | `polish_diff` | 从计划生成机械性补丁 |
 | `polish_apply` | 带备份保护执行补丁 |
 | `polish_doctor` | 修复后验证令牌健康状态 |
-| `polish_style_lookup` | 按名称或模式查找令牌 |
+| `polish_style_lookup` | 查询品牌 DESIGN.md 设计令牌数据 |
 
 ## Node.js API
 
@@ -259,7 +259,7 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 
 **polish-design-tokens** 执行**静态分析**——它扫描源文件（CSS、SCSS、HTML、JS/TS）以查找令牌声明、引用和冲突。这适用于任何项目、任何环境，无需额外设置。
 
-**运行时测量**（在真实浏览器中检查实际渲染值）是配套工具 `token-audit-mcp` 中的独立能力。它检测只有在真实浏览器中评估令牌时才出现的 `runtime-drift` 和 `hardcoded` 发现。这需要 Chrome DevTools 可用，且不属于 npm 包默认流水线的一部分。
+**运行时测量**（在真实浏览器中检查实际渲染值）通过本包导出的 `measure()` 函数提供。它检测只有在真实浏览器中评估令牌时才出现的 `runtime-drift` 和 `hardcoded` 发现。这需要 Chrome DevTools 可用。配套的 `token-audit-mcp` 包提供了封装 `measure()` 并自带浏览器自动化的 MCP 工具，如果你不想直接调用该函数可以使用。
 
 对于大多数用例——审计项目源码、修复机械性问题、验证令牌一致性——`polish-design-tokens` 中的静态流水线已经足够。当你需要验证用户在浏览器中实际看到的内容时，请使用 `token-audit-mcp`。
 
@@ -268,10 +268,10 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 **机械性（可通过 `polish diff` + `polish apply` 自动修复）：**
 
 - **`duplicate-value`** — 两个或更多令牌名共享同一值。修复：将次要令牌别名到主要令牌。
-- **`dangling`** — 令牌被引用但从未声明。修复：添加带 `inherit` 回退值的声明。
 
 **判断性（标记供人工审查，不自动生成补丁）：**
 
+- **`dangling`** — 令牌被引用但从未声明。需要提供规范值——自动插入 `inherit` 可能产生无效或损坏的 CSS。
 - **`hardcoded`** — 直接使用原始颜色或间距值而非令牌引用。需要选择映射到哪个令牌。
 - **`conflict`** — 同一令牌名以不同值声明。需要选择规范值。
 - **`cascade-override`** — 普通 CSS 层叠产生非预期的值变异。需要决定重构还是接受。

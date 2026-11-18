@@ -1,7 +1,7 @@
 # polish — Design Spec
 
 **Date:** 2026-11-04
-**Status:** Draft — pending user review
+**Status:** Approved — implemented in v1.4.10
 **Product:** polish — design token superpower tool: extract · critique · apply
 
 ---

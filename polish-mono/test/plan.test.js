@@ -18,12 +18,16 @@ test('plan sorts findings by priority', () => {
 
 test('plan classifies mechanical findings correctly', () => {
   const result = plan(SAMPLE_FINDINGS);
-  const dangling = result.find(r => r.finding.id === 'dangling');
-  assert.equal(dangling.mechanical, true);
-  assert.equal(dangling.judgmental, false);
-
   const dup = result.find(r => r.finding.id === 'duplicate-value');
   assert.equal(dup.mechanical, true);
+  assert.equal(dup.judgmental, false);
+});
+
+test('plan classifies dangling as judgmental', () => {
+  const result = plan(SAMPLE_FINDINGS);
+  const dangling = result.find(r => r.finding.id === 'dangling');
+  assert.equal(dangling.mechanical, false);
+  assert.equal(dangling.judgmental, true);
 });
 
 test('plan classifies judgmental findings correctly', () => {
@@ -61,8 +65,9 @@ test('plan assigns action based on severity', () => {
 
 test('MECHANICAL_IDS contains the right set', () => {
   assert.ok(MECHANICAL_IDS.has('duplicate-value'));
-  assert.ok(MECHANICAL_IDS.has('dangling'));
+  assert.ok(!MECHANICAL_IDS.has('dangling'), 'dangling is judgmental');
   assert.ok(!MECHANICAL_IDS.has('hardcoded'), 'hardcoded is judgmental');
+  assert.ok(JUDGMENTAL_IDS.has('dangling'));
   assert.ok(JUDGMENTAL_IDS.has('hardcoded'));
 });
 

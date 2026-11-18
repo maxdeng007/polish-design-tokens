@@ -71,7 +71,7 @@ Do NOT apply any fixes or modify any files. Install, audit, and report only.
 ## Quick Start
 
 ```bash
-# 1. Audit a project for token issues (via MCP or Node API — see below)
+# 1. Audit a project for token issues
 # 2. Convert findings to a ranked plan
 polish plan findings.json > plan.json
 
@@ -91,7 +91,7 @@ The most common workflow: give your AI coding agent (Qoder, Claude, etc.) the Gi
 3. Use `polish_audit` to scan the target project
 4. Use `polish_plan` → `polish_diff` → `polish_apply` to fix mechanical issues
 
-All commands are idempotent and backed up — no risk of data loss.
+All `polish apply` operations create `.backup` files before modifying any file. Failed patches are recorded and do not abort the batch — review the apply report for failures.
 
 ## The Pipeline
 
@@ -113,7 +113,7 @@ Findings are ranked by priority:
 | Priority | Type | Description | Classification |
 |----------|------|-------------|----------------|
 | 1 | `conflict` | Same token name with different values in root scope | Judgmental |
-| 2 | `dangling` | Token referenced but never declared | Mechanical |
+| 2 | `dangling` | Token referenced but never declared | Judgmental |
 | 3 | `runtime-drift` | Inconsistent token values across pages at runtime | Judgmental |
 | 4 | `orphan` | Declared but never referenced | Judgmental |
 | 5 | `duplicate-value` | Multiple token names sharing the same value | Mechanical |
@@ -124,7 +124,7 @@ Findings are ranked by priority:
 | 10 | `theme-variation` | Token values differ across themes | Judgmental |
 | 11 | `dynamic-variable` | Tokens with dynamic (non-static) values | Judgmental |
 
-Only **mechanical** findings (`duplicate-value`, `dangling`) produce patches in the next phase.
+Only **mechanical** findings (`duplicate-value`) produce patches in the next phase.
 
 ### 2. Diff — generate patches
 
@@ -191,7 +191,7 @@ Available tools:
 | `polish_diff` | Generate mechanical patches from a plan |
 | `polish_apply` | Execute patches with backup protection |
 | `polish_doctor` | Verify token health after fixes |
-| `polish_style_lookup` | Find tokens by name or pattern |
+| `polish_style_lookup` | Query brand DESIGN.md design token data |
 
 ## Node.js API
 
@@ -259,7 +259,7 @@ The `polish_style_lookup` tool falls back to bundled brand data (Vercel, Stripe,
 
 **polish-design-tokens** performs **static analysis** — it scans source files (CSS, SCSS, HTML, JS/TS) to find token declarations, references, and conflicts. This works on any project, any environment, no extra setup required.
 
-**Runtime measurement** (checking actual rendered values in a live browser) is a separate capability in the companion `token-audit-mcp` tool. It detects `runtime-drift` and `hardcoded` findings that only appear when tokens are evaluated in a real browser. This requires Chrome DevTools to be available and is not part of the npm package's default pipeline.
+**Runtime measurement** (checking actual rendered values in a live browser) is available via the `measure()` function, exported from this package. It detects `runtime-drift` and `hardcoded` findings that only appear when tokens are evaluated in a real browser. This requires Chrome DevTools to be available. The companion `token-audit-mcp` package provides a ready-to-use MCP tool that wraps `measure()` with browser automation, if you prefer not to call it directly.
 
 For most use cases — auditing a project's source, fixing mechanical issues, and verifying token consistency — the static pipeline in `polish-design-tokens` is sufficient. Use `token-audit-mcp` when you need to verify what users actually see in the browser.
 
@@ -268,10 +268,10 @@ For most use cases — auditing a project's source, fixing mechanical issues, an
 **Mechanical (auto-fixable by `polish diff` + `polish apply`):**
 
 - **`duplicate-value`** — Two or more token names share the same value. Fix: make secondary tokens alias the primary.
-- **`dangling`** — A token is referenced but never declared. Fix: add a declaration with `inherit` as the fallback.
 
 **Judgmental (flagged for human review, no auto-patch):**
 
+- **`dangling`** — A token is referenced but never declared. Requires supplying a canonical value — auto-inserting `inherit` can produce invalid or broken CSS.
 - **`hardcoded`** — Raw color or space values used directly instead of token references. Requires choosing the right token to map to.
 - **`conflict`** — Same token name declared with different values. Requires choosing a canonical value.
 - **`cascade-override`** — Normal CSS cascading produces unintended value variation. Requires deciding whether to refactor or accept.

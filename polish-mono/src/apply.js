@@ -5,7 +5,14 @@
  * applies before→after replacements on the specified line, and returns
  * a summary of what was applied, what failed, and which backups were made.
  *
- * Safety: each file is backed up once (before the first patch touches it).
+ * Safety:
+ * - Each file is backed up once (before the first patch touches it).
+ *   Backups are never overwritten by subsequent apply calls.
+ * - If a target directory is provided, patches targeting files outside
+ *   that directory are rejected.
+ * - Patches within a file are applied in line-descending order so that
+ *   inserts don't shift the line numbers of subsequent patches.
+ *
  * Failed patches don't abort the batch — they're recorded and the rest
  * proceed.
  */
@@ -17,13 +24,17 @@ import path from 'path';
  * Apply a list of patches to files.
  *
  * @param {Array} patches — [{type, file, line, before, after, reason, findingId}]
+ * @param {string} [target] — If provided, reject patches whose file path
+ *   falls outside this directory.
  * @returns {Promise<{applied: Array, failed: Array, backupCount: number}>}
  */
-export async function apply(patches) {
+export async function apply(patches, target = null) {
   const applied = [];
   const failed = [];
   const backedUp = new Set();
   let backupCount = 0;
+
+  const resolvedTarget = target ? path.resolve(target) : null;
 
   // Group patches by file so we can back up once and apply multiple changes
   const byFile = new Map();
@@ -38,6 +49,22 @@ export async function apply(patches) {
   }
 
   for (const [file, filePatches] of byFile) {
+    // Boundary check: reject paths outside the target directory
+    if (resolvedTarget) {
+      const resolvedFile = path.resolve(file);
+      const withinTarget = resolvedFile === resolvedTarget ||
+        resolvedFile.startsWith(resolvedTarget + path.sep);
+      if (!withinTarget) {
+        failed.push({ file, error: `file path is outside target directory: ${resolvedTarget}` });
+        continue;
+      }
+    }
+
+    // Sort by line descending so that `add` patches at higher lines don't
+    // shift the line numbers of subsequent patches. End-of-file adds
+    // (line === null/0) sort last.
+    filePatches.sort((a, b) => (b.line || 0) - (a.line || 0));
+
     try {
       const content = await fs.readFile(file, 'utf8');
       const lines = content.split('\n');
