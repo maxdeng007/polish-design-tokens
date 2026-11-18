@@ -66,12 +66,14 @@ Please help me audit the design tokens in my project using the "polish" tool.
 Do NOT apply any fixes or modify any files. Install, audit, and report only.
 ```
 
-**What's next:** polish stays installed on your system after the audit — no reinstall needed. If you want to apply the mechanical fixes (duplicate values, dangling references), just give your AI a follow-up prompt like: *"Now apply the mechanical fixes to my project with backups."* The AI will re-run the audit, generate patches, and apply them with automatic backups.
+**What's next:** polish stays installed on your system after the audit — no reinstall needed. If you want to apply the mechanical fixes (duplicate values), just give your AI a follow-up prompt like: *"Now apply the mechanical fixes to my project with backups."* The AI will re-run the audit, generate patches, and apply them with automatic backups.
 
 ## Quick Start
 
 ```bash
 # 1. Audit a project for token issues
+polish audit ./my-project --ignore=node_modules,dist > findings.json
+
 # 2. Convert findings to a ranked plan
 polish plan findings.json > plan.json
 
@@ -217,12 +219,12 @@ const result = await apply(patches);
 | `extract` | `(target: string, ignore?: string[]) → DeclarationGraph` | Scan a directory for token declarations and references |
 | `audit` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → AuditReport` | Scan + cross-reference to produce findings |
 | `runPipeline` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → PipelineResult` | Full pipeline: extract → audit → plan → diff (no apply) |
-| `scan` | `(target: string, opts?: { ignore?: string }) → DeclarationGraph` | Low-level scan, same as `extract` |
+| `scan` | `(target: string, ignore?: string[]) → DeclarationGraph` | Low-level scan, same as `extract` |
 | `cross` | `(graph: DeclarationGraph, observation?: RuntimeObservation) → AuditReport` | Judge findings from a declaration graph |
 | `measure` | `(docs?: unknown[]) → RuntimeObservation` | Normalize runtime observation data for audit |
 | `plan` | `(findings: Finding[]) → PlanAction[]` | Rank and classify findings into an action queue |
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | Generate mechanical patches from a plan |
-| `apply` | `(patches: Patch[]) → Promise<ApplyResult>` | Apply patches with backup protection |
+| `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | Apply patches with backup protection (target defaults to cwd) |
 
 TypeScript definitions are bundled — no `@types` package needed. All types are exported from the package root.
 
@@ -249,7 +251,7 @@ All 8 MCP tools accept and return JSON. Key parameters:
 - **`polish_measure`** — `{ documents: unknown[] }` → `RuntimeObservation`
 - **`polish_plan`** — `{ findings: Finding[] }` → `PlanAction[]`
 - **`polish_diff`** — `{ plan: PlanAction[] }` → `Patch[]`
-- **`polish_apply`** — `{ patches: Patch[] }` → `ApplyResult`
+- **`polish_apply`** — `{ patches: Patch[], target: string }` → `ApplyResult`
 - **`polish_doctor`** — `{ target?: string }` → dependency health check
 - **`polish_style_lookup`** — `{ brand?: string }` → brand design token reference
 
@@ -259,9 +261,9 @@ The `polish_style_lookup` tool falls back to bundled brand data (Vercel, Stripe,
 
 **polish-design-tokens** performs **static analysis** — it scans source files (CSS, SCSS, HTML, JS/TS) to find token declarations, references, and conflicts. This works on any project, any environment, no extra setup required.
 
-**Runtime measurement** (checking actual rendered values in a live browser) is available via the `measure()` function, exported from this package. It detects `runtime-drift` and `hardcoded` findings that only appear when tokens are evaluated in a real browser. This requires Chrome DevTools to be available. The companion `token-audit-mcp` package provides a ready-to-use MCP tool that wraps `measure()` with browser automation, if you prefer not to call it directly.
+**Runtime measurement** (checking actual rendered values in a live browser) is available via the `measure()` function, exported from this package. It detects `runtime-drift` and `hardcoded` findings that only appear when tokens are evaluated in a real browser. This requires Chrome DevTools to be available. A companion MCP package can wrap `measure()` with browser automation if you prefer not to call it directly.
 
-For most use cases — auditing a project's source, fixing mechanical issues, and verifying token consistency — the static pipeline in `polish-design-tokens` is sufficient. Use `token-audit-mcp` when you need to verify what users actually see in the browser.
+For most use cases — auditing a project's source, fixing mechanical issues, and verifying token consistency — the static pipeline in `polish-design-tokens` is sufficient. Use `measure()` (or a browser-automation companion) when you need to verify what users actually see in the browser.
 
 ## What It Finds
 
@@ -291,7 +293,7 @@ No external design-md skill files were found, and no brand name was provided. Pa
 The patch's `before` string doesn't match the file content exactly — whitespace, quotes, or line content may differ. Check the `.backup` file (created before each apply) and regenerate patches from a fresh audit.
 
 **`runtime-drift` findings appear with no observation data**
-Runtime findings (`runtime-drift`, `hardcoded`) require a `RuntimeObservation` from `measure()`. Static-only audits won't produce them. Use the `token-audit-mcp` companion for browser-based measurement.
+Runtime findings (`runtime-drift`, `hardcoded`) require a `RuntimeObservation` from `measure()`. Static-only audits won't produce them. Call `measure()` with browser-observed variable data and pass it as the `observation` parameter to `audit()` or `cross()`.
 
 **Large projects scan slowly**
 The scanner is zero-dependency and single-threaded. For projects with thousands of files, use the `ignore` option to exclude directories that don't contain tokens. Binary files (detected by null bytes) are skipped automatically.
@@ -315,10 +317,7 @@ The scanner is zero-dependency and single-threaded. For projects with thousands 
 
 | Directory | Description |
 |-----------|-------------|
-| `polish/` | Core tool: `plan.js`, `diff.js`, `apply.js` + CLI (`bin/polish.mjs`) |
-| `polish-mcp/` | MCP server with 8 tool handlers |
-| `polish-mono/` | Unified npm package for distribution (`polish-design-tokens`) |
-| `token-audit-mcp/` | Token audit MCP server (static scan + runtime measurement) |
+| `polish-mono/` | Unified npm package for distribution (`polish-design-tokens`) — core tool, CLI, MCP server, tests |
 | `examples/` | Sample projects with known token issues |
 | `docs/` | Design specs and implementation plans |
 

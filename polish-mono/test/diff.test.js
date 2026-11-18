@@ -89,3 +89,42 @@ test('generateDiffs returns empty array for all-judgmental plan', () => {
   const patches = generateDiffs(judgmentalOnly);
   assert.deepEqual(patches, []);
 });
+
+test('duplicate-value generates one patch per secondary evidence entry', () => {
+  const findings = [
+    {
+      id: 'duplicate-value',
+      severity: 'warn',
+      title: '1 color value expressed by 3 token names',
+      detail: '#123456 = --bg = --one = --two',
+      evidence: [
+        {
+          value: '#123456',
+          names: ['--bg', '--one', '--two'],
+          primary: '--bg',
+          secondary: '--one',
+          primaryFile: 'src/tokens.css',
+          primaryLine: 2,
+          secondaryFile: 'src/tokens.css',
+          secondaryLine: 3
+        },
+        {
+          value: '#123456',
+          names: ['--bg', '--one', '--two'],
+          primary: '--bg',
+          secondary: '--two',
+          primaryFile: 'src/tokens.css',
+          primaryLine: 2,
+          secondaryFile: 'src/tokens.css',
+          secondaryLine: 4
+        }
+      ]
+    }
+  ];
+  const patches = generateDiffs(plan(findings));
+  const dupPatches = patches.filter(p => p.findingId === 'duplicate-value');
+  assert.equal(dupPatches.length, 2, 'should produce one patch per secondary');
+  assert.equal(dupPatches[0].after, 'var(--bg)');
+  assert.equal(dupPatches[0].line, 3, 'first patch targets first secondary line');
+  assert.equal(dupPatches[1].line, 4, 'second patch targets second secondary line');
+});

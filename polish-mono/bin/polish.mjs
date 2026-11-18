@@ -18,7 +18,7 @@ Usage:
   polish audit  <target> [--ignore=a,b]  Scan a directory and output findings JSON
   polish plan   <findings.json>          Convert findings into ordered action list
   polish diff   <plan.json>              Generate mechanical patches from a plan
-  polish apply  <patches.json>           Execute patches with backup protection
+  polish apply  <patches.json> [--target=dir]   Execute patches with backup protection (target defaults to cwd)
   polish mcp                             Start MCP server (JSON-RPC over stdin/stdout)
 
 Exit codes:
@@ -49,12 +49,15 @@ async function main() {
 
   const cmd = args[0];
 
-  // Parse --ignore=a,b style flags from remaining args
+  // Parse --ignore=a,b and --target=dir style flags from remaining args
   let ignoreFlag = null;
+  let targetFlag = null;
   const positional = [];
   for (let i = 1; i < args.length; i++) {
     if (args[i].startsWith('--ignore=')) {
       ignoreFlag = args[i].slice('--ignore='.length);
+    } else if (args[i].startsWith('--target=')) {
+      targetFlag = args[i].slice('--target='.length);
     } else {
       positional.push(args[i]);
     }
@@ -88,7 +91,8 @@ async function main() {
   if (cmd === 'apply') {
     const data = loadJson(file);
     const patches = data.patches || data;
-    const result = await apply(patches);
+    const target = resolve(targetFlag || process.cwd());
+    const result = await apply(patches, target);
     console.log(JSON.stringify(result, null, 2));
     process.exit(result.failed.length > 0 ? 1 : 0);
   }

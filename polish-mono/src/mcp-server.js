@@ -183,7 +183,7 @@ const toolDefinitions = [
   },
   {
     name: 'polish_apply',
-    description: 'Execute mechanical patches on files with backup protection. Each file is backed up with .backup extension before modification.',
+    description: 'Execute mechanical patches on files with backup protection. Each file is backed up with .backup extension before modification. Target is required to enforce file-path boundaries.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -204,9 +204,9 @@ const toolDefinitions = [
             required: ['file', 'type']
           }
         },
-        target: { type: 'string', description: 'Target directory to resolve relative file paths in patches' }
+        target: { type: 'string', description: 'Target directory to resolve and bound relative file paths. Required — patches outside this directory are rejected.' }
       },
-      required: ['patches']
+      required: ['patches', 'target']
     }
   },
   {

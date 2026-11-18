@@ -12,7 +12,12 @@ import { apply } from '../apply.js';
  */
 export async function polish_apply(params, deps) {
   const patches = params.patches || [];
-  const target = params.target ? path.resolve(params.target) : null;
+  if (!params.target) {
+    const err = new Error('polish_apply requires a target directory to enforce file-path boundaries');
+    err.code = 'MISSING_TARGET';
+    throw err;
+  }
+  const target = path.resolve(params.target);
 
   // Resolve relative file paths to absolute
   for (const p of patches) {

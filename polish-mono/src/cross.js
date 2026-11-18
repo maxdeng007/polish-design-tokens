@@ -322,19 +322,28 @@ function cross(graph, observation) {
       severity: 'warn',
       title: `${dupes.length} color values are expressed by multiple token names`,
       detail: dupes.slice(0, 8).map(d => `${d.value} = ${d.names.join(' = ')}`).join('；'),
-      evidence: dupes.slice(0, 8).map(d => {
-        const locs = d.names.map(n => declMap.get(n)).filter(Boolean);
-        const first = locs[0] || {};
-        return {
-          value: d.value,
-          names: d.names,
-          primary: d.names[0],
-          secondary: d.names[1],
-          primaryFile: first.file,
-          primaryLine: first.line,
-          secondaryFile: locs[1] ? locs[1].file : first.file,
-          secondaryLine: locs[1] ? locs[1].line : first.line
-        };
+      evidence: dupes.slice(0, 8).flatMap(d => {
+        const locByName = new Map();
+        for (const n of d.names) {
+          const loc = declMap.get(n);
+          if (loc) locByName.set(n, loc);
+        }
+        const primaryLoc = locByName.get(d.names[0]) || {};
+        // One evidence entry per secondary name so diff.js generates a patch
+        // for each alias — not just the first one after the primary.
+        return d.names.slice(1).map(secondary => {
+          const secLoc = locByName.get(secondary) || primaryLoc;
+          return {
+            value: d.value,
+            names: d.names,
+            primary: d.names[0],
+            secondary,
+            primaryFile: primaryLoc.file,
+            primaryLine: primaryLoc.line,
+            secondaryFile: secLoc.file,
+            secondaryLine: secLoc.line
+          };
+        });
       }),
       suggestion: 'Keep one canonical name per color and alias the rest to it, reducing guesswork about which one to use.'
     });

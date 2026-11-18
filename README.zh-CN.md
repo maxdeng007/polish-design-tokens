@@ -68,12 +68,14 @@ npm install -g .
 不要应用任何修复或修改任何文件。只安装、审计并汇报。
 ```
 
-**下一步：** 审计完成后，polish 会持续保留在你的系统上——无需重新安装。如果你想应用机械性修复（硬编码颜色、重复值、悬空引用），只需给 AI 发送一条后续提示，例如：*"现在对我的项目应用机械性修复，带备份。"* AI 会重新运行审计、生成补丁，并自动带备份应用。
+**下一步：** 审计完成后，polish 会持续保留在你的系统上——无需重新安装。如果你想应用机械性修复（重复值），只需给 AI 发送一条后续提示，例如：*"现在对我的项目应用机械性修复，带备份。"* AI 会重新运行审计、生成补丁，并自动带备份应用。
 
 ## 快速开始
 
 ```bash
-# 1. 审计项目中的令牌问题（通过 MCP 或 Node API——见下文）
+# 1. 审计项目中的令牌问题
+polish audit ./my-project --ignore=node_modules,dist > findings.json
+
 # 2. 将发现转换为排序后的计划
 polish plan findings.json > plan.json
 
@@ -93,7 +95,7 @@ polish apply patches.json
 3. 使用 `polish_audit` 扫描目标项目
 4. 使用 `polish_plan` → `polish_diff` → `polish_apply` 修复机械性问题
 
-所有命令均为幂等且有备份——无数据丢失风险。
+所有命令均为幂等，且每次应用补丁前都会创建 `.backup` 备份文件。
 
 ## 流水线
 
@@ -115,18 +117,18 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 | 优先级 | 类型 | 描述 | 分类 |
 |----------|------|-------------|----------------|
 | 1 | `conflict` | 根作用域内同一令牌名有不同值 | 判断性 |
-| 2 | `dangling` | 令牌被引用但从未声明 | 机械性 |
+| 2 | `dangling` | 令牌被引用但从未声明 | 判断性 |
 | 3 | `runtime-drift` | 运行时跨页面令牌值不一致 | 判断性 |
 | 4 | `orphan` | 已声明但从未被引用 | 判断性 |
 | 5 | `duplicate-value` | 多个令牌名共享同一值 | 机械性 |
 | 6 | `namespace` | 多种命名族共存 | 判断性 |
-| 7 | `hardcoded` | 直接使用原始颜色/间距值而非令牌引用 | 机械性 |
+| 7 | `hardcoded` | 直接使用原始颜色/间距值而非令牌引用 | 判断性 |
 | 8 | `cascade-override` | CSS 层叠产生非预期的变异 | 判断性 |
 | 9 | `state-variation` | 令牌值在不同组件状态间变化 | 判断性 |
 | 10 | `theme-variation` | 令牌值在不同主题间变化 | 判断性 |
 | 11 | `dynamic-variable` | 具有动态（非静态）值的令牌 | 判断性 |
 
-只有**机械性**发现（`hardcoded`、`duplicate-value`、`dangling`）会在下一阶段生成补丁。
+只有**机械性**发现（`duplicate-value`）会在下一阶段生成补丁。
 
 ### 2. 差异 — 生成补丁
 
@@ -146,6 +148,7 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 ## CLI 用法
 
 ```bash
+polish audit  <target> [--ignore=a,b]  # 扫描目录并输出发现 JSON
 polish plan  <findings.json>   # 将发现转换为有序操作列表
 polish diff  <plan.json>       # 从计划生成机械性补丁
 polish apply <patches.json>    # 应用补丁（创建 .backup 文件）
@@ -193,7 +196,7 @@ polish 通过 Model Context Protocol 暴露 8 个工具，因此任何 AI 编程
 | `polish_diff` | 从计划生成机械性补丁 |
 | `polish_apply` | 带备份保护执行补丁 |
 | `polish_doctor` | 检查必需和可选依赖 |
-| `polish_style_lookup` | 按名称或模式查找令牌 |
+| `polish_style_lookup` | 查询品牌 DESIGN.md 设计令牌数据 |
 
 ## Node.js API
 
@@ -219,12 +222,12 @@ const result = await apply(patches);
 | `extract` | `(target: string, ignore?: string[]) → DeclarationGraph` | 扫描目录中的令牌声明和引用 |
 | `audit` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → AuditReport` | 扫描 + 交叉比对，生成发现 |
 | `runPipeline` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → PipelineResult` | 完整流水线：提取 → 审计 → 计划 → 差异（不应用） |
-| `scan` | `(target: string, opts?: { ignore?: string }) → DeclarationGraph` | 底层扫描，与 `extract` 相同 |
+| `scan` | `(target: string, ignore?: string[]) → DeclarationGraph` | 底层扫描，与 `extract` 相同 |
 | `cross` | `(graph: DeclarationGraph, observation?: RuntimeObservation) → AuditReport` | 从声明图判定发现 |
 | `measure` | `(docs?: unknown[]) → RuntimeObservation` | 为审计规范化运行时观测数据 |
 | `plan` | `(findings: Finding[]) → PlanAction[]` | 将发现排序分类为操作队列 |
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | 从计划生成机械性补丁 |
-| `apply` | `(patches: Patch[]) → Promise<ApplyResult>` | 带备份保护应用补丁 |
+| `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | 带备份保护应用补丁（target 默认为 cwd） |
 
 已内置 TypeScript 类型定义——无需 `@types` 包。所有类型从包根目录导出。
 
@@ -251,7 +254,7 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 - **`polish_measure`** — `{ documents: unknown[] }` → `RuntimeObservation`
 - **`polish_plan`** — `{ findings: Finding[] }` → `PlanAction[]`
 - **`polish_diff`** — `{ plan: PlanAction[] }` → `Patch[]`
-- **`polish_apply`** — `{ patches: Patch[] }` → `ApplyResult`
+- **`polish_apply`** — `{ patches: Patch[], target: string }` → `ApplyResult`
 - **`polish_doctor`** — `{ target?: string }` → 依赖健康检查
 - **`polish_style_lookup`** — `{ brand?: string }` → 品牌设计令牌参考
 
@@ -261,20 +264,20 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 
 **polish-design-tokens** 执行**静态分析**——它扫描源文件（CSS、SCSS、HTML、JS/TS）以查找令牌声明、引用和冲突。这适用于任何项目、任何环境，无需额外设置。
 
-**运行时测量**（在真实浏览器中检查实际渲染值）是配套工具 `token-audit-mcp` 中的独立能力。它检测只有在真实浏览器中评估令牌时才出现的 `runtime-drift` 和 `hardcoded` 发现。这需要 Chrome DevTools 可用，且不属于 npm 包默认流水线的一部分。
+**运行时测量**（在真实浏览器中检查实际渲染值）通过本包导出的 `measure()` 函数提供。它检测只有在真实浏览器中评估令牌时才出现的 `runtime-drift` 和 `hardcoded` 发现。这需要 Chrome DevTools 可用。如果你不想直接调用该函数，配套的浏览器自动化 MCP 包可以封装 `measure()` 提供现成工具。
 
-对于大多数用例——审计项目源码、修复机械性问题、验证令牌一致性——`polish-design-tokens` 中的静态流水线已经足够。当你需要验证用户在浏览器中实际看到的内容时，请使用 `token-audit-mcp`。
+对于大多数用例——审计项目源码、修复机械性问题、验证令牌一致性——`polish-design-tokens` 中的静态流水线已经足够。当你需要验证用户在浏览器中实际看到的内容时，请使用 `measure()`（或浏览器自动化配套工具）。
 
 ## 能发现什么
 
 **机械性（可通过 `polish diff` + `polish apply` 自动修复）：**
 
-- **`hardcoded`** — 直接使用原始颜色或间距值而非令牌引用。修复：替换为 `var(--token-name)`。
 - **`duplicate-value`** — 两个或更多令牌名共享同一值。修复：将次要令牌别名到主要令牌。
-- **`dangling`** — 令牌被引用但从未声明。修复：添加带默认值的声明。
 
 **判断性（标记供人工审查，不自动生成补丁）：**
 
+- **`dangling`** — 令牌被引用但从未声明。需要提供规范值——自动插入 `inherit` 可能产生无效或损坏的 CSS。
+- **`hardcoded`** — 直接使用原始颜色或间距值而非令牌引用。需要选择映射到哪个令牌。
 - **`conflict`** — 同一令牌名以不同值声明。需要选择规范值。
 - **`cascade-override`** — 普通 CSS 层叠产生非预期的值变异。需要决定重构还是接受。
 - **`namespace`** — 多种命名约定共存（如 `--color-*` 和 `--bg-*`）。需要统一命名。
@@ -293,7 +296,7 @@ GitHub 上的仓库有过期的 CommonJS 源文件。确保 ESM 版本（`import
 补丁的 `before` 字符串与文件内容不完全匹配——空白、引号或行内容可能有差异。检查 `.backup` 文件（在每次应用前创建），并从新的审计重新生成补丁。
 
 **没有观测数据却出现 `runtime-drift` 发现**
-运行时发现（`runtime-drift`、`hardcoded`）需要来自 `measure()` 的 `RuntimeObservation`。仅静态审计不会产生它们。使用配套的 `token-audit-mcp` 进行基于浏览器的测量。
+运行时发现（`runtime-drift`、`hardcoded`）需要来自 `measure()` 的 `RuntimeObservation`。仅静态审计不会产生它们。调用 `measure()` 传入浏览器观测到的变量数据，并将其作为 `observation` 参数传给 `audit()` 或 `cross()`。
 
 **大型项目扫描缓慢**
 扫描器零依赖且单线程。对于包含数千文件的项目，使用 `ignore` 选项排除不包含令牌的目录。二进制文件（通过空字节检测）会自动跳过。
@@ -317,10 +320,7 @@ GitHub 上的仓库有过期的 CommonJS 源文件。确保 ESM 版本（`import
 
 | 目录 | 描述 |
 |-----------|-------------|
-| `polish/` | 核心工具：`plan.js`、`diff.js`、`apply.js` + CLI（`bin/polish.mjs`） |
-| `polish-mcp/` | MCP 服务器，含工具处理器 |
-| `polish-mono/` | 统一 npm 分发包（`polish-design-tokens`） |
-| `token-audit-mcp/` | 令牌审计 MCP 服务器（静态扫描 + 运行时测量） |
+| `polish-mono/` | 统一 npm 分发包（`polish-design-tokens`）——核心工具、CLI、MCP 服务器、测试 |
 | `examples/` | 包含已知令牌问题的示例项目 |
 | `docs/` | 设计规格和实现计划 |
 
