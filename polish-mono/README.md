@@ -66,6 +66,8 @@ Please help me audit the design tokens in my project using the "polish" tool.
 Do NOT apply any fixes or modify any files. Install, audit, and report only.
 ```
 
+**What's next:** polish stays installed on your system after the audit — no reinstall needed. If you want to apply the mechanical fixes (hardcoded colors, duplicate values, dangling references), just give your AI a follow-up prompt like: *"Now apply the mechanical fixes to my project with backups."* The AI will re-run the audit, generate patches, and apply them with automatic backups.
+
 ## Quick Start
 
 ```bash
