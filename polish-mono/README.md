@@ -1,5 +1,7 @@
 ![polish — Design Token Superpower Tool](banner.jpg)
 
+[English](README.md) | [中文](README.zh-CN.md)
+
 # polish — Design Token Superpower Tool
 
 **Extract · Critique · Apply** — a zero-dependency toolkit that closes the loop on CSS custom properties (design tokens). It scans stylesheets for token problems, classifies each finding, and auto-applies mechanical fixes while flagging judgmental ones for human decisions.
