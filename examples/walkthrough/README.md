@@ -4,7 +4,7 @@ This directory is a complete, runnable example of the polish pipeline: **extract
 
 It uses a small demo project (`demo-project/`) with deliberately planted token issues. Every file here was produced by actually running the pipeline against that project — no hand-written mocks.
 
-![polish pipeline flow](pipeline-flow.png)
+![polish pipeline flow](pipeline-flow.jpg)
 
 ## What's Here
 

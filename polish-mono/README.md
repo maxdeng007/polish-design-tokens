@@ -12,7 +12,7 @@ Works as a CLI, an MCP server for AI coding agents, or a Node.js module.
 
 **Repository**: [https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
-![polish pipeline flow](https://github.com/maxdeng007/polish-design-tokens/blob/main/examples/walkthrough/pipeline-flow.png)
+![polish pipeline flow](https://github.com/maxdeng007/polish-design-tokens/blob/main/examples/walkthrough/pipeline-flow.jpg)
 
 ## Problem
 

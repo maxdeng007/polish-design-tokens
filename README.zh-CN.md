@@ -12,7 +12,7 @@
 
 **仓库**：[https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
-![polish 流水线流程](https://github.com/maxdeng007/polish-design-tokens/blob/main/examples/walkthrough/pipeline-flow.png)
+![polish 流水线流程](https://github.com/maxdeng007/polish-design-tokens/blob/main/examples/walkthrough/pipeline-flow.jpg)
 
 ## 问题
 
