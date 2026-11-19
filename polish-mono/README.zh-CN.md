@@ -8,6 +8,8 @@
 
 可作为 CLI、AI 编程代理的 MCP 服务器，或 Node.js 模块使用。
 
+**面向**已使用 CSS 自定义属性、需要在项目增长时保持其一致性的前端工程师和设计系统维护者。
+
 **仓库**：[https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
 ## 问题
@@ -19,6 +21,14 @@
 1. **提取** — 扫描 CSS/HTML 文件，构建声明图
 2. **审查** — 交叉比对声明与引用，发现问题
 3. **应用** — 为机械性修复生成并执行补丁，附带备份
+
+**范围说明：** polish 检测的 11 类发现中，仅 `duplicate-value` 会被自动修复。其余 10 类会被标记，交由人工或 AI 代理审查——polish 告诉你哪里有问题，但如何修复的决定权在你。
+
+## 为什么不用 Stylelint 或 ESLint？
+
+Stylelint 和 ESLint 能捕获语法错误和风格规则违规，但它们不理解令牌之间的关系。它们无法告诉你 `--background` 与 `--bg` 重复，也无法告诉你引用的令牌从未被声明。polish 构建声明图并交叉比对，精准定位这些结构性令牌问题——然后自动修复机械性问题，将其余标记供你判断。
+
+机械/判断分流是核心理念：有唯一安全答案的问题自动修复；需要决策的问题会被暴露出来，绝不静默打补丁。
 
 ## 安装
 
@@ -46,7 +56,7 @@ npm install -g .
 
 ## 通过 AI 安装（无需编程）
 
-如果你对上面的命令行不太熟悉，可以直接跳过。复制下方提示词，粘贴到任意 AI 聊天工具（ChatGPT、Claude 等）中，AI 就会帮你安装 polish 并审计你的项目——无需编程。
+**适合非技术用户。** 如果你对上面的命令行不太熟悉，可以直接跳过。复制下方提示词，粘贴到任意 AI 聊天工具（ChatGPT、Claude 等）中，AI 就会帮你安装 polish 并审计你的项目——无需编程。
 
 ```text
 请帮我用 "polish" 工具审计我项目中的设计令牌。
@@ -70,6 +80,8 @@ npm install -g .
 
 ## 快速开始
 
+**适合 CLI 用户。** 标准的四步流水线：
+
 ```bash
 # 1. 审计项目中的令牌问题
 polish audit ./my-project --ignore=node_modules,dist > findings.json
@@ -86,7 +98,7 @@ polish apply patches.json
 
 ## AI 代理部署
 
-最常见的工作流：将 GitHub 仓库地址交给你的 AI 编程代理（Qoder、Claude 等），让它设置并运行 polish。代理会：
+**适合 AI 编程代理。** 最常见的工作流：将 GitHub 仓库地址交给你的 AI 编程代理（Qoder、Claude 等），让它设置并运行 polish。代理会：
 
 1. 克隆仓库或从 npm 安装
 2. 注册 MCP 服务器（见下文）
@@ -105,7 +117,7 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 
 ### 1. 计划 — 分类与排序
 
-接收发现（来自 `polish_audit` 或 token-audit），生成有序的操作队列。每条发现被分类为：
+接收发现（来自 `polish_audit`），生成有序的操作队列。每条发现被分类为：
 
 - **机械性（Mechanical）** — 可安全自动修复。无需人工决策。
 - **判断性（Judgmental）** — 需要人工判断。提交人工审查。
@@ -280,11 +292,11 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 - **`namespace`** — 多种命名约定共存（如 `--color-*` 和 `--bg-*`）。需要统一命名。
 - **`orphan`** — 已声明但从未被引用。需要决定删除还是保留。
 - **`runtime-drift`** — 运行时测量时令牌值在不同页面间不同。需要调查源头。
+- **`state-variation`** — 令牌值在不同组件状态间变化（如 `:hover`、`:focus`）。需要决定是否拆分为独立令牌还是接受变化。
+- **`theme-variation`** — 令牌值在不同主题间变化（如深色/浅色）。需要决定是否规范化主题结构。
+- **`dynamic-variable`** — 具有动态（非静态）值的令牌，如运行时计算的值。需要决定如何处理动态行为。
 
 ## 故障排查
-
-**CI 工作流报错 `require is not defined` 或 `missing export named 'scan'`**
-GitHub 上的仓库有过期的 CommonJS 源文件。确保 ESM 版本（`import`/`export`）已推送。CI 检查纯 ESM 导出。
 
 **`polish_style_lookup` 返回 `found: false`**
 未找到外部 design-md skill 文件，且未提供品牌名。传入 `brand` 参数（如 `"vercel"`、`"stripe"`）以使用内置品牌数据，或安装 awesome-design-md skill 以获得完整覆盖。

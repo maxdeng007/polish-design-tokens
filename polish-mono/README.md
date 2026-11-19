@@ -8,6 +8,8 @@
 
 Works as a CLI, an MCP server for AI coding agents, or a Node.js module.
 
+**Built for** frontend engineers and design-system maintainers who use CSS custom properties and need to keep them consistent as a project grows.
+
 **Repository**: [https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
 ## Problem
@@ -19,6 +21,14 @@ Design tokens — CSS custom properties like `--color-primary` — are powerful 
 1. **Extract** — scan CSS/HTML files, build a declaration graph
 2. **Critique** — cross-reference declarations and references to find problems
 3. **Apply** — generate and execute patches for mechanical fixes, with backups
+
+**Important scope note:** of the 11 finding types polish detects, only `duplicate-value` is auto-fixed. The remaining 10 are flagged for human or agent review — polish tells you what's wrong, but the decision on how to fix it is yours.
+
+## Why Not Stylelint or ESLint?
+
+Stylelint and ESLint catch syntax errors and style-rule violations, but they don't understand token relationships. They can't tell you that `--background` duplicates `--bg`, or that a token you're referencing was never declared. polish builds a declaration graph and cross-references it to find exactly these structural token problems — then auto-fixes the mechanical ones and flags the rest for your judgment.
+
+The mechanical/judgmental split is the core idea: problems with one safe answer are fixed automatically; problems that need a decision are surfaced, never silently patched.
 
 ## Installation
 
@@ -46,7 +56,7 @@ Requires Node.js ≥ 18.
 
 ## Install via AI (No Coding Required)
 
-If you're not comfortable with the command line above, you can skip it entirely. Copy the prompt below, paste it into any AI chat (ChatGPT, Claude, etc.), and the AI will install polish and audit your project for you — no coding required.
+**For non-technical users.** If you're not comfortable with the command line above, you can skip it entirely. Copy the prompt below, paste it into any AI chat (ChatGPT, Claude, etc.), and the AI will install polish and audit your project for you — no coding required.
 
 ```text
 Please help me audit the design tokens in my project using the "polish" tool.
@@ -70,6 +80,8 @@ Do NOT apply any fixes or modify any files. Install, audit, and report only.
 
 ## Quick Start
 
+**For CLI users.** The standard four-step pipeline:
+
 ```bash
 # 1. Audit a project for token issues
 polish audit ./my-project --ignore=node_modules,dist > findings.json
@@ -86,7 +98,7 @@ polish apply patches.json
 
 ## AI Agent Deployment
 
-The most common workflow: give your AI coding agent (Qoder, Claude, etc.) the GitHub repo URL and ask it to set up and run polish. The agent will:
+**For AI coding agents.** The most common workflow: give your AI coding agent (Qoder, Claude, etc.) the GitHub repo URL and ask it to set up and run polish. The agent will:
 
 1. Clone the repo or install from npm
 2. Register the MCP server (see below)
@@ -105,7 +117,7 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 
 ### 1. Plan — classify and rank
 
-Takes findings (from `polish_audit` or token-audit) and produces an ordered action queue. Each finding is classified as:
+Takes findings (from `polish_audit`) and produces an ordered action queue. Each finding is classified as:
 
 - **Mechanical** — safe to auto-fix. No human decision needed.
 - **Judgmental** — requires human judgment. Surfaced for manual review.
@@ -280,11 +292,11 @@ For most use cases — auditing a project's source, fixing mechanical issues, an
 - **`namespace`** — Multiple naming conventions coexist (e.g. `--color-*` and `--bg-*`). Requires unifying naming.
 - **`orphan`** — Declared but never referenced. Requires deciding to remove or keep.
 - **`runtime-drift`** — Token values differ across pages when measured at runtime. Requires investigating the source.
+- **`state-variation`** — Token values differ across component states (e.g., `:hover`, `:focus`). Requires deciding whether to split into separate tokens or accept the variation.
+- **`theme-variation`** — Token values differ across themes (e.g., dark/light). Requires deciding whether to formalize the theme structure.
+- **`dynamic-variable`** — Tokens with dynamic (non-static) values, such as those computed at runtime. Requires deciding how to handle the dynamic behavior.
 
 ## Troubleshooting
-
-**CI workflow fails with `require is not defined` or `missing export named 'scan'`**
-The repository on GitHub has stale CommonJS source files. Ensure the ESM versions (`import`/`export`) are pushed. The CI checks for ESM-only exports.
 
 **`polish_style_lookup` returns `found: false`**
 No external design-md skill files were found, and no brand name was provided. Pass a `brand` parameter (e.g. `"vercel"`, `"stripe"`) to use the bundled brand data, or install the awesome-design-md skill for full coverage.
