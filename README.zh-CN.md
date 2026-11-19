@@ -12,7 +12,7 @@
 
 **仓库**：[https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
-![polish 流水线流程](examples/walkthrough/pipeline-flow.png)
+![polish 流水线流程](https://github.com/maxdeng007/polish-design-tokens/blob/main/examples/walkthrough/pipeline-flow.png)
 
 ## 问题
 
@@ -338,9 +338,9 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 
 ## 示例
 
-参见 [`examples/walkthrough/`](examples/walkthrough/)——在演示项目上运行完整流水线（审计 → 计划 → 差异 → 应用）的完整可执行演练，包含真实流水线输出、可视化流程图和终端截图。
+参见 [`examples/walkthrough/`](https://github.com/maxdeng007/polish-design-tokens/tree/main/examples/walkthrough/)——在演示项目上运行完整流水线（审计 → 计划 → 差异 → 应用）的完整可执行演练，包含真实流水线输出、可视化流程图和终端截图。
 
-另见 [`examples/noah-sample/`](examples/noah-sample/)——覆盖所有发现类型的丰富测试用例，包含重复值、硬编码颜色和悬空引用的真实样式表。
+另见 [`examples/noah-sample/`](https://github.com/maxdeng007/polish-design-tokens/tree/main/examples/noah-sample/)——覆盖所有发现类型的丰富测试用例，包含重复值、硬编码颜色和悬空引用的真实样式表。
 
 ## 许可证
 

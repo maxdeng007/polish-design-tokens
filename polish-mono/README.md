@@ -12,7 +12,7 @@ Works as a CLI, an MCP server for AI coding agents, or a Node.js module.
 
 **Repository**: [https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
-![polish pipeline flow](../examples/walkthrough/pipeline-flow.png)
+![polish pipeline flow](https://github.com/maxdeng007/polish-design-tokens/blob/main/examples/walkthrough/pipeline-flow.png)
 
 ## Problem
 
@@ -338,9 +338,9 @@ The scanner is zero-dependency and single-threaded. For projects with thousands 
 
 ## Examples
 
-See [`examples/walkthrough/`](../examples/walkthrough/) — a complete, runnable walkthrough of the full pipeline (audit → plan → diff → apply) on a demo project with real pipeline outputs, including a visual flow diagram and terminal screenshots.
+See [`examples/walkthrough/`](https://github.com/maxdeng007/polish-design-tokens/tree/main/examples/walkthrough/) — a complete, runnable walkthrough of the full pipeline (audit → plan → diff → apply) on a demo project with real pipeline outputs, including a visual flow diagram and terminal screenshots.
 
-Also see [`examples/noah-sample/`](../examples/noah-sample/) — a rich test case covering all finding types, including a real-world stylesheet with duplicate values, hardcoded colors, and dangling references.
+Also see [`examples/noah-sample/`](https://github.com/maxdeng007/polish-design-tokens/tree/main/examples/noah-sample/) — a rich test case covering all finding types, including a real-world stylesheet with duplicate values, hardcoded colors, and dangling references.
 
 ## License
 
