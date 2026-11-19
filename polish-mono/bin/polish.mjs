@@ -19,6 +19,7 @@ Usage:
   polish plan   <findings.json>          Convert findings into ordered action list
   polish diff   <plan.json>              Generate mechanical patches from a plan
   polish apply  <patches.json> [--target=dir]   Execute patches with backup protection (target defaults to cwd)
+  polish doctor                           Check optional dependencies and environment health
   polish mcp                             Start MCP server (JSON-RPC over stdin/stdout)
 
 Exit codes:
@@ -100,6 +101,13 @@ async function main() {
   if (cmd === 'mcp') {
     await import('../src/mcp-server.js');
     return;
+  }
+
+  if (cmd === 'doctor') {
+    const { polish_doctor } = await import('../src/handlers/polish-doctor.js');
+    const report = await polish_doctor({}, {});
+    console.log(JSON.stringify(report, null, 2));
+    process.exit(0);
   }
 
   console.error(`Error: unknown command "${cmd}"\n`);

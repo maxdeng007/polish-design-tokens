@@ -172,6 +172,7 @@ polish audit  <target> [--ignore=a,b]  # 扫描目录并输出发现 JSON
 polish plan  <findings.json>   # 将发现转换为有序操作列表
 polish diff  <plan.json>       # 从计划生成机械性补丁
 polish apply <patches.json>    # 应用补丁（创建 .backup 文件）
+polish doctor                 # 检查可选依赖和环境健康状态
 polish mcp                     # 启动 MCP 服务器（stdin/stdout 上的 JSON-RPC）
 ```
 

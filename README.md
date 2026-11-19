@@ -172,6 +172,7 @@ polish audit  <target> [--ignore=a,b]  # Scan a directory and output findings JS
 polish plan  <findings.json>   # Convert findings to an ordered action list
 polish diff  <plan.json>       # Generate mechanical patches from a plan
 polish apply <patches.json>    # Apply patches (creates .backup files)
+polish doctor                 # Check optional dependencies and environment health
 polish mcp                     # Start MCP server (JSON-RPC over stdin/stdout)
 ```
 
