@@ -12,6 +12,8 @@
 
 **仓库**：[https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
+![polish 流水线流程](../examples/walkthrough/pipeline-flow.png)
+
 ## 问题
 
 设计令牌——如 `--color-primary` 这样的 CSS 自定义属性——强大但脆弱。随着项目增长，令牌会发生漂移：硬编码颜色悄然出现，不同名称下出现重复值，引用悬空，层叠覆盖悄然破坏一致性。手动检测这些问题很繁琐，修复则更甚。
@@ -201,6 +203,7 @@ polish 通过 Model Context Protocol 暴露 8 个工具，因此任何 AI 编程
 |------|-------------|
 | `polish_extract` | 从目录中提取令牌声明 |
 | `polish_audit` | 扫描 + 交叉比对，生成发现 |
+| `polish_measure` | 为审计规范化运行时观测数据 |
 | `polish_plan` | 将发现转换为排序后的分类操作队列 |
 | `polish_diff` | 从计划生成机械性补丁 |
 | `polish_apply` | 带备份保护执行补丁 |

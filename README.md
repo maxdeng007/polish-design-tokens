@@ -107,7 +107,7 @@ polish apply patches.json
 3. Use `polish_audit` to scan the target project
 4. Use `polish_plan` → `polish_diff` → `polish_apply` to fix mechanical issues
 
-All commands are idempotent and each applied patch is backed up with a `.backup` file before any modification.
+All `polish apply` operations create `.backup` files before modifying any file. Failed patches are recorded and do not abort the batch — review the apply report for failures.
 
 ## The Pipeline
 

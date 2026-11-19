@@ -12,6 +12,8 @@ Works as a CLI, an MCP server for AI coding agents, or a Node.js module.
 
 **Repository**: [https://github.com/maxdeng007/polish-design-tokens](https://github.com/maxdeng007/polish-design-tokens)
 
+![polish pipeline flow](../examples/walkthrough/pipeline-flow.png)
+
 ## Problem
 
 Design tokens — CSS custom properties like `--color-primary` — are powerful but fragile. As projects grow, tokens drift: hardcoded colors creep in, duplicate values appear under different names, references dangle, and cascade overrides silently break consistency. Detecting these issues manually is tedious; fixing them is even more so.
@@ -201,6 +203,7 @@ Available tools:
 |------|-------------|
 | `polish_extract` | Extract token declarations from a directory |
 | `polish_audit` | Scan + cross-reference to produce findings |
+| `polish_measure` | Normalize runtime observation data for audit |
 | `polish_plan` | Convert findings to a ranked, classified action queue |
 | `polish_diff` | Generate mechanical patches from a plan |
 | `polish_apply` | Execute patches with backup protection |

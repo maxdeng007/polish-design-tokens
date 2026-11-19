@@ -107,7 +107,7 @@ polish apply patches.json
 3. 使用 `polish_audit` 扫描目标项目
 4. 使用 `polish_plan` → `polish_diff` → `polish_apply` 修复机械性问题
 
-所有命令均为幂等，且每次应用补丁前都会创建 `.backup` 备份文件。
+所有 `polish apply` 操作在修改任何文件前都会创建 `.backup` 备份文件。失败的补丁会被记录且不会中断批量操作——请检查 apply 报告以查看失败项。
 
 ## 流水线
 
