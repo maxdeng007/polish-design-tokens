@@ -45,7 +45,7 @@ const DEPENDENCIES = [
       }
       return { installed: false };
     },
-    install: 'Add the taste skill to your Qoder/Claude skills directory'
+    install: 'git clone --depth 1 https://github.com/Leonxlnx/taste-skill /tmp/taste-skill && mkdir -p ~/.qoder/skills && cp -r /tmp/taste-skill/skills/taste-skill ~/.qoder/skills/taste && rm -rf /tmp/taste-skill'
   },
   {
     name: 'awesome-design-md',
@@ -62,7 +62,7 @@ const DEPENDENCIES = [
       }
       return { installed: false };
     },
-    install: 'Clone awesome-design-md and add it to your skills directory'
+    install: 'git clone --depth 1 https://github.com/VoltAgent/awesome-design-md /tmp/adm && mkdir -p ~/.qoder/skills/awesome-design-md/references && for d in /tmp/adm/design-md/*/; do cp "$d/DESIGN.md" ~/.qoder/skills/awesome-design-md/references/$(basename "$d").md 2>/dev/null; done && printf -- \'---\nname: awesome-design-md\ndescription: Curated collection of DESIGN.md files from popular brand design systems.\n---\n\n# Awesome DESIGN.md\nSee references/ for available brand design systems.\n\' > ~/.qoder/skills/awesome-design-md/SKILL.md && rm -rf /tmp/adm'
   },
   {
     name: 'impeccable',
@@ -79,7 +79,7 @@ const DEPENDENCIES = [
       }
       return { installed: false };
     },
-    install: 'Add the impeccable skill to your Qoder/Claude skills directory'
+    install: 'git clone --depth 1 https://github.com/pbakaus/impeccable /tmp/impeccable && mkdir -p ~/.qoder/skills && cp -r /tmp/impeccable/.qoder/skills/impeccable ~/.qoder/skills/impeccable && rm -rf /tmp/impeccable'
   }
 ];
 
