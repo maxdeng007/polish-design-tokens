@@ -157,6 +157,14 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 
 应用补丁到文件，带自动备份保护。每个文件在修改前都会备份。结果报告已应用的内容和任何失败。
 
+## 输入
+
+polish 只读取**本地文件**——不联网抓取 URL 或在线资源。
+
+`target` 参数接受**目录路径**（推荐）或**单个文件路径**。传入目录时，polish 递归扫描其中所有支持的文件，自动跳过常见构建与依赖目录（`node_modules`、`dist`、`.git` 等）和二进制文件。
+
+CLI、MCP 和 Node.js API 三种入口使用相同的 `target` 参数。
+
 ## CLI 用法
 
 ```bash

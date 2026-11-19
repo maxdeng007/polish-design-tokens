@@ -157,6 +157,14 @@ Patches for `duplicate-value` target the **secondary** token's location and alia
 
 Applies patches to files with automatic backup protection. Each file is backed up before modification. The result reports what was applied and any failures.
 
+## Input
+
+polish reads **local files** — it does not fetch from URLs or online resources.
+
+Provide a **directory path** (recommended) or a **single file path** as the `target`. When given a directory, polish recursively scans every supported file inside it, automatically skipping common build and dependency directories (`node_modules`, `dist`, `.git`, etc.) and binary files.
+
+The same `target` parameter is used across all three entry points — CLI, MCP, and Node.js API.
+
 ## CLI Usage
 
 ```bash
