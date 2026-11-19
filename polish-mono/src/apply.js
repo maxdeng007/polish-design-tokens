@@ -19,7 +19,24 @@
  */
 
 import fs from 'fs/promises';
+import fsSync from 'fs';
 import path from 'path';
+
+/**
+ * Resolve a path to its physical (symlink-resolved) form. If the path
+ * doesn't exist, resolve its nearest existing parent directory and
+ * re-append the remaining path components.
+ */
+function realpathSafe(p) {
+  try {
+    return fsSync.realpathSync(p);
+  } catch {
+    const dir = path.dirname(p);
+    if (dir === p) return p;
+    const parent = realpathSafe(dir);
+    return path.join(parent, path.basename(p));
+  }
+}
 
 /**
  * Apply a list of patches to files.
@@ -36,7 +53,7 @@ export async function apply(patches, target = process.cwd()) {
   const backedUp = new Set();
   let backupCount = 0;
 
-  const resolvedTarget = path.resolve(target);
+  const resolvedTarget = realpathSafe(target);
 
   // Group patches by file so we can back up once and apply multiple changes
   const byFile = new Map();
@@ -53,7 +70,7 @@ export async function apply(patches, target = process.cwd()) {
   for (const [file, filePatches] of byFile) {
     // Boundary check: reject paths outside the target directory
     if (resolvedTarget) {
-      const resolvedFile = path.resolve(file);
+      const resolvedFile = realpathSafe(file);
       const withinTarget = resolvedFile === resolvedTarget ||
         resolvedFile.startsWith(resolvedTarget + path.sep);
       if (!withinTarget) {

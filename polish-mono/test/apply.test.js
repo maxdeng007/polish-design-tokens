@@ -187,3 +187,29 @@ test('apply without target rejects files outside cwd by default', async () => {
   assert.equal(fs.readFileSync(outsideFile, 'utf8'), 'original\n');
   fs.rmSync(outsideFile, { force: true });
 });
+
+test('apply resolves symlinks in boundary check so symlinked dirs are accepted', async () => {
+  // Create a real directory and a symlink to it. Use the symlink path as
+  // the target — without realpath resolution the boundary check would
+  // reject the file because the symlink and real paths differ.
+  const realDir = path.join(TMP_DIR, 'real-dir');
+  const linkDir = path.join(TMP_DIR, 'link-dir');
+  fs.mkdirSync(realDir, { recursive: true });
+  fs.rmSync(linkDir, { force: true });
+  fs.symlinkSync(realDir, linkDir, 'dir');
+
+  // Write the file through the symlink path so its path contains the symlink
+  const file = path.join(linkDir, 'tokens.css');
+  fs.writeFileSync(file, ':root {\n  --bg: #1a1a2e;\n}\n', 'utf8');
+
+  const result = await apply([
+    { type: 'replace', file, line: 2, before: '#1a1a2e', after: 'var(--x)', reason: 'test', findingId: 'custom' }
+  ], linkDir);
+
+  assert.equal(result.applied.length, 1, 'symlinked file should be accepted');
+  assert.equal(result.failed.length, 0, 'no patches should fail');
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(content.includes('var(--x)'), 'replace should succeed');
+
+  cleanup();
+});
