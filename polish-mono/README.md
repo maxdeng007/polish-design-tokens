@@ -207,14 +207,14 @@ Available tools:
 | `polish_plan` | Convert findings to a ranked, classified action queue |
 | `polish_diff` | Generate mechanical patches from a plan |
 | `polish_apply` | Execute patches with backup protection |
-| `polish_doctor` | Verify token health after fixes |
+| `polish_doctor` | Check required and optional dependencies |
 | `polish_style_lookup` | Query brand DESIGN.md design token data |
 
 ## Node.js API
 
 ```javascript
 import { plan, generateDiffs, apply } from 'polish-design-tokens';
-import { extract, audit, runPipeline } from 'polish-design-tokens';
+import { extract, audit, runPipeline, measure } from 'polish-design-tokens';
 
 // Full pipeline: scan → audit → plan → diff (does NOT apply)
 const { graph, findings, plan, patches } = runPipeline('./my-project');
@@ -338,7 +338,9 @@ The scanner is zero-dependency and single-threaded. For projects with thousands 
 
 ## Examples
 
-See [`examples/noah-sample/`](examples/noah-sample/) — a rich test case covering all finding types, including a real-world stylesheet with duplicate values, hardcoded colors, and dangling references.
+See [`examples/walkthrough/`](../examples/walkthrough/) — a complete, runnable walkthrough of the full pipeline (audit → plan → diff → apply) on a demo project with real pipeline outputs, including a visual flow diagram and terminal screenshots.
+
+Also see [`examples/noah-sample/`](../examples/noah-sample/) — a rich test case covering all finding types, including a real-world stylesheet with duplicate values, hardcoded colors, and dangling references.
 
 ## License
 

@@ -207,14 +207,14 @@ polish 通过 Model Context Protocol 暴露 8 个工具，因此任何 AI 编程
 | `polish_plan` | 将发现转换为排序后的分类操作队列 |
 | `polish_diff` | 从计划生成机械性补丁 |
 | `polish_apply` | 带备份保护执行补丁 |
-| `polish_doctor` | 修复后验证令牌健康状态 |
+| `polish_doctor` | 检查必需和可选依赖 |
 | `polish_style_lookup` | 查询品牌 DESIGN.md 设计令牌数据 |
 
 ## Node.js API
 
 ```javascript
 import { plan, generateDiffs, apply } from 'polish-design-tokens';
-import { extract, audit, runPipeline } from 'polish-design-tokens';
+import { extract, audit, runPipeline, measure } from 'polish-design-tokens';
 
 // 完整流水线：扫描 → 审计 → 计划 → 差异（不应用）
 const { graph, findings, plan, patches } = runPipeline('./my-project');
@@ -338,7 +338,9 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 
 ## 示例
 
-参见 [`examples/noah-sample/`](examples/noah-sample/)——覆盖所有发现类型的丰富测试用例，包含重复值、硬编码颜色和悬空引用的真实样式表。
+参见 [`examples/walkthrough/`](../examples/walkthrough/)——在演示项目上运行完整流水线（审计 → 计划 → 差异 → 应用）的完整可执行演练，包含真实流水线输出、可视化流程图和终端截图。
+
+另见 [`examples/noah-sample/`](../examples/noah-sample/)——覆盖所有发现类型的丰富测试用例，包含重复值、硬编码颜色和悬空引用的真实样式表。
 
 ## 许可证
 
