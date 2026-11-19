@@ -80,6 +80,19 @@ npm install -g .
 
 **下一步：** 审计完成后，polish 会持续保留在你的系统上——无需重新安装。如果你想应用机械性修复（重复值），只需给 AI 发送一条后续提示，例如：*"现在对我的项目应用机械性修复，带备份。"* AI 会重新运行审计、生成补丁，并自动带备份应用。
 
+## 可选技能
+
+polish 零依赖，开箱即用。以下四个可选技能与工具可增强体验——均非令牌审计所必需。运行 `polish doctor` 检查已安装项，缺失的技能会附带可直接执行的安装命令。
+
+| 技能 / 工具 | 功能 | 如何与 polish 配合 |
+|---|---|---|
+| `awesome-design-md` | 54 个现成 DESIGN.md 文件，涵盖 Vercel、Stripe、Linear、Notion 等品牌 | 驱动 `polish_style_lookup`——按品牌查询设计令牌（配色、字体、间距），获取特定视觉风格 |
+| `dembrandt` | 设计令牌分析与分类工具 | 互补的令牌工具——polish 审计你的项目，dembrandt 协助分类和规范化令牌数据 |
+| `taste` | 前端艺术指导与设计品味 | 当 polish 标记判断性问题（硬编码颜色、命名冲突、层叠覆盖等）时，辅助做出设计决策 |
+| `impeccable` | 生产级前端界面生成 | 生成使用你令牌的高质量 UI，与 polish 的审计→修复流水线协同工作 |
+
+四者均为可选。polish 无需任何一项即可完成完整的令牌审计——按需安装匹配你工作流的技能即可。
+
 ## 快速开始
 
 **适合 CLI 用户。** 标准的四步流水线：
@@ -216,7 +229,7 @@ polish 通过 Model Context Protocol 暴露 8 个工具，因此任何 AI 编程
 | `polish_plan` | 将发现转换为排序后的分类操作队列 |
 | `polish_diff` | 从计划生成机械性补丁 |
 | `polish_apply` | 带备份保护执行补丁 |
-| `polish_doctor` | 检查必需和可选依赖 |
+| `polish_doctor` | 检查可选依赖和环境健康状态 |
 | `polish_style_lookup` | 查询品牌 DESIGN.md 设计令牌数据 |
 
 ## Node.js API
@@ -276,7 +289,7 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 - **`polish_plan`** — `{ findings: Finding[] }` → `PlanAction[]`
 - **`polish_diff`** — `{ plan: PlanAction[] }` → `Patch[]`
 - **`polish_apply`** — `{ patches: Patch[], target: string }` → `ApplyResult`
-- **`polish_doctor`** — `{ target?: string }` → 依赖健康检查
+- **`polish_doctor`** — `{}` → 依赖健康检查
 - **`polish_style_lookup`** — `{ brand?: string }` → 品牌设计令牌参考
 
 当未找到外部 skill 文件时，`polish_style_lookup` 工具回退到内置品牌数据（Vercel、Stripe、Linear、Notion、Anthropic、GitHub、shadcn、Figma），使其在任何机器上无需额外设置即可工作。

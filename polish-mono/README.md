@@ -80,6 +80,19 @@ Do NOT apply any fixes or modify any files. Install, audit, and report only.
 
 **What's next:** polish stays installed on your system after the audit — no reinstall needed. If you want to apply the mechanical fixes (duplicate values), just give your AI a follow-up prompt like: *"Now apply the mechanical fixes to my project with backups."* The AI will re-run the audit, generate patches, and apply them with automatic backups.
 
+## Optional Skills
+
+polish works out of the box with zero dependencies. Four optional skills and tools enhance the experience — none are required for token auditing. Run `polish doctor` to check what's installed; it reports any missing skill with a ready-to-run install command.
+
+| Skill / Tool | What It Does | How It Complements polish |
+|---|---|---|
+| `awesome-design-md` | 54 ready-to-use DESIGN.md files from brands like Vercel, Stripe, Linear, and Notion | Powers `polish_style_lookup` — query a brand's design tokens (colors, typography, spacing) for a specific visual language |
+| `dembrandt` | Design token analysis and classification tool | Complementary token tool — polish audits your project; dembrandt helps classify and normalize token data |
+| `taste` | Frontend art direction and design taste | Informs design decisions when polish flags judgmental findings (hardcoded colors, naming conflicts, cascade overrides) |
+| `impeccable` | Production-grade frontend interface generation | Builds polished UI that uses your tokens consistently, working alongside polish's audit-and-fix pipeline |
+
+All four are optional. polish performs a complete token audit without any of them — install the ones that match your workflow.
+
 ## Quick Start
 
 **For CLI users.** The standard four-step pipeline:
@@ -216,7 +229,7 @@ Available tools:
 | `polish_plan` | Convert findings to a ranked, classified action queue |
 | `polish_diff` | Generate mechanical patches from a plan |
 | `polish_apply` | Execute patches with backup protection |
-| `polish_doctor` | Check required and optional dependencies |
+| `polish_doctor` | Check optional dependencies and environment health |
 | `polish_style_lookup` | Query brand DESIGN.md design token data |
 
 ## Node.js API
@@ -276,7 +289,7 @@ All 8 MCP tools accept and return JSON. Key parameters:
 - **`polish_plan`** — `{ findings: Finding[] }` → `PlanAction[]`
 - **`polish_diff`** — `{ plan: PlanAction[] }` → `Patch[]`
 - **`polish_apply`** — `{ patches: Patch[], target: string }` → `ApplyResult`
-- **`polish_doctor`** — `{ target?: string }` → dependency health check
+- **`polish_doctor`** — `{}` → dependency health check
 - **`polish_style_lookup`** — `{ brand?: string }` → brand design token reference
 
 The `polish_style_lookup` tool falls back to bundled brand data (Vercel, Stripe, Linear, Notion, Anthropic, GitHub, shadcn, Figma) when no external skill files are found, making it work on any machine without additional setup.

@@ -145,14 +145,14 @@ polish 通过 Model Context Protocol 暴露 8 个工具（stdin/stdout 上的 JS
 
 ### `polish_doctor`
 
-检查必需和可选依赖。
+检查可选依赖是否已安装。
 
 **输入：**
 ```json
-{ "target": "./src/styles" }
+{}
 ```
 
-**输出：** 健康检查报告 — 确认 Node.js 版本、MCP 服务器状态，以及可选工具（如 design-md skill）是否可用。
+**输出：** 健康检查报告 — 确认可选技能与工具（dembrandt、taste、awesome-design-md、impeccable）是否可用，并为缺失项返回可直接执行的安装命令。
 
 **使用时机：** 排查设置问题，或在运行流水线前验证环境。
 

@@ -145,14 +145,14 @@ Execute patches with backup protection.
 
 ### `polish_doctor`
 
-Check required and optional dependencies.
+Check optional dependencies are installed.
 
 **Input:**
 ```json
-{ "target": "./src/styles" }
+{}
 ```
 
-**Output:** Health check report — confirms Node.js version, MCP server status, and whether optional tools (like the design-md skill) are available.
+**Output:** Health check report — confirms whether optional skills and tools (dembrandt, taste, awesome-design-md, impeccable) are available, and returns ready-to-run install commands for any missing ones.
 
 **Use when:** Troubleshooting setup issues, or verifying the environment before running the pipeline.
 
