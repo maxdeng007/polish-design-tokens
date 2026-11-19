@@ -8,8 +8,9 @@
  * Safety:
  * - Each file is backed up once (before the first patch touches it).
  *   Backups are never overwritten by subsequent apply calls.
- * - If a target directory is provided, patches targeting files outside
- *   that directory are rejected.
+ * - Patches targeting files outside the target directory are rejected.
+ *   The target defaults to `process.cwd()`; pass a different directory to
+ *   allow writes elsewhere.
  * - Patches within a file are applied in line-descending order so that
  *   inserts don't shift the line numbers of subsequent patches.
  *
@@ -24,17 +25,18 @@ import path from 'path';
  * Apply a list of patches to files.
  *
  * @param {Array} patches — [{type, file, line, before, after, reason, findingId}]
- * @param {string} [target] — If provided, reject patches whose file path
- *   falls outside this directory.
+ * @param {string} [target] — Directory that patches must stay within.
+ *   Defaults to `process.cwd()` so the boundary check always applies.
+ *   Pass a different directory to allow writes elsewhere.
  * @returns {Promise<{applied: Array, failed: Array, backupCount: number}>}
  */
-export async function apply(patches, target = null) {
+export async function apply(patches, target = process.cwd()) {
   const applied = [];
   const failed = [];
   const backedUp = new Set();
   let backupCount = 0;
 
-  const resolvedTarget = target ? path.resolve(target) : null;
+  const resolvedTarget = path.resolve(target);
 
   // Group patches by file so we can back up once and apply multiple changes
   const byFile = new Map();

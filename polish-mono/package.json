@@ -1,6 +1,6 @@
 {
   "name": "polish-design-tokens",
-  "version": "1.4.12",
+  "version": "1.4.13",
   "description": "Design token superpower tool: extract · critique · apply · publish via npm",
   "type": "module",
   "bin": {

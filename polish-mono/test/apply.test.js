@@ -172,3 +172,18 @@ test('apply sorts patches by line descending so adds do not shift replaces', asy
   assert.ok(content.includes('--new: #000;'), 'add at line 2 should succeed');
   cleanup();
 });
+
+test('apply without target rejects files outside cwd by default', async () => {
+  // Write a file in /tmp (definitely outside the project cwd) and verify
+  // apply rejects it when no explicit target is passed.
+  const outsideFile = path.join('/tmp', `polish-apply-outside-${Date.now()}.txt`);
+  fs.writeFileSync(outsideFile, 'original\n', 'utf8');
+  const result = await apply([
+    { type: 'replace', file: outsideFile, line: 1, before: 'original', after: 'modified', reason: 'test', findingId: 'custom' }
+  ]);
+  assert.equal(result.applied.length, 0);
+  assert.equal(result.failed.length, 1);
+  assert.ok(result.failed[0].error.includes('outside target directory'));
+  assert.equal(fs.readFileSync(outsideFile, 'utf8'), 'original\n');
+  fs.rmSync(outsideFile, { force: true });
+});
