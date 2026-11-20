@@ -189,6 +189,7 @@ polish audit  <target> [--ignore=a,b] [--summary]  # 扫描并输出发现
 polish plan  <findings.json> [--summary]   # 将发现转换为有序操作列表
 polish diff  <plan.json> [--summary]       # 从计划生成机械性补丁
 polish apply <patches.json> [--summary]    # 应用补丁（创建 .backup 文件）
+polish confirm <decisions.json> [--target=dir] [--summary]  # 应用设计师确认的判断性决策
 polish doctor [--install] [--summary]      # 检查可选依赖；--install 自动安装缺失项
 polish explain <finding-type>              # 解释某类发现的含义与修复方法
 polish mcp                     # 启动 MCP 服务器（stdin/stdout 上的 JSON-RPC）
@@ -222,9 +223,36 @@ polish explain conflict
 polish explain hardcoded
 ```
 
+**`polish confirm`** 应用设计师确认的判断性决策——这些是 `polish diff` 无法自动修复、需要人工判断的发现。传入一个决策 JSON 文件和目标目录，polish 会重新扫描目标、将每条决策解析为补丁，并带备份保护地执行。
+
+```json
+// decisions.json
+{
+  "decisions": [
+    { "action": "delete", "token": "--primary" },
+    { "action": "alias", "from": "--heading", "to": "--text" },
+    { "action": "rename", "from": "--bg", "to": "--background" }
+  ]
+}
+```
+
+```bash
+polish confirm decisions.json --target=./my-project --summary
+```
+
+支持三种决策动作：
+
+| 动作 | 效果 | 用途 |
+|------|------|------|
+| `delete` | 删除令牌声明 | 孤儿令牌 |
+| `alias` | 将值替换为 `var(--to)` | 有选定主令牌的重复值 |
+| `rename` | 跨文件重写所有出现处 | 命名空间碎片化 |
+
+同样的决策也可以通过向导的**确认**步骤（第 3 步，共 5 步）交互式收集。
+
 ## 交互式向导
 
-不带参数运行 `polish`（或运行 `polish wizard`）即启动交互式向导，逐步引导你完成完整流水线——审计、计划、补丁、应用——每一步都有确认提示。无需重定向 JSON 文件，无需记忆命令参数。
+不带参数运行 `polish`（或运行 `polish wizard`）即启动交互式向导，逐步引导你完成完整流水线——审计、计划、确认、补丁、应用——每一步都有确认提示。无需重定向 JSON 文件，无需记忆命令参数。
 
 ```bash
 polish
@@ -239,13 +267,19 @@ polish
 # 第 2 步：计划
 #   10 个判断性操作（建议人工审查）
 #   34 个机械性操作（可自动修复）
-# 继续生成补丁？[Y/n/q] y
+# 继续审查决策并生成补丁？[Y/n/q] y
 #
-# 第 3 步：补丁
-#   已生成 34 个机械性补丁。
+# 第 3 步：确认
+#   2 个判断性发现需要你的决策：
+#   删除 --primary？[y/N/q] y
+#   ✓ 将删除 --primary
+#   1 个补丁来自已确认的决策
+#
+# 第 4 步：补丁
+#   已生成 35 个补丁（34 个机械性 + 1 个已确认）。
 # 立即应用这些补丁？[Y/n/q] y
 #
-#   ✓ 已应用 34 个补丁，0 个失败
+#   ✓ 已应用 35 个补丁，0 个失败
 #   已创建 2 个备份文件
 # 完成。
 ```

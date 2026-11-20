@@ -17,6 +17,7 @@ import { scan } from './scan.js';
 import { cross } from './cross.js';
 import { plan } from './plan.js';
 import { generateDiffs } from './diff.js';
+import { confirm as resolveDecisions } from './confirm.js';
 import { apply } from './apply.js';
 import { formatAudit, formatPlan, formatDiff, formatApply, ANSI, useColor } from './format.js';
 
@@ -121,7 +122,7 @@ export async function runWizard(opts = {}) {
 
     // --- step 1: audit ---
     out('');
-    out(c(ANSI.bold, 'Step 1 of 4 — Audit'));
+    out(c(ANSI.bold, 'Step 1 of 5 — Audit'));
     out('----------------------');
     out('Scanning your project for token issues...');
 
@@ -151,51 +152,81 @@ export async function runWizard(opts = {}) {
 
     // --- step 2: plan ---
     out('');
-    out(c(ANSI.bold, 'Step 2 of 4 — Plan'));
+    out(c(ANSI.bold, 'Step 2 of 5 — Plan'));
     out('-------------------');
     const actions = plan(report.findings || []);
     out(formatPlan(actions));
     result.planActions = actions.length;
 
     const mechCount = actions.filter(a => a.mechanical).length;
-    if (mechCount === 0) {
-      out('');
-      out(c(ANSI.yellow, 'No mechanical fixes available — all findings need your decision.'));
-      out('Review the plan above, then use `polish explain <type>` to learn about each one.');
-      result.status = 'no-mechanical';
-      return result;
-    }
 
-    const decision2 = await askConfirm(prompt, 'Proceed to generate patches?');
+    const decision2 = await askConfirm(prompt, 'Proceed to review decisions and generate patches?');
     if (decision2 === 'quit') { out(''); out('Quit. No changes were made.'); result.status = 'quit'; return result; }
     if (decision2 === 'no') { out(''); out('Stopped after plan. No patches generated.'); result.status = 'stopped'; return result; }
 
-    // --- step 3: diff ---
+    // --- step 3: confirm (judgmental decisions) ---
     out('');
-    out(c(ANSI.bold, 'Step 3 of 4 — Patch'));
+    out(c(ANSI.bold, 'Step 3 of 5 — Confirm'));
     out('--------------------');
-    const patches = generateDiffs(actions);
-    out(formatDiff(patches));
-    result.patches = patches.length;
+    const judgmentalActions = actions.filter(a => a.judgmental);
+    const confirmedPatches = [];
 
-    if (patches.length === 0) {
+    if (judgmentalActions.length === 0) {
+      out('No judgmental decisions needed.');
+    } else {
+      out(c(ANSI.yellow, `${judgmentalActions.length} judgmental finding(s) need your decision:`));
+      const decisions = [];
+      for (const action of judgmentalActions) {
+        const f = action.finding;
+        if (f.id === 'orphan') {
+          for (const ev of f.evidence || []) {
+            const d = await askConfirm(prompt, `Delete ${ev.name}?`, false);
+            if (d === 'quit') { out(''); out('Quit. No changes were made.'); result.status = 'quit'; return result; }
+            if (d === 'yes') {
+              decisions.push({ action: 'delete', token: ev.name });
+              out(c(ANSI.green, `  ✓ will delete ${ev.name}`));
+            }
+          }
+        } else {
+          out(`  ${f.id}: see \`polish explain ${f.id}\` for guidance, or use \`polish confirm\` with a decisions file`);
+        }
+      }
+      if (decisions.length > 0) {
+        out('');
+        out(`Resolving ${decisions.length} decision(s) into patches...`);
+        const resolved = resolveDecisions(decisions, graph);
+        confirmedPatches.push(...resolved);
+        out(c(ANSI.green, `  ${resolved.length} patch(es) from confirmed decisions`));
+      }
+    }
+
+    // --- step 4: patch ---
+    out('');
+    out(c(ANSI.bold, 'Step 4 of 5 — Patch'));
+    out('--------------------');
+    const mechPatches = generateDiffs(actions);
+    const allPatches = [...mechPatches, ...confirmedPatches];
+    out(formatDiff(allPatches));
+    result.patches = allPatches.length;
+
+    if (allPatches.length === 0) {
       out('');
       out(c(ANSI.yellow, 'No patches generated. Nothing to apply.'));
       result.status = 'no-patches';
       return result;
     }
 
-    // --- step 4: apply ---
+    // --- step 5: apply ---
     out('');
-    out(c(ANSI.bold, 'Step 4 of 4 — Apply'));
+    out(c(ANSI.bold, 'Step 5 of 5 — Apply'));
     out('---------------------');
-    out(c(ANSI.yellow, `About to modify ${patches.length} location(s). Backups (.backup) will be created.`));
+    out(c(ANSI.yellow, `About to modify ${allPatches.length} location(s). Backups (.backup) will be created.`));
     const decision4 = await askConfirm(prompt, 'Apply patches now?', true);
     if (decision4 === 'quit') { out(''); out('Quit. No changes were made.'); result.status = 'quit'; return result; }
     if (decision4 === 'no') { out(''); out('Aborted. No files were modified.'); result.status = 'aborted'; return result; }
 
     // Resolve patch file paths to absolute so apply()'s boundary check passes.
-    const absPatches = patches.map(p => ({
+    const absPatches = allPatches.map(p => ({
       ...p,
       file: p.file ? path.resolve(target, p.file) : p.file
     }));

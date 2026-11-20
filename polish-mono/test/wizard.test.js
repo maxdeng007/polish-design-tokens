@@ -54,7 +54,7 @@ function collector() {
 // --- Full pipeline to apply ---
 
 test('wizard runs full pipeline and applies patches', async () => {
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt(['', 'y', 'y', 'y']);
   const result = await runWizard({ target: dir, prompt, write: out.write });
@@ -65,19 +65,19 @@ test('wizard runs full pipeline and applies patches', async () => {
   assert.equal(result.applied > 0, true);
   assert.equal(result.failed, 0);
   assert.equal(result.backups > 0, true);
-  assert.ok(out.get().includes('Step 1 of 4'));
-  assert.ok(out.get().includes('Step 4 of 4'));
+  assert.ok(out.get().includes('Step 1 of 5'));
+  assert.ok(out.get().includes('Step 5 of 5'));
   assert.ok(out.get().includes('All patches applied'));
 
   const content = fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8');
-  assert.ok(content.includes('var(--bg)'), 'duplicate should be aliased');
+  assert.ok(content.includes('var(--color-bg)'), 'duplicate should be aliased');
   cleanup();
 });
 
 // --- Quit at audit step ---
 
 test('wizard quits at plan prompt', async () => {
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt(['', 'q']);
   const result = await runWizard({ target: dir, prompt, write: out.write });
@@ -91,7 +91,7 @@ test('wizard quits at plan prompt', async () => {
 // --- Stop after audit ---
 
 test('wizard stops after audit when user says no to plan', async () => {
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt(['', 'n']);
   const result = await runWizard({ target: dir, prompt, write: out.write });
@@ -105,7 +105,7 @@ test('wizard stops after audit when user says no to plan', async () => {
 // --- Stop before apply ---
 
 test('wizard stops after plan when user says no to patch generation', async () => {
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt(['', 'y', 'n']);
   const result = await runWizard({ target: dir, prompt, write: out.write });
@@ -120,7 +120,7 @@ test('wizard stops after plan when user says no to patch generation', async () =
 // --- Abort at apply ---
 
 test('wizard aborts at final apply confirmation', async () => {
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt(['', 'y', 'y', 'n']);
   const result = await runWizard({ target: dir, prompt, write: out.write });
@@ -145,24 +145,47 @@ test('wizard reports clean when no findings', async () => {
   cleanup();
 });
 
-// --- No mechanical fixes ---
+// --- Confirm step for judgmental findings ---
 
-test('wizard reports no-mechanical when only judgmental findings', async () => {
+test('wizard proceeds to confirm step when only judgmental findings', async () => {
   const dir = makeJudgmentalProject();
   const out = collector();
-  const prompt = scriptedPrompt(['', '', 'y']);
+  const prompt = scriptedPrompt(['', '', 'y', 'n']);
   const result = await runWizard({ target: dir, prompt, write: out.write });
 
-  assert.equal(result.status, 'no-mechanical');
-  assert.equal(result.patches, 0);
-  assert.ok(out.get().includes('No mechanical fixes available'));
+  assert.equal(result.status, 'no-patches');
+  assert.ok(out.get().includes('Confirm'));
+  cleanup();
+});
+
+test('wizard confirm step deletes orphan token when confirmed', async () => {
+  const dir = makeJudgmentalProject();
+  const out = collector();
+  const prompt = scriptedPrompt(['', '', 'y', 'y']);
+  const result = await runWizard({ target: dir, prompt, write: out.write });
+
+  assert.equal(result.status, 'completed');
+  assert.ok(result.applied > 0);
+  const content = fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8');
+  assert.ok(!content.includes('--bg'), '--bg should be deleted');
+  cleanup();
+});
+
+test('wizard confirm step skips confirm when no judgmental findings', async () => {
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
+  const out = collector();
+  const prompt = scriptedPrompt(['', 'y', 'y', 'y']);
+  const result = await runWizard({ target: dir, prompt, write: out.write });
+
+  assert.equal(result.status, 'completed');
+  assert.ok(out.get().includes('No judgmental decisions needed'));
   cleanup();
 });
 
 // --- Quit at plan step ---
 
 test('wizard quits at patch generation prompt', async () => {
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt(['', 'y', 'q']);
   const result = await runWizard({ target: dir, prompt, write: out.write });
@@ -176,7 +199,7 @@ test('wizard quits at patch generation prompt', async () => {
 // --- Quit at apply prompt ---
 
 test('wizard quits at final apply prompt', async () => {
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt(['', 'y', 'y', 'q']);
   const result = await runWizard({ target: dir, prompt, write: out.write });
@@ -189,7 +212,7 @@ test('wizard quits at final apply prompt', async () => {
 // --- Target prompted when not provided ---
 
 test('wizard prompts for target when not provided', async () => {
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt([dir, '', 'q']);
   const result = await runWizard({ prompt, write: out.write });
@@ -216,7 +239,7 @@ test('wizard quits when user types q at target prompt', async () => {
 test('wizard accepts ignore patterns', async () => {
   fs.mkdirSync(path.join(TMP_DIR, 'skipme'), { recursive: true });
   fs.writeFileSync(path.join(TMP_DIR, 'skipme', 'extra.css'), ':root {\n  --skip: #fff;\n}\n', 'utf8');
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt(['', 'y', 'y', 'y']);
   const result = await runWizard({ target: dir, ignore: ['skipme'], prompt, write: out.write });
@@ -240,7 +263,7 @@ test('wizard returns error status on invalid target', async () => {
 // --- Default confirm is yes ---
 
 test('wizard treats empty input as yes for default-yes prompts', async () => {
-  const dir = makeProject(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const dir = makeProject(':root {\n  --color-bg: #1a1a2e;\n  --color-bg-alt: #1a1a2e;\n}\n.hero {\n  background: var(--color-bg);\n  color: var(--color-bg-alt);\n}\n');
   const out = collector();
   const prompt = scriptedPrompt(['', '', '', '']);
   const result = await runWizard({ target: dir, prompt, write: out.write });

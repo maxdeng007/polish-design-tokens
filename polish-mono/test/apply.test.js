@@ -213,3 +213,118 @@ test('apply resolves symlinks in boundary check so symlinked dirs are accepted',
 
   cleanup();
 });
+
+test('apply removes the target line for a delete patch', async () => {
+  const file = makeTempCss(':root {\n  --a: #111;\n  --b: #222;\n  --c: #333;\n}\n');
+  const result = await apply([
+    { type: 'delete', file, line: 3, before: '', after: '', reason: 'test', findingId: 'orphan' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 1);
+  assert.equal(result.failed.length, 0);
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(content.includes('--a: #111;'), 'line 2 should remain');
+  assert.ok(!content.includes('--b: #222;'), 'line 3 should be deleted');
+  assert.ok(content.includes('--c: #333;'), 'line 4 should remain');
+  cleanup();
+});
+
+test('apply creates a backup when deleting a line', async () => {
+  const file = makeTempCss(':root {\n  --a: #111;\n  --b: #222;\n}\n');
+  await apply([
+    { type: 'delete', file, line: 3, before: '', after: '', reason: 'test', findingId: 'orphan' }
+  ], TMP_DIR);
+  assert.ok(fs.existsSync(file + '.backup'), 'backup should exist');
+  const backup = fs.readFileSync(file + '.backup', 'utf8');
+  assert.ok(backup.includes('--b: #222;'), 'backup should contain the deleted line');
+  cleanup();
+});
+
+test('apply records failed delete for out-of-range line', async () => {
+  const file = makeTempCss(':root {\n  --a: #111;\n}\n');
+  const result = await apply([
+    { type: 'delete', file, line: 99, before: '', after: '', reason: 'test', findingId: 'orphan' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 0);
+  assert.equal(result.failed.length, 1);
+  assert.ok(result.failed[0].error.includes('out of range'));
+  cleanup();
+});
+
+test('apply deletes lines in descending order so line numbers stay valid', async () => {
+  const file = makeTempCss(':root {\n  --a: #111;\n  --b: #222;\n  --c: #333;\n  --d: #444;\n}\n');
+  const result = await apply([
+    { type: 'delete', file, line: 2, before: '', after: '', reason: 't1', findingId: 'orphan' },
+    { type: 'delete', file, line: 4, before: '', after: '', reason: 't2', findingId: 'orphan' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 2);
+  assert.equal(result.failed.length, 0);
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(!content.includes('--a: #111;'), 'line 2 should be deleted');
+  assert.ok(content.includes('--b: #222;'), 'line 3 should remain');
+  assert.ok(!content.includes('--c: #333;'), 'line 4 should be deleted');
+  assert.ok(content.includes('--d: #444;'), 'line 5 should remain');
+  cleanup();
+});
+
+test('apply replaces all token references for a rewrite patch', async () => {
+  const file = makeTempCss(':root {\n  --bg: #ffffff;\n}\n.hero {\n  background: var(--bg);\n  color: var(--bg);\n}\n');
+  const result = await apply([
+    { type: 'rewrite', file, line: null, before: '--bg', after: '--background', reason: 'test', findingId: 'namespace' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 1);
+  assert.equal(result.failed.length, 0);
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(content.includes('--background: #ffffff;'), 'declaration should be renamed');
+  assert.ok(content.includes('var(--background)'), 'all references should be renamed');
+  assert.ok(!content.includes('--bg'), 'no --bg should remain');
+  cleanup();
+});
+
+test('apply rewrite is word-boundary safe and does not touch longer token names', async () => {
+  const file = makeTempCss(':root {\n  --bg: #ffffff;\n  --bg-hover: #eeeeee;\n}\n.btn {\n  background: var(--bg);\n}\n');
+  const result = await apply([
+    { type: 'rewrite', file, line: null, before: '--bg', after: '--background', reason: 'test', findingId: 'namespace' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 1);
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(content.includes('--background: #ffffff;'), '--bg declaration renamed');
+  assert.ok(content.includes('--bg-hover: #eeeeee;'), '--bg-hover must NOT be touched');
+  assert.ok(content.includes('var(--background)'), 'reference renamed');
+  assert.ok(!content.match(/--bg(?![\w-])/), 'no standalone --bg remains');
+  cleanup();
+});
+
+test('apply rewrite does not corrupt a token that is a substring of the target', async () => {
+  const file = makeTempCss(':root {\n  --bg: #ffffff;\n  --background: #000000;\n}\n');
+  const result = await apply([
+    { type: 'rewrite', file, line: null, before: '--bg', after: '--background', reason: 'test', findingId: 'namespace' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 1);
+  const content = fs.readFileSync(file, 'utf8');
+  // --bg renamed to --background, and the pre-existing --background left alone
+  const backgroundCount = (content.match(/--background/g) || []).length;
+  assert.equal(backgroundCount, 2, 'should have two --background (renamed + pre-existing)');
+  assert.ok(!content.match(/--bg(?![\w-])/), 'no standalone --bg remains');
+  cleanup();
+});
+
+test('apply rewrite creates a backup of the original file', async () => {
+  const file = makeTempCss(':root {\n  --bg: #ffffff;\n}\n');
+  await apply([
+    { type: 'rewrite', file, line: null, before: '--bg', after: '--background', reason: 'test', findingId: 'namespace' }
+  ], TMP_DIR);
+  assert.ok(fs.existsSync(file + '.backup'), 'backup should exist');
+  const backup = fs.readFileSync(file + '.backup', 'utf8');
+  assert.ok(backup.includes('--bg'), 'backup should contain original --bg');
+  cleanup();
+});
+
+test('apply records failed rewrite when file does not exist', async () => {
+  const missingFile = path.join(TMP_DIR, 'nonexistent.css');
+  const result = await apply([
+    { type: 'rewrite', file: missingFile, line: null, before: '--bg', after: '--background', reason: 'test', findingId: 'namespace' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 0);
+  assert.equal(result.failed.length, 1);
+  cleanup();
+});

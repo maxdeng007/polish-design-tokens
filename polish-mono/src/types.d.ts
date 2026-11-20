@@ -207,15 +207,23 @@ export interface PlanAction {
   judgmental: boolean;
 }
 
-/** A concrete patch generated for a mechanical finding. */
+/** A concrete patch generated for a mechanical finding or confirmed decision. */
 export interface Patch {
-  type: 'replace' | 'add' | 'rename' | 'rewrite';
+  type: 'replace' | 'add' | 'delete' | 'rename' | 'rewrite';
   file: string | null;
   line: number | null;
   before: string;
   after: string;
   reason: string;
   findingId: FindingId;
+}
+
+/** A designer-confirmed judgmental decision for polish confirm(). */
+export interface Decision {
+  action: 'delete' | 'alias' | 'rename';
+  token?: string;
+  from?: string;
+  to?: string;
 }
 
 /** Result of applying patches. */
@@ -242,7 +250,6 @@ export interface WizardResult {
     | 'quit'
     | 'stopped'
     | 'aborted'
-    | 'no-mechanical'
     | 'no-patches'
     | 'partial'
     | 'error';

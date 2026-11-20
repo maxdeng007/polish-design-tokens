@@ -52,6 +52,7 @@ export { cross, familyOf, isStateVariant, selectorClasses } from './cross.js';
 export { measure } from './measure.js';
 export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS } from './plan.js';
 export { generateDiffs } from './diff.js';
+export { confirm } from './confirm.js';
 export { apply } from './apply.js';
 export { runWizard } from './wizard.js';
 

@@ -9,10 +9,11 @@ import { cross } from './cross.js';
 import { measure } from './measure.js';
 import { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS } from './plan.js';
 import { generateDiffs } from './diff.js';
+import { confirm } from './confirm.js';
 import { apply } from './apply.js';
 import { runWizard } from './wizard.js';
 
-export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, apply, measure, runWizard };
+export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, confirm, apply, measure, runWizard };
 
 /**
  * Extract tokens from a directory.

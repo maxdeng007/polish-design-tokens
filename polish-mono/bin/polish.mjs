@@ -10,6 +10,7 @@ import { scan } from '../src/scan.js';
 import { cross } from '../src/cross.js';
 import { plan } from '../src/plan.js';
 import { generateDiffs } from '../src/diff.js';
+import { confirm as resolveDecisions } from '../src/confirm.js';
 import { apply } from '../src/apply.js';
 
 const USAGE = `polish — Design token superpower tool
@@ -21,6 +22,7 @@ Usage:
   polish plan   <findings.json> [--summary]          Convert findings into ordered action list
   polish diff   <plan.json> [--summary]              Generate mechanical patches from a plan
   polish apply  <patches.json> [--target=dir] [--summary]   Execute patches with backup protection
+  polish confirm <decisions.json> [--target=dir] [--summary]  Apply designer-confirmed judgmental decisions
   polish doctor  [--install] [--summary]              Check dependencies, optionally install missing ones
   polish explain <finding-type>                      Explain what a finding type means
   polish mcp                                          Start MCP server (JSON-RPC over stdin/stdout)
@@ -131,6 +133,22 @@ async function main() {
     const data = loadJson(file);
     const patches = data.patches || data;
     const target = resolve(targetFlag || process.cwd());
+    const result = await apply(patches, target);
+    if (summaryFlag) {
+      const { formatApply } = await import('../src/format.js');
+      console.log(formatApply(result));
+    } else {
+      console.log(JSON.stringify(result, null, 2));
+    }
+    process.exit(result.failed.length > 0 ? 1 : 0);
+  }
+
+  if (cmd === 'confirm') {
+    const data = loadJson(file);
+    const decisions = data.decisions || data;
+    const target = resolve(targetFlag || process.cwd());
+    const graph = scan(target);
+    const patches = resolveDecisions(decisions, graph);
     const result = await apply(patches, target);
     if (summaryFlag) {
       const { formatApply } = await import('../src/format.js');

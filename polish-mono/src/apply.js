@@ -38,6 +38,11 @@ function realpathSafe(p) {
   }
 }
 
+/** Escape regex metacharacters in a literal string. */
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 /**
  * Apply a list of patches to files.
  *
@@ -91,7 +96,7 @@ export async function apply(patches, target = process.cwd()) {
 
     try {
       const content = await fs.readFile(absFile, 'utf8');
-      const lines = content.split('\n');
+      let lines = content.split('\n');
 
       // Back up once per file. If a backup already exists (from a previous
       // apply call), keep it — it holds the original pre-modification content.
@@ -112,6 +117,27 @@ export async function apply(patches, target = process.cwd()) {
           const insertIdx = patch.line ? patch.line - 1 : lines.length;
           lines.splice(insertIdx, 0, patch.after);
           applied.push({ file: absFile, line: patch.line || 'end' });
+          continue;
+        }
+
+        if (patch.type === 'delete') {
+          const lineIdx = patch.line - 1;
+          if (lineIdx < 0 || lineIdx >= lines.length) {
+            failed.push({ file: absFile, line: patch.line, error: 'line out of range' });
+            continue;
+          }
+          lines.splice(lineIdx, 1);
+          applied.push({ file: absFile, line: patch.line });
+          continue;
+        }
+
+        if (patch.type === 'rewrite') {
+          // File-level token rename: replace every whole-token occurrence of
+          // `before` with `after`. The negative lookahead prevents matching
+          // `--bg` inside `--bg-hover` or `--background`.
+          const re = new RegExp(escapeRegex(patch.before) + '(?![\\w-])', 'g');
+          lines = lines.join('\n').replace(re, patch.after).split('\n');
+          applied.push({ file: absFile, line: 'rewrite' });
           continue;
         }
 

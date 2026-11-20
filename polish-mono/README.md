@@ -189,6 +189,7 @@ polish audit  <target> [--ignore=a,b] [--summary]  # Scan and output findings
 polish plan  <findings.json> [--summary]   # Convert findings to an ordered action list
 polish diff  <plan.json> [--summary]       # Generate mechanical patches from a plan
 polish apply <patches.json> [--summary]    # Apply patches (creates .backup files)
+polish confirm <decisions.json> [--target=dir] [--summary]  # Apply designer-confirmed judgmental decisions
 polish doctor [--install] [--summary]      # Check optional deps; --install auto-installs missing ones
 polish explain <finding-type>              # Explain what a finding type means and how to fix it
 polish mcp                       # Start MCP server (JSON-RPC over stdin/stdout)
@@ -222,9 +223,36 @@ polish explain conflict
 polish explain hardcoded
 ```
 
+**`polish confirm`** applies designer-confirmed decisions for judgmental findings — the ones that `polish diff` cannot auto-fix because they need a human decision. Pass a decisions JSON file and a target directory; polish re-scans the target, resolves each decision into a patch, and applies it with backup protection.
+
+```bash
+# decisions.json
+{
+  "decisions": [
+    { "action": "delete", "token": "--primary" },
+    { "action": "alias", "from": "--heading", "to": "--text" },
+    { "action": "rename", "from": "--bg", "to": "--background" }
+  ]
+}
+```
+
+```bash
+polish confirm decisions.json --target=./my-project --summary
+```
+
+Three decision actions are supported:
+
+| Action | Effect | Use for |
+|--------|--------|---------|
+| `delete` | Removes the token declaration | Orphan tokens |
+| `alias` | Replaces the value with `var(--to)` | Duplicate values with a chosen primary |
+| `rename` | Rewrites all occurrences across files | Namespace fragmentation |
+
+The same decisions can be collected interactively via the wizard's **Confirm** step (Step 3 of 5).
+
 ## Interactive Wizard
 
-Running `polish` with no arguments (or `polish wizard`) launches an interactive wizard that walks you through the entire pipeline — audit, plan, diff, and apply — step by step with confirmation prompts. No JSON files to redirect, no command flags to remember.
+Running `polish` with no arguments (or `polish wizard`) launches an interactive wizard that walks you through the entire pipeline — audit, plan, confirm, diff, and apply — step by step with confirmation prompts. No JSON files to redirect, no command flags to remember.
 
 ```bash
 polish
@@ -239,13 +267,19 @@ polish
 # Step 2: Plan
 #   10 judgmental actions (review recommended)
 #   34 mechanical actions (auto-fixable)
-# Proceed to generate patches? [Y/n/q] y
+# Proceed to review decisions and generate patches? [Y/n/q] y
 #
-# Step 3: Diff
-#   Generated 34 mechanical patches.
+# Step 3: Confirm
+#   2 judgmental finding(s) need your decision:
+#   Delete --primary? [y/N/q] y
+#   ✓ will delete --primary
+#   1 patch(es) from confirmed decisions
+#
+# Step 4: Patch
+#   Generated 35 patches (34 mechanical + 1 confirmed).
 # Apply patches now? [Y/n/q] y
 #
-#   ✓ 34 patches applied, 0 failed
+#   ✓ 35 patches applied, 0 failed
 #   2 backup files created
 # Done.
 ```
@@ -332,6 +366,7 @@ const result = await apply(patches);
 | `plan` | `(findings: Finding[]) → PlanAction[]` | Rank and classify findings into an action queue |
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | Generate mechanical patches from a plan |
 | `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | Apply patches with backup protection (target defaults to cwd) |
+| `confirm` | `(decisions: Decision[], graph: DeclarationGraph) → Patch[]` | Resolve designer-confirmed decisions into patches |
 | `runWizard` | `(opts?: WizardOptions) → Promise<WizardResult>` | Interactive guided pipeline with confirmation prompts |
 
 TypeScript definitions are bundled — no `@types` package needed. All types are exported from the package root.
