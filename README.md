@@ -271,7 +271,7 @@ Three decision actions are supported:
 
 The same decisions can be collected interactively via the wizard's **Confirm** step (Step 3 of 5).
 
-**`polish report`** generates a self-contained, interactive HTML report — open it in any browser to review findings without touching the CLI or JSON. Findings are color-coded by severity and grouped into error/warn/info sections. Each card shows the finding type, file and line, evidence, and a suggestion. Simple decisions (delete an orphan token, alias a duplicate value) get a checkbox — check the ones you agree with and click **Download decisions.json** to export them. Pass the file to `polish confirm` to apply those decisions with backup protection.
+**`polish report`** generates a self-contained, interactive HTML report — open it in any browser to review findings without touching the CLI or JSON. Findings are color-coded by severity and grouped into error/warn/info sections. Each card shows the finding type, file and line, evidence, and a suggestion; color values render with a swatch so you can see the color at a glance. Simple decisions (delete an orphan token, alias a duplicate value) get a checkbox — check the ones you agree with and click **Download** or **Copy decisions.json** to export them. The report shows the exact `polish confirm` command to run next, or you can hand `decisions.json` to an AI agent to apply.
 
 ```bash
 polish report ./my-project                       # Writes polish-report.html into the target

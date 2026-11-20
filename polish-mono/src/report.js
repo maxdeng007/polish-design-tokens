@@ -21,6 +21,11 @@ function esc(text) {
     .replace(/'/g, '&#39;');
 }
 
+/** True when the value is a CSS hex color (#rgb, #rrggbb, #rrggbbaa). */
+function isHexColor(value) {
+  return typeof value === 'string' && /^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(value.trim());
+}
+
 /** Build the decisions.json entry for a single evidence item, or null if none. */
 function decisionFor(finding, ev) {
   if (finding.id === 'orphan' && ev.name) {
@@ -51,7 +56,10 @@ function renderEvidence(ev) {
     parts.push(`<code>${esc(loc)}</code>`);
   }
   if (ev.value != null) {
-    parts.push(`value <code>${esc(ev.value)}</code>`);
+    const swatch = isHexColor(ev.value)
+      ? `<span class="swatch" style="background:${esc(ev.value)}"></span>`
+      : '';
+    parts.push(`${swatch} value <code>${esc(ev.value)}</code>`);
   }
   if (ev.names) {
     parts.push(`tokens ${esc(ev.names.join(' = '))}`);
@@ -167,6 +175,11 @@ export function generateReport(report) {
     ? `<div class="clean-banner">✓ No issues found. Your tokens are healthy.</div>`
     : '';
 
+  const hasDecisions = findings.some(f => (f.evidence || []).some(ev => decisionFor(f, ev)));
+  const confirmHint = hasDecisions
+    ? `<p class="toolbar-hint" id="confirm-hint">Next: run <code>polish confirm decisions.json --target=${esc(target)}</code> — or hand <code>decisions.json</code> to your AI agent to apply.</p>`
+    : '';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -263,6 +276,15 @@ export function generateReport(report) {
     font-family: 'SF Mono', 'Menlo', monospace;
     font-size: 0.78rem;
   }
+  .swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    vertical-align: middle;
+    margin-right: 0.3rem;
+  }
   .card-suggestion { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.75rem; }
   .decisions { border-top: 1px solid var(--border); padding-top: 0.75rem; }
   .decision-row {
@@ -301,6 +323,21 @@ export function generateReport(report) {
   }
   .download-btn:hover { opacity: 0.85; }
   .download-btn:disabled { background: var(--muted); cursor: not-allowed; opacity: 0.5; }
+  .copy-btn {
+    background: var(--card-bg);
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+  .copy-btn:hover { opacity: 0.85; }
+  .copy-btn:disabled { background: var(--card-bg); color: var(--muted); border-color: var(--border); cursor: not-allowed; opacity: 0.5; }
+  .toolbar-hint { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .toolbar-hint code {
+    background: var(--bg);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 0.78rem;
+  }
   footer { margin-top: 2rem; text-align: center; color: var(--muted); font-size: 0.8rem; }
 </style>
 </head>
@@ -318,8 +355,10 @@ export function generateReport(report) {
     <div class="toolbar-inner">
       <span class="toolbar-count" id="decision-count">0 decisions selected</span>
       <button class="download-btn" id="download-btn" disabled>Download decisions.json</button>
+      <button class="download-btn copy-btn" id="copy-btn" disabled>Copy decisions.json</button>
     </div>
   </div>
+  ${confirmHint}
 
   ${sections}
 
@@ -333,18 +372,9 @@ export function generateReport(report) {
   var checkboxes = document.querySelectorAll('input[type="checkbox"][data-decision]');
   var countEl = document.getElementById('decision-count');
   var btn = document.getElementById('download-btn');
+  var copyBtn = document.getElementById('copy-btn');
 
-  function updateCount() {
-    var checked = document.querySelectorAll('input[type="checkbox"][data-decision]:checked');
-    countEl.textContent = checked.length + ' decision' + (checked.length === 1 ? '' : 's') + ' selected';
-    btn.disabled = checked.length === 0;
-  }
-
-  checkboxes.forEach(function(cb) {
-    cb.addEventListener('change', updateCount);
-  });
-
-  btn.addEventListener('click', function() {
+  function buildDecisions() {
     var checked = document.querySelectorAll('input[type="checkbox"][data-decision]:checked');
     var decisions = [];
     checked.forEach(function(cb) {
@@ -352,6 +382,22 @@ export function generateReport(report) {
         decisions.push(JSON.parse(cb.getAttribute('data-decision')));
       } catch (e) { /* skip malformed */ }
     });
+    return decisions;
+  }
+
+  function updateCount() {
+    var checked = document.querySelectorAll('input[type="checkbox"][data-decision]:checked');
+    countEl.textContent = checked.length + ' decision' + (checked.length === 1 ? '' : 's') + ' selected';
+    btn.disabled = checked.length === 0;
+    copyBtn.disabled = checked.length === 0;
+  }
+
+  checkboxes.forEach(function(cb) {
+    cb.addEventListener('change', updateCount);
+  });
+
+  btn.addEventListener('click', function() {
+    var decisions = buildDecisions();
     if (decisions.length === 0) return;
     var blob = new Blob([JSON.stringify({ decisions: decisions }, null, 2)], { type: 'application/json' });
     var url = URL.createObjectURL(blob);
@@ -363,6 +409,35 @@ export function generateReport(report) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
+
+  copyBtn.addEventListener('click', function() {
+    var decisions = buildDecisions();
+    if (decisions.length === 0) return;
+    copyText(JSON.stringify({ decisions: decisions }, null, 2), copyBtn);
+  });
+
+  function copyText(text, btn) {
+    var flash = function() {
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy decisions.json'; }, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(flash, function() { legacyCopy(text, flash); });
+    } else {
+      legacyCopy(text, flash);
+    }
+  }
+
+  function legacyCopy(text, done) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
 
   updateCount();
 })();

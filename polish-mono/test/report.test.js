@@ -162,3 +162,35 @@ test('polish report severity sections have rounded corners', () => {
   assert.ok(rule[0].includes('border-radius'), 'severity section should have rounded corners');
   cleanup();
 });
+
+test('polish report renders color swatches for hex values', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  const swatch = html.match(/<span class="swatch"[^>]*style="([^"]+)"/);
+  assert.ok(swatch, 'should render a color swatch span');
+  assert.ok(swatch[1].includes('#111827'), 'swatch background should use the hex value');
+  cleanup();
+});
+
+test('polish report has a copy decisions button', () => {
+  const dir = makeProject(':root {\n  --unused: #fff;\n  --primary: #4f46e5;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('Copy decisions.json'), 'should have a copy button');
+  assert.ok(html.includes('id="copy-btn"'), 'copy button should have an id');
+  cleanup();
+});
+
+test('polish report shows the polish confirm command hint', () => {
+  const dir = makeProject(':root {\n  --unused: #fff;\n  --primary: #4f46e5;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('polish confirm decisions.json'), 'should show the confirm command');
+  assert.ok(html.includes('--target='), 'confirm command should include a target flag');
+  assert.ok(html.includes('id="confirm-hint"'), 'should have a confirm hint element');
+  cleanup();
+});

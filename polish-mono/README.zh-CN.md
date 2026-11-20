@@ -271,7 +271,7 @@ polish confirm decisions.json --target=./my-project --summary
 
 同样的决策也可以通过向导的**确认**步骤（第 3 步，共 5 步）交互式收集。
 
-**`polish report`** 生成一个自包含的交互式 HTML 报告——在任意浏览器中打开，无需命令行或 JSON 即可审查发现。发现按严重程度着色，并分为错误/警告/信息三组。每张卡片展示发现类型、文件与行号、证据和建议。简单决策（删除孤儿令牌、别名重复值）配有复选框——勾选你同意的项，点击**下载 decisions.json** 导出，再交给 `polish confirm` 带备份执行。
+**`polish report`** 生成一个自包含的交互式 HTML 报告——在任意浏览器中打开，无需命令行或 JSON 即可审查发现。发现按严重程度着色，并分为错误/警告/信息三组。每张卡片展示发现类型、文件与行号、证据和建议；颜色值旁渲染色块，可一眼识别颜色。简单决策（删除孤儿令牌、别名重复值）配有复选框——勾选你同意的项，点击**下载**或**复制 decisions.json** 导出。报告同时给出下一步要运行的 `polish confirm` 命令，也可以把 `decisions.json` 交给 AI 代理执行。
 
 ```bash
 polish report ./my-project                        # 在目标目录写入 polish-report.html
