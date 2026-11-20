@@ -20,7 +20,8 @@ Usage:
   polish diff   <plan.json> [--summary]              Generate mechanical patches from a plan
   polish apply  <patches.json> [--target=dir] [--summary]   Execute patches with backup protection
   polish doctor  [--install] [--summary]              Check dependencies, optionally install missing ones
-  polish mcp                                      Start MCP server (JSON-RPC over stdin/stdout)
+  polish explain <finding-type>                      Explain what a finding type means
+  polish mcp                                          Start MCP server (JSON-RPC over stdin/stdout)
 
 Flags:
   --summary     Print human-readable summary instead of JSON
@@ -133,6 +134,22 @@ async function main() {
   if (cmd === 'mcp') {
     await import('../src/mcp-server.js');
     return;
+  }
+
+  if (cmd === 'explain') {
+    const type = positional[0];
+    if (!type) {
+      console.error('Error: missing finding type\n');
+      console.log('Usage: polish explain <finding-type>');
+      console.log('');
+      const { listFindingTypes } = await import('../src/explain.js');
+      console.log('Available types:');
+      for (const t of listFindingTypes()) console.log(`  ${t}`);
+      process.exit(2);
+    }
+    const { formatExplanation } = await import('../src/explain.js');
+    console.log(formatExplanation(type));
+    process.exit(0);
   }
 
   if (cmd === 'doctor') {

@@ -2,9 +2,41 @@
  * Human-readable formatting for CLI output.
  * Used by the --summary flag to print plain-language summaries
  * instead of raw JSON, making polish usable by non-technical users.
+ *
+ * When stdout is a TTY, findings are color-coded by severity for
+ * at-a-glance readability. When output is piped or redirected,
+ * colors are automatically disabled.
  */
 
 const MECHANICAL_IDS = new Set(['duplicate-value']);
+
+const ANSI = {
+  reset: '\x1b[0m',
+  bold: '\x1b[1m',
+  dim: '\x1b[2m',
+  red: '\x1b[31m',
+  yellow: '\x1b[33m',
+  green: '\x1b[32m',
+  blue: '\x1b[34m',
+  cyan: '\x1b[36m'
+};
+
+/** Returns true when stdout is a TTY (interactive terminal). */
+function useColor() {
+  return !!(process.stdout && process.stdout.isTTY);
+}
+
+/** Wrap text in a color code if colors are enabled, otherwise return plain text. */
+function c(code, text) {
+  return useColor() ? code + text + ANSI.reset : text;
+}
+
+/** Color a text by severity: error → red, warn → yellow, info → green. */
+function cSeverity(severity, text) {
+  if (severity === 'error') return c(ANSI.red, text);
+  if (severity === 'warn') return c(ANSI.yellow, text);
+  return c(ANSI.green, text);
+}
 
 function countByType(findings) {
   const byType = {};
@@ -18,8 +50,8 @@ function countByType(findings) {
 /** Format an audit report (output of cross()) as a plain-language summary. */
 export function formatAudit(report) {
   const lines = [];
-  lines.push('Token Audit Summary');
-  lines.push('====================');
+  lines.push(c(ANSI.bold, 'Token Audit Summary'));
+  lines.push(ANSI.bold ? '====================' : '====================');
   lines.push('');
 
   if (report.target && report.target.value) {
@@ -36,7 +68,7 @@ export function formatAudit(report) {
 
   const findings = report.findings || [];
   if (findings.length === 0) {
-    lines.push('No issues found. Your tokens look clean.');
+    lines.push(c(ANSI.green, 'No issues found. Your tokens look clean.'));
     return lines.join('\n');
   }
 
@@ -45,22 +77,23 @@ export function formatAudit(report) {
 
   const byType = countByType(findings);
   for (const [type, info] of Object.entries(byType)) {
-    const label = MECHANICAL_IDS.has(type) ? '[Mechanical]' : '[Judgmental]';
-    lines.push(`  ${label} ${info.count} ${type}`);
+    const label = MECHANICAL_IDS.has(type) ? c(ANSI.green, '[Mechanical]') : c(ANSI.yellow, '[Judgmental]');
+    const typeName = cSeverity(info.severity, type);
+    lines.push(`  ${label} ${info.count} ${typeName}`);
   }
 
   lines.push('');
 
   const mechCount = findings.filter(f => MECHANICAL_IDS.has(f.id)).length;
   if (mechCount > 0) {
-    lines.push(`${mechCount} can be auto-fixed.`);
+    lines.push(c(ANSI.green, `${mechCount} can be auto-fixed.`));
     lines.push('');
     lines.push('Next steps:');
     lines.push('  polish plan findings.json > plan.json');
     lines.push('  polish diff plan.json > patches.json');
     lines.push('  polish apply patches.json');
   } else {
-    lines.push('No mechanical fixes available — all findings need your decision.');
+    lines.push(c(ANSI.yellow, 'No mechanical fixes available — all findings need your decision.'));
   }
 
   return lines.join('\n');
@@ -69,12 +102,12 @@ export function formatAudit(report) {
 /** Format a plan action array (output of plan()) as a plain-language summary. */
 export function formatPlan(actions) {
   const lines = [];
-  lines.push('Action Plan');
+  lines.push(c(ANSI.bold, 'Action Plan'));
   lines.push('===========');
   lines.push('');
 
   if (!actions || actions.length === 0) {
-    lines.push('No actions needed. No findings to process.');
+    lines.push(c(ANSI.green, 'No actions needed. No findings to process.'));
     return lines.join('\n');
   }
 
@@ -83,16 +116,19 @@ export function formatPlan(actions) {
 
   for (const item of actions) {
     const f = item.finding || {};
-    const label = item.mechanical ? 'mechanical' : item.judgmental ? 'judgmental' : 'unknown';
-    lines.push(`  ${item.priority}. ${f.id || 'unknown'} (${label}) — ${f.title || 'no title'}`);
+    const label = item.mechanical
+      ? c(ANSI.green, 'mechanical')
+      : item.judgmental ? c(ANSI.yellow, 'judgmental') : 'unknown';
+    const id = cSeverity(f.severity, f.id || 'unknown');
+    lines.push(`  ${item.priority}. ${id} (${label}) — ${f.title || 'no title'}`);
   }
 
   lines.push('');
 
   const mech = actions.filter(a => a.mechanical).length;
   const judg = actions.filter(a => a.judgmental).length;
-  lines.push(`Mechanical: ${mech} (auto-fixable via polish diff + polish apply)`);
-  lines.push(`Judgmental: ${judg} (needs your decision)`);
+  lines.push(`${c(ANSI.green, 'Mechanical:')} ${mech} (auto-fixable via polish diff + polish apply)`);
+  lines.push(`${c(ANSI.yellow, 'Judgmental:')} ${judg} (needs your decision)`);
 
   return lines.join('\n');
 }
@@ -100,27 +136,27 @@ export function formatPlan(actions) {
 /** Format a patch array (output of generateDiffs()) as a plain-language summary. */
 export function formatDiff(patches) {
   const lines = [];
-  lines.push('Patches Generated');
+  lines.push(c(ANSI.bold, 'Patches Generated'));
   lines.push('================');
   lines.push('');
 
   if (!patches || patches.length === 0) {
-    lines.push('No mechanical patches to apply. All findings are judgmental.');
+    lines.push(c(ANSI.yellow, 'No mechanical patches to apply. All findings are judgmental.'));
     return lines.join('\n');
   }
 
-  lines.push(`${patches.length} mechanical patches ready:`);
+  lines.push(`${c(ANSI.green, patches.length)} mechanical patches ready:`);
   lines.push('');
 
   for (const p of patches) {
     const file = p.file || '?';
     const line = p.line || '?';
     const change = p.before && p.after ? `${p.before} → ${p.after}` : (p.reason || '');
-    lines.push(`  [${p.type}] ${file}:${line} — ${change}`);
+    lines.push(`  ${c(ANSI.cyan, `[${p.type}]`)} ${file}:${line} — ${change}`);
   }
 
   lines.push('');
-  lines.push('Run `polish apply patches.json` to apply with backup.');
+  lines.push(c(ANSI.cyan, 'Run `polish apply patches.json` to apply with backup.'));
 
   return lines.join('\n');
 }
@@ -128,7 +164,7 @@ export function formatDiff(patches) {
 /** Format an apply result (output of apply()) as a plain-language summary. */
 export function formatApply(result) {
   const lines = [];
-  lines.push('Apply Results');
+  lines.push(c(ANSI.bold, 'Apply Results'));
   lines.push('=============');
   lines.push('');
 
@@ -136,19 +172,19 @@ export function formatApply(result) {
   const failed = (result.failed || []).length;
   const backups = result.backupCount || 0;
 
-  lines.push(`Applied:  ${applied} patches`);
-  lines.push(`Failed:   ${failed} patches`);
-  lines.push(`Backups:  ${backups} files`);
+  lines.push(`${c(ANSI.green, 'Applied:')}  ${applied} patches`);
+  lines.push(`${failed > 0 ? c(ANSI.red, 'Failed:') : 'Failed:'}   ${failed} patches`);
+  lines.push(`${c(ANSI.blue, 'Backups:')}  ${backups} files`);
   lines.push('');
 
   if (failed === 0) {
-    lines.push('All patches applied successfully.');
+    lines.push(c(ANSI.green, 'All patches applied successfully.'));
   } else {
-    lines.push('Some patches failed. Review the errors below:');
+    lines.push(c(ANSI.red, 'Some patches failed. Review the errors below:'));
     lines.push('');
     for (const f of result.failed) {
       const file = f.file || '?';
-      lines.push(`  ${file}: ${f.error}`);
+      lines.push(`  ${c(ANSI.red, file)}: ${f.error}`);
     }
   }
 
@@ -158,7 +194,7 @@ export function formatApply(result) {
 /** Format a doctor report (output of polish_doctor()) as a plain-language summary. */
 export function formatDoctor(report) {
   const lines = [];
-  lines.push('Dependency Check');
+  lines.push(c(ANSI.bold, 'Dependency Check'));
   lines.push('================');
   lines.push('');
 
@@ -166,11 +202,13 @@ export function formatDoctor(report) {
   for (const d of deps) {
     let status;
     if (d.installAttempted) {
-      status = d.installResult === 'success' || d.installed ? '[INSTALLED]' : '[FAILED]  ';
+      status = d.installResult === 'success' || d.installed
+        ? c(ANSI.green, '[INSTALLED]')
+        : c(ANSI.red, '[FAILED]  ');
     } else if (d.installed) {
-      status = '[OK]      ';
+      status = c(ANSI.green, '[OK]      ');
     } else {
-      status = '[MISSING] ';
+      status = c(ANSI.yellow, '[MISSING] ');
     }
     lines.push(`  ${status} ${d.name}`);
   }
@@ -179,13 +217,13 @@ export function formatDoctor(report) {
 
   const missing = deps.filter(d => !d.installed).length;
   if (missing > 0) {
-    lines.push(`${missing} optional skill/tool not installed.`);
-    lines.push('Run `polish doctor --install` to install missing skills.');
+    lines.push(`${c(ANSI.yellow, missing)} optional skill/tool not installed.`);
+    lines.push(c(ANSI.cyan, 'Run `polish doctor --install` to install missing skills.'));
   } else {
-    lines.push('All dependencies are installed.');
+    lines.push(c(ANSI.green, 'All dependencies are installed.'));
   }
 
   return lines.join('\n');
 }
 
-export { MECHANICAL_IDS };
+export { MECHANICAL_IDS, useColor, ANSI };

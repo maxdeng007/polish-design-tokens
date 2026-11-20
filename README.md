@@ -186,6 +186,7 @@ polish plan  <findings.json> [--summary]   # Convert findings to an ordered acti
 polish diff  <plan.json> [--summary]       # Generate mechanical patches from a plan
 polish apply <patches.json> [--summary]    # Apply patches (creates .backup files)
 polish doctor [--install] [--summary]      # Check optional deps; --install auto-installs missing ones
+polish explain <finding-type>              # Explain what a finding type means and how to fix it
 polish mcp                       # Start MCP server (JSON-RPC over stdin/stdout)
 ```
 
@@ -201,11 +202,20 @@ polish audit ./my-project --summary
 # ...
 ```
 
+When output goes to a terminal, findings are **color-coded by severity** — red for errors, yellow for warnings, green for informational. Colors are automatically disabled when output is piped or redirected.
+
 **`--install`** (doctor only) automatically installs missing optional dependencies. Without it, doctor just reports what's missing and shows the install commands to run manually:
 
 ```bash
 polish doctor              # Check what's installed, show install commands for missing
 polish doctor --install    # Check and auto-install missing optional dependencies
+```
+
+**`polish explain`** prints a plain-language explanation of any finding type — what it means, why it matters, and how to fix it. Run it when you see a finding type in your report and want to understand it without reading the docs:
+
+```bash
+polish explain conflict
+polish explain hardcoded
 ```
 
 Without `--summary`, all commands output raw JSON for piping and programmatic use.

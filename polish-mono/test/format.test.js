@@ -272,3 +272,136 @@ test('formatDoctor handles empty dependencies', () => {
   assert.ok(out.includes('Dependency Check'));
   assert.ok(out.includes('All dependencies are installed'));
 });
+
+// --- Color output (TTY) ---
+
+const ANSI_RE = /\[[0-9;]*m/g;
+
+function stripAnsi(text) {
+  return text.replace(ANSI_RE, '');
+}
+
+test('color output is disabled when stdout is not a TTY', () => {
+  // In test runner, process.stdout.isTTY is undefined/false
+  const out = formatAudit({
+    target: { value: '/test' },
+    summary: { declarations: 1, uniqueTokens: 1 },
+    findings: [{ id: 'conflict', severity: 'error', title: 'C' }]
+  });
+  assert.ok(!out.includes('\x1b['), 'should not contain ANSI codes when not a TTY');
+});
+
+test('color output is enabled when stdout is a TTY', () => {
+  const originalIsTTY = process.stdout.isTTY;
+  process.stdout.isTTY = true;
+  try {
+    const out = formatAudit({
+      target: { value: '/test' },
+      summary: { declarations: 1, uniqueTokens: 1 },
+      findings: [{ id: 'conflict', severity: 'error', title: 'C' }]
+    });
+    assert.ok(out.includes('\x1b['), 'should contain ANSI codes when TTY');
+    // Strip colors and verify the plain text is still correct
+    const plain = stripAnsi(out);
+    assert.ok(plain.includes('Token Audit Summary'));
+    assert.ok(plain.includes('Found 1 issue'));
+  } finally {
+    process.stdout.isTTY = originalIsTTY;
+  }
+});
+
+test('formatAudit colors error severity red and warn severity yellow when TTY', () => {
+  const originalIsTTY = process.stdout.isTTY;
+  process.stdout.isTTY = true;
+  try {
+    const out = formatAudit({
+      target: { value: '/test' },
+      summary: { declarations: 1, uniqueTokens: 1 },
+      findings: [
+        { id: 'conflict', severity: 'error', title: 'Conflict' },
+        { id: 'hardcoded', severity: 'warn', title: 'Hardcoded' }
+      ]
+    });
+    // The type names should be wrapped in their severity colors
+    assert.ok(out.includes('\x1b[31mconflict\x1b[0m'), 'error should be red');
+    assert.ok(out.includes('\x1b[33mhardcoded\x1b[0m'), 'warn should be yellow');
+  } finally {
+    process.stdout.isTTY = originalIsTTY;
+  }
+});
+
+test('formatAudit colors mechanical label green when TTY', () => {
+  const originalIsTTY = process.stdout.isTTY;
+  process.stdout.isTTY = true;
+  try {
+    const out = formatAudit({
+      target: { value: '/test' },
+      summary: { declarations: 1, uniqueTokens: 1 },
+      findings: [{ id: 'duplicate-value', severity: 'warn', title: 'Dup' }]
+    });
+    assert.ok(out.includes('\x1b[32m[Mechanical]\x1b[0m'), 'mechanical label should be green');
+  } finally {
+    process.stdout.isTTY = originalIsTTY;
+  }
+});
+
+test('formatApply colors failed count red when there are failures and TTY', () => {
+  const originalIsTTY = process.stdout.isTTY;
+  process.stdout.isTTY = true;
+  try {
+    const out = formatApply({
+      applied: [],
+      failed: [{ file: 'a.css', error: 'not found' }],
+      backupCount: 0
+    });
+    assert.ok(out.includes('\x1b[31mFailed:\x1b[0m'), 'failed label should be red');
+    assert.ok(out.includes('\x1b[31ma.css\x1b[0m'), 'failed file should be red');
+  } finally {
+    process.stdout.isTTY = originalIsTTY;
+  }
+});
+
+test('formatApply does not color failed label when no failures', () => {
+  const originalIsTTY = process.stdout.isTTY;
+  process.stdout.isTTY = true;
+  try {
+    const out = formatApply({ applied: [{}], failed: [], backupCount: 1 });
+    // "Failed:" should NOT be wrapped in red when count is 0
+    assert.ok(!out.includes('\x1b[31mFailed:\x1b[0m'), 'no red on Failed when no failures');
+  } finally {
+    process.stdout.isTTY = originalIsTTY;
+  }
+});
+
+test('formatDoctor colors [MISSING] yellow and [OK] green when TTY', () => {
+  const originalIsTTY = process.stdout.isTTY;
+  process.stdout.isTTY = true;
+  try {
+    const out = formatDoctor({
+      dependencies: [
+        { name: 'dembrandt', installed: true },
+        { name: 'taste', installed: false }
+      ]
+    });
+    assert.ok(out.includes('\x1b[32m[OK]      \x1b[0m'), '[OK] should be green');
+    assert.ok(out.includes('\x1b[33m[MISSING] \x1b[0m'), '[MISSING] should be yellow');
+  } finally {
+    process.stdout.isTTY = originalIsTTY;
+  }
+});
+
+test('formatPlan colors mechanical green and judgmental yellow when TTY', () => {
+  const originalIsTTY = process.stdout.isTTY;
+  process.stdout.isTTY = true;
+  try {
+    const out = formatPlan([
+      { priority: 1, mechanical: false, judgmental: true, finding: { id: 'conflict', severity: 'error', title: 'C' } },
+      { priority: 5, mechanical: true, judgmental: false, finding: { id: 'duplicate-value', severity: 'warn', title: 'D' } }
+    ]);
+    assert.ok(out.includes('\x1b[33mjudgmental\x1b[0m'), 'judgmental label should be yellow');
+    assert.ok(out.includes('\x1b[32mmechanical\x1b[0m'), 'mechanical label should be green');
+    assert.ok(out.includes('\x1b[31mconflict\x1b[0m'), 'error id should be red');
+  } finally {
+    process.stdout.isTTY = originalIsTTY;
+  }
+});

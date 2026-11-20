@@ -186,6 +186,7 @@ polish plan  <findings.json> [--summary]   # 将发现转换为有序操作列�
 polish diff  <plan.json> [--summary]       # 从计划生成机械性补丁
 polish apply <patches.json> [--summary]    # 应用补丁（创建 .backup 文件）
 polish doctor [--install] [--summary]      # 检查可选依赖；--install 自动安装缺失项
+polish explain <finding-type>              # 解释某类发现的含义与修复方法
 polish mcp                     # 启动 MCP 服务器（stdin/stdout 上的 JSON-RPC）
 ```
 
@@ -201,11 +202,20 @@ polish audit ./my-project --summary
 # ...
 ```
 
+当输出到终端时，发现会按严重程度**着色显示**——错误为红色，警告为黄色，信息为绿色。输出被管道或重定向时颜色会自动关闭。
+
 **`--install`**（仅 doctor）自动安装缺失的可选依赖。不加此标志时，doctor 仅报告缺失项并展示需手动执行的安装命令：
 
 ```bash
 polish doctor              # 检查已安装项，对缺失项展示安装命令
 polish doctor --install    # 检查并自动安装缺失的可选依赖
+```
+
+**`polish explain`** 打印任意发现类型的通俗解释——含义、为何重要、如何修复。在报告中看到某个发现类型时，无需查阅文档即可快速理解：
+
+```bash
+polish explain conflict
+polish explain hardcoded
 ```
 
 不加 `--summary` 时，所有命令输出原始 JSON，便于管道传递和程序化使用。
