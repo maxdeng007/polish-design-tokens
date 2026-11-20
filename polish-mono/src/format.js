@@ -226,4 +226,127 @@ export function formatDoctor(report) {
   return lines.join('\n');
 }
 
+/** Count findings by severity. */
+function countSeverity(findings) {
+  const counts = { error: 0, warn: 0, info: 0 };
+  for (const f of findings) {
+    if (counts[f.severity] !== undefined) counts[f.severity]++;
+  }
+  return counts;
+}
+
+/** Format a health check report as a concise verdict for `polish check`. */
+export function formatCheck(report) {
+  const lines = [];
+  lines.push(c(ANSI.bold, 'Token Health Check'));
+  lines.push('==================');
+  lines.push('');
+
+  const s = report.summary || {};
+  const tokenInfo = [];
+  if (s.declarations !== undefined) tokenInfo.push(`${s.declarations} declarations`);
+  if (s.uniqueTokens !== undefined) tokenInfo.push(`${s.uniqueTokens} unique tokens`);
+  if (tokenInfo.length) lines.push(`Tokens: ${tokenInfo.join(', ')}`);
+
+  const findings = report.findings || [];
+  if (findings.length === 0) {
+    lines.push('');
+    lines.push(c(ANSI.green, 'No issues found. Your tokens are healthy.'));
+    return lines.join('\n');
+  }
+
+  lines.push('');
+  lines.push(`Found ${findings.length} issue${findings.length === 1 ? '' : 's'}:`);
+  lines.push('');
+
+  const byType = countByType(findings);
+  for (const [type, info] of Object.entries(byType)) {
+    const typeName = cSeverity(info.severity, type);
+    lines.push(`  ${info.count} ${typeName}`);
+  }
+
+  lines.push('');
+
+  const sev = countSeverity(findings);
+  if (sev.error > 0) {
+    lines.push(c(ANSI.red, `Health: ${sev.error} error${sev.error === 1 ? '' : 's'} need attention.`));
+    lines.push('');
+    lines.push(c(ANSI.cyan, 'Run `polish fix <target>` to auto-resolve mechanical issues.'));
+  } else if (sev.warn > 0) {
+    lines.push(c(ANSI.yellow, `Health: ${sev.warn} warning${sev.warn === 1 ? '' : 's'} — no errors, but review recommended.`));
+    lines.push('');
+    lines.push(c(ANSI.cyan, 'Run `polish fix <target>` to auto-resolve mechanical issues.'));
+  } else {
+    lines.push(c(ANSI.green, 'Health: clean — informational findings only.'));
+  }
+
+  return lines.join('\n');
+}
+
+/** Format a fix result (audit + apply summary + remaining judgmental) for `polish fix`. */
+export function formatFix(report, result) {
+  const lines = [];
+  lines.push(c(ANSI.bold, 'Token Fix'));
+  lines.push('==========');
+  lines.push('');
+
+  const s = report.summary || {};
+  const tokenInfo = [];
+  if (s.declarations !== undefined) tokenInfo.push(`${s.declarations} declarations`);
+  if (s.uniqueTokens !== undefined) tokenInfo.push(`${s.uniqueTokens} unique tokens`);
+  if (tokenInfo.length) lines.push(`Tokens: ${tokenInfo.join(', ')}`);
+
+  const findings = report.findings || [];
+  if (findings.length === 0) {
+    lines.push('');
+    lines.push(c(ANSI.green, 'No issues found. Your tokens are healthy.'));
+    return lines.join('\n');
+  }
+
+  const byType = countByType(findings);
+  const typeSummary = Object.entries(byType)
+    .map(([type, info]) => `${info.count} ${type}`)
+    .join(', ');
+  lines.push(`Found ${findings.length} issue${findings.length === 1 ? '' : 's'}: ${typeSummary}`);
+  lines.push('');
+
+  const mechanicalCount = findings.filter(f => MECHANICAL_IDS.has(f.id)).length;
+  if (mechanicalCount > 0) {
+    lines.push(`Applying ${mechanicalCount} mechanical patch${mechanicalCount === 1 ? '' : 'es'}...`);
+    lines.push('');
+
+    const applied = (result.applied || []).length;
+    const failed = (result.failed || []).length;
+    const backups = result.backupCount || 0;
+    lines.push(`  ${c(ANSI.green, `Applied: ${applied}`)}  ${failed > 0 ? c(ANSI.red, `Failed: ${failed}`) : `Failed: ${failed}`}  ${c(ANSI.blue, `Backups: ${backups}`)}`);
+    if (failed === 0) {
+      lines.push(c(ANSI.green, '  All patches applied successfully.'));
+    } else {
+      for (const f of result.failed) {
+        const file = f.file || '?';
+        lines.push(`  ${c(ANSI.red, file)}: ${f.error}`);
+      }
+    }
+    lines.push('');
+  }
+
+  const judgmental = findings.filter(f => !MECHANICAL_IDS.has(f.id));
+  if (judgmental.length > 0) {
+    lines.push(c(ANSI.yellow, 'Remaining judgmental issues (need manual review):'));
+    lines.push('');
+
+    const jByType = countByType(judgmental);
+    for (const [type, info] of Object.entries(jByType)) {
+      lines.push(`  ${info.count} ${type} — run \`polish explain ${type}\``);
+    }
+    lines.push('');
+    lines.push(c(ANSI.cyan, 'Use `polish confirm <decisions.json>` or the wizard to resolve them.'));
+  }
+
+  lines.push('');
+  lines.push(c(ANSI.cyan, 'Run `polish check <target>` to verify.'));
+
+  return lines.join('\n');
+}
+
 export { MECHANICAL_IDS, useColor, ANSI };

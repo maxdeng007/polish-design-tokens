@@ -19,6 +19,8 @@ Usage:
   polish                                  Launch the interactive wizard
   polish wizard [--target=dir] [--ignore=a,b]   Interactive guided pipeline
   polish audit  <target> [--ignore=a,b] [--summary]  Scan a directory and output findings
+  polish check  <target> [--ignore=a,b]              Health check: read-only summary with exit code
+  polish fix    <target> [--ignore=a,b] [--dry-run]  One-shot fix: apply mechanical patches with backup
   polish plan   <findings.json> [--summary]          Convert findings into ordered action list
   polish diff   <plan.json> [--summary]              Generate mechanical patches from a plan
   polish apply  <patches.json> [--target=dir] [--summary]   Execute patches with backup protection
@@ -62,6 +64,7 @@ async function main() {
   let targetFlag = null;
   let summaryFlag = false;
   let installFlag = false;
+  let dryRunFlag = false;
   const positional = [];
   for (let i = 1; i < args.length; i++) {
     if (args[i].startsWith('--ignore=')) {
@@ -72,6 +75,8 @@ async function main() {
       summaryFlag = true;
     } else if (args[i] === '--install') {
       installFlag = true;
+    } else if (args[i] === '--dry-run') {
+      dryRunFlag = true;
     } else {
       positional.push(args[i]);
     }
@@ -99,6 +104,38 @@ async function main() {
       console.log(JSON.stringify(report, null, 2));
     }
     process.exit(0);
+  }
+
+  if (cmd === 'check') {
+    const target = resolve(positional[0] || '.');
+    const ignore = ignoreFlag ? ignoreFlag.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const graph = scan(target, { ignore });
+    const report = cross(graph);
+    const { formatCheck } = await import('../src/format.js');
+    console.log(formatCheck(report));
+    const hasErrors = (report.findings || []).some(f => f.severity === 'error');
+    process.exit(hasErrors ? 1 : 0);
+  }
+
+  if (cmd === 'fix') {
+    const target = resolve(positional[0] || '.');
+    const ignore = ignoreFlag ? ignoreFlag.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const graph = scan(target, { ignore });
+    const report = cross(graph);
+    const findings = report.findings || [];
+    const actions = plan(findings);
+    const patches = generateDiffs(actions);
+
+    let result;
+    if (dryRunFlag) {
+      result = { applied: [], failed: [], backupCount: 0, dryRun: true, patches };
+    } else {
+      result = await apply(patches, target);
+    }
+
+    const { formatFix } = await import('../src/format.js');
+    console.log(formatFix(report, result));
+    process.exit(result.failed.length > 0 ? 1 : 0);
   }
 
   const file = resolve(positional[0] || '');

@@ -113,6 +113,21 @@ polish apply patches.json
 
 **或者直接运行 `polish`（不带参数）** 即可启动交互式向导——它会逐步引导你完成全部五个步骤，每步都有确认提示，无需记忆 JSON 文件或命令参数。详见下方 [交互式向导](#交互式向导)。
 
+**一键命令。** 无需串联 JSON 文件，快速、可重复使用：
+
+```bash
+# 只读健康检查——发现错误时退出码为 1，适合 CI
+polish check ./my-project
+
+# 一键修复——扫描、应用机械性补丁并备份，其余问题标记供你审查
+polish fix ./my-project
+
+# 预览修复但不修改文件
+polish fix ./my-project --dry-run
+```
+
+`polish check` 绝不修改文件——可安全用于 CI、pre-commit 钩子，或任何需要快速令牌健康快照的场景。`polish fix` 将完整的审计 → 计划 → 补丁 → 应用流水线合并为一条命令，仅应用机械性修复，并标记判断性问题供你审查。
+
 ## AI 代理部署
 
 **适合 AI 编程代理。** 最常见的工作流：将 GitHub 仓库地址交给你的 AI 编程代理（Qoder、Claude 等），让它设置并运行 polish。代理会：
@@ -186,6 +201,8 @@ CLI、MCP 和 Node.js API 三种入口使用相同的 `target` 参数。
 polish                                  # 启动交互式向导
 polish wizard [--target=dir] [--ignore=a,b]  # 带确认提示的引导式流水线
 polish audit  <target> [--ignore=a,b] [--summary]  # 扫描并输出发现
+polish check  <target> [--ignore=a,b]              # 健康检查：只读摘要，退出码表示是否有错误
+polish fix    <target> [--ignore=a,b] [--dry-run]  # 一键修复：自动应用机械性补丁并备份
 polish plan  <findings.json> [--summary]   # 将发现转换为有序操作列表
 polish diff  <plan.json> [--summary]       # 从计划生成机械性补丁
 polish apply <patches.json> [--summary]    # 应用补丁（创建 .backup 文件）

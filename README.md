@@ -111,7 +111,22 @@ polish diff plan.json > patches.json
 polish apply patches.json
 ```
 
-**Or just run `polish` with no arguments** to launch the interactive wizard — it walks you through all four steps with confirmation prompts, no JSON files or command flags to remember. See [Interactive Wizard](#interactive-wizard) below.
+**Or just run `polish` with no arguments** to launch the interactive wizard — it walks you through all five steps with confirmation prompts, no JSON files or command flags to remember. See [Interactive Wizard](#interactive-wizard) below.
+
+**One-shot commands.** For quick, repeatable use without chaining JSON files:
+
+```bash
+# Read-only health check — exit code 1 if errors found, ready for CI
+polish check ./my-project
+
+# One-shot fix — scans, applies mechanical patches with backup, reports the rest
+polish fix ./my-project
+
+# Preview fixes without touching files
+polish fix ./my-project --dry-run
+```
+
+`polish check` never modifies files — it's safe to run in CI, pre-commit hooks, or any time you want a quick token health snapshot. `polish fix` collapses the full audit → plan → diff → apply pipeline into a single command, applying only mechanical fixes and flagging judgmental issues for your review.
 
 ## AI Agent Deployment
 
@@ -186,6 +201,8 @@ The same `target` parameter is used across all three entry points — CLI, MCP, 
 polish                                 # Launch the interactive wizard
 polish wizard [--target=dir] [--ignore=a,b]  # Guided pipeline with confirmation prompts
 polish audit  <target> [--ignore=a,b] [--summary]  # Scan and output findings
+polish check  <target> [--ignore=a,b]              # Health check: read-only summary, exit code = errors
+polish fix    <target> [--ignore=a,b] [--dry-run]  # One-shot fix: apply mechanical patches with backup
 polish plan  <findings.json> [--summary]   # Convert findings to an ordered action list
 polish diff  <plan.json> [--summary]       # Generate mechanical patches from a plan
 polish apply <patches.json> [--summary]    # Apply patches (creates .backup files)
