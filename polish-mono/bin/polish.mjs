@@ -4,8 +4,8 @@
  * Extract · Critique · Apply
  */
 
-import { resolve } from 'path';
-import { readFileSync, existsSync } from 'fs';
+import { resolve, join } from 'path';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { scan } from '../src/scan.js';
 import { cross } from '../src/cross.js';
 import { plan } from '../src/plan.js';
@@ -21,6 +21,7 @@ Usage:
   polish audit  <target> [--ignore=a,b] [--summary]  Scan a directory and output findings
   polish check  <target> [--ignore=a,b]              Health check: read-only summary with exit code
   polish fix    <target> [--ignore=a,b] [--dry-run]  One-shot fix: apply mechanical patches with backup
+  polish report <target> [--ignore=a,b] [--output=f] Generate interactive HTML report
   polish plan   <findings.json> [--summary]          Convert findings into ordered action list
   polish diff   <plan.json> [--summary]              Generate mechanical patches from a plan
   polish apply  <patches.json> [--target=dir] [--summary]   Execute patches with backup protection
@@ -65,12 +66,15 @@ async function main() {
   let summaryFlag = false;
   let installFlag = false;
   let dryRunFlag = false;
+  let outputFlag = null;
   const positional = [];
   for (let i = 1; i < args.length; i++) {
     if (args[i].startsWith('--ignore=')) {
       ignoreFlag = args[i].slice('--ignore='.length);
     } else if (args[i].startsWith('--target=')) {
       targetFlag = args[i].slice('--target='.length);
+    } else if (args[i].startsWith('--output=')) {
+      outputFlag = args[i].slice('--output='.length);
     } else if (args[i] === '--summary') {
       summaryFlag = true;
     } else if (args[i] === '--install') {
@@ -136,6 +140,19 @@ async function main() {
     const { formatFix } = await import('../src/format.js');
     console.log(formatFix(report, result));
     process.exit(result.failed.length > 0 ? 1 : 0);
+  }
+
+  if (cmd === 'report') {
+    const target = resolve(positional[0] || '.');
+    const ignore = ignoreFlag ? ignoreFlag.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const graph = scan(target, { ignore });
+    const report = cross(graph);
+    const { generateReport } = await import('../src/report.js');
+    const html = generateReport(report);
+    const outFile = resolve(outputFlag || join(target, 'polish-report.html'));
+    writeFileSync(outFile, html, 'utf8');
+    console.log(`Report written to ${outFile}`);
+    process.exit(0);
   }
 
   const file = resolve(positional[0] || '');

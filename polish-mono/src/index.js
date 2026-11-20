@@ -12,8 +12,9 @@ import { generateDiffs } from './diff.js';
 import { confirm } from './confirm.js';
 import { apply } from './apply.js';
 import { runWizard } from './wizard.js';
+import { generateReport } from './report.js';
 
-export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, confirm, apply, measure, runWizard };
+export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, confirm, apply, measure, runWizard, generateReport };
 
 /**
  * Extract tokens from a directory.

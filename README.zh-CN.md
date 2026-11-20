@@ -124,9 +124,12 @@ polish fix ./my-project
 
 # 预览修复但不修改文件
 polish fix ./my-project --dry-run
+
+# 生成交互式 HTML 报告——浏览器打开即可，勾选决策
+polish report ./my-project
 ```
 
-`polish check` 绝不修改文件——可安全用于 CI、pre-commit 钩子，或任何需要快速令牌健康快照的场景。`polish fix` 将完整的审计 → 计划 → 补丁 → 应用流水线合并为一条命令，仅应用机械性修复，并标记判断性问题供你审查。
+`polish check` 绝不修改文件——可安全用于 CI、pre-commit 钩子，或任何需要快速令牌健康快照的场景。`polish fix` 将完整的审计 → 计划 → 补丁 → 应用流水线合并为一条命令，仅应用机械性修复，并标记判断性问题供你审查。`polish report` 生成一个自包含的 HTML 文件，可直接分享给设计师——按严重程度着色展示发现，并为简单决策（删除孤儿令牌、别名重复值）提供复选框；勾选后下载 `decisions.json`，即可交给 `polish confirm` 执行。
 
 ## AI 代理部署
 
@@ -203,6 +206,7 @@ polish wizard [--target=dir] [--ignore=a,b]  # 带确认提示的引导式流水
 polish audit  <target> [--ignore=a,b] [--summary]  # 扫描并输出发现
 polish check  <target> [--ignore=a,b]              # 健康检查：只读摘要，退出码表示是否有错误
 polish fix    <target> [--ignore=a,b] [--dry-run]  # 一键修复：自动应用机械性补丁并备份
+polish report <target> [--ignore=a,b] [--output=f] # 生成交互式 HTML 报告
 polish plan  <findings.json> [--summary]   # 将发现转换为有序操作列表
 polish diff  <plan.json> [--summary]       # 从计划生成机械性补丁
 polish apply <patches.json> [--summary]    # 应用补丁（创建 .backup 文件）
@@ -266,6 +270,16 @@ polish confirm decisions.json --target=./my-project --summary
 | `rename` | 跨文件重写所有出现处 | 命名空间碎片化 |
 
 同样的决策也可以通过向导的**确认**步骤（第 3 步，共 5 步）交互式收集。
+
+**`polish report`** 生成一个自包含的交互式 HTML 报告——在任意浏览器中打开，无需命令行或 JSON 即可审查发现。发现按严重程度着色，并分为错误/警告/信息三组。每张卡片展示发现类型、文件与行号、证据和建议。简单决策（删除孤儿令牌、别名重复值）配有复选框——勾选你同意的项，点击**下载 decisions.json** 导出，再交给 `polish confirm` 带备份执行。
+
+```bash
+polish report ./my-project                        # 在目标目录写入 polish-report.html
+polish report ./my-project --output=report.html   # 写入指定路径
+polish report ./my-project --ignore=node_modules  # 跳过目录
+```
+
+HTML 完全自包含——不依赖外部 CSS、JS 或网络请求——可邮件分享、放入仓库或离线打开。
 
 ## 交互式向导
 
@@ -383,6 +397,8 @@ const result = await apply(patches);
 | `plan` | `(findings: Finding[]) → PlanAction[]` | 将发现排序分类为操作队列 |
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | 从计划生成机械性补丁 |
 | `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | 带备份保护应用补丁（target 默认为 cwd） |
+| `confirm` | `(decisions: Decision[], graph: DeclarationGraph) → Patch[]` | 将设计师确认的决策解析为补丁 |
+| `generateReport` | `(report: AuditReport) → string` | 生成自包含的交互式 HTML 报告 |
 | `runWizard` | `(opts?: WizardOptions) → Promise<WizardResult>` | 交互式引导流水线，带确认提示 |
 
 已内置 TypeScript 类型定义——无需 `@types` 包。所有类型从包根目录导出。

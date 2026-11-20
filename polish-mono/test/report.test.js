@@ -1,0 +1,118 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { spawnSync } from 'child_process';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const TMP_DIR = path.join(__dirname, '.report-tmp');
+const BIN = path.resolve(__dirname, '../bin/polish.mjs');
+const NODE = process.execPath;
+
+function makeProject(cssContent) {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  const file = path.join(TMP_DIR, 'tokens.css');
+  fs.writeFileSync(file, cssContent, 'utf8');
+  return TMP_DIR;
+}
+
+function runCli(args) {
+  return spawnSync(NODE, [BIN, ...args], { encoding: 'utf8' });
+}
+
+function cleanup() {
+  fs.rmSync(TMP_DIR, { recursive: true, force: true });
+}
+
+test('polish report generates an HTML file', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n  --unused: #fff;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.length > 0, 'HTML file should not be empty');
+  assert.ok(html.includes('<html'), 'should contain HTML document');
+  cleanup();
+});
+
+test('polish report HTML is self-contained (no external resources)', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(!html.includes('src="http'), 'should not reference external scripts');
+  assert.ok(!html.includes('href="http'), 'should not reference external stylesheets');
+  assert.ok(html.includes('<style>'), 'should have inline styles');
+  cleanup();
+});
+
+test('polish report HTML contains finding types and file/line info', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('duplicate-value'), 'should list duplicate-value findings');
+  assert.ok(html.includes('tokens.css'), 'should show file names');
+  cleanup();
+});
+
+test('polish report HTML has checkboxes for orphan decisions', () => {
+  const dir = makeProject(':root {\n  --unused: #fff;\n  --primary: #4f46e5;\n}\n');
+  const result = runCli(['report', dir]);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('orphan'), 'should list orphan findings');
+  assert.ok(html.includes('data-decision'), 'should have decision data attributes');
+  assert.ok(html.includes('delete'), 'should mention delete action for orphans');
+  cleanup();
+});
+
+test('polish report HTML has checkboxes for duplicate-value alias decisions', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('alias'), 'should mention alias action for duplicate-value');
+  assert.ok(html.includes('--text'), 'should show primary token name');
+  assert.ok(html.includes('--heading'), 'should show secondary token name');
+  cleanup();
+});
+
+test('polish report HTML does not have checkboxes for conflict findings', () => {
+  const dir = makeProject(':root {\n  --primary: #4f46e5;\n}\n:root {\n  --primary: #ec4899;\n}\n');
+  const result = runCli(['report', dir]);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('conflict'), 'should list conflict findings');
+  cleanup();
+});
+
+test('polish report --output specifies output path', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const outFile = path.join(dir, 'custom-report.html');
+  const result = runCli(['report', dir, `--output=${outFile}`]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  assert.ok(fs.existsSync(outFile), 'custom output file should exist');
+  cleanup();
+});
+
+test('polish report --ignore skips files', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir, '--ignore=tokens.css']);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(!html.includes('duplicate-value'), 'ignored file should not produce findings');
+  cleanup();
+});
+
+test('polish report shows clean message when no findings', () => {
+  const dir = makeProject(':root {\n  --primary: #4f46e5;\n}\n.hero {\n  color: var(--primary);\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.toLowerCase().includes('clean') || html.includes('No issues'), 'should show clean state');
+  cleanup();
+});
+
+test('polish report HTML includes download decisions button', () => {
+  const dir = makeProject(':root {\n  --unused: #fff;\n  --primary: #4f46e5;\n}\n');
+  const result = runCli(['report', dir]);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('decisions.json'), 'should mention decisions.json download');
+  cleanup();
+});

@@ -124,9 +124,12 @@ polish fix ./my-project
 
 # Preview fixes without touching files
 polish fix ./my-project --dry-run
+
+# Generate an interactive HTML report — open in any browser, check decisions
+polish report ./my-project
 ```
 
-`polish check` never modifies files — it's safe to run in CI, pre-commit hooks, or any time you want a quick token health snapshot. `polish fix` collapses the full audit → plan → diff → apply pipeline into a single command, applying only mechanical fixes and flagging judgmental issues for your review.
+`polish check` never modifies files — it's safe to run in CI, pre-commit hooks, or any time you want a quick token health snapshot. `polish fix` collapses the full audit → plan → diff → apply pipeline into a single command, applying only mechanical fixes and flagging judgmental issues for your review. `polish report` produces a self-contained HTML file you can share with designers — it color-codes findings by severity and includes checkboxes for simple decisions (delete an orphan token, alias a duplicate value); check them and download a `decisions.json` to feed into `polish confirm`.
 
 ## AI Agent Deployment
 
@@ -203,6 +206,7 @@ polish wizard [--target=dir] [--ignore=a,b]  # Guided pipeline with confirmation
 polish audit  <target> [--ignore=a,b] [--summary]  # Scan and output findings
 polish check  <target> [--ignore=a,b]              # Health check: read-only summary, exit code = errors
 polish fix    <target> [--ignore=a,b] [--dry-run]  # One-shot fix: apply mechanical patches with backup
+polish report <target> [--ignore=a,b] [--output=f] # Generate interactive HTML report
 polish plan  <findings.json> [--summary]   # Convert findings to an ordered action list
 polish diff  <plan.json> [--summary]       # Generate mechanical patches from a plan
 polish apply <patches.json> [--summary]    # Apply patches (creates .backup files)
@@ -266,6 +270,16 @@ Three decision actions are supported:
 | `rename` | Rewrites all occurrences across files | Namespace fragmentation |
 
 The same decisions can be collected interactively via the wizard's **Confirm** step (Step 3 of 5).
+
+**`polish report`** generates a self-contained, interactive HTML report — open it in any browser to review findings without touching the CLI or JSON. Findings are color-coded by severity and grouped into error/warn/info sections. Each card shows the finding type, file and line, evidence, and a suggestion. Simple decisions (delete an orphan token, alias a duplicate value) get a checkbox — check the ones you agree with and click **Download decisions.json** to export them. Pass the file to `polish confirm` to apply those decisions with backup protection.
+
+```bash
+polish report ./my-project                       # Writes polish-report.html into the target
+polish report ./my-project --output=report.html   # Writes to a specific path
+polish report ./my-project --ignore=node_modules  # Skip directories
+```
+
+The HTML is fully self-contained — no external CSS, JS, or network requests — so you can share it by email, drop it in a repo, or open it offline.
 
 ## Interactive Wizard
 
@@ -384,6 +398,7 @@ const result = await apply(patches);
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | Generate mechanical patches from a plan |
 | `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | Apply patches with backup protection (target defaults to cwd) |
 | `confirm` | `(decisions: Decision[], graph: DeclarationGraph) → Patch[]` | Resolve designer-confirmed decisions into patches |
+| `generateReport` | `(report: AuditReport) → string` | Generate a self-contained interactive HTML report |
 | `runWizard` | `(opts?: WizardOptions) → Promise<WizardResult>` | Interactive guided pipeline with confirmation prompts |
 
 TypeScript definitions are bundled — no `@types` package needed. All types are exported from the package root.
