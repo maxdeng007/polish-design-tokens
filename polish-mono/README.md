@@ -82,7 +82,7 @@ Do NOT apply any fixes or modify any files. Install, audit, and report only.
 
 ## Optional Skills
 
-polish works out of the box with zero dependencies. Four optional skills and tools enhance the experience — none are required for token auditing. Run `polish doctor` to check what's installed; it reports any missing skill with a ready-to-run install command.
+polish works out of the box with zero dependencies. Four optional skills and tools enhance the experience — none are required for token auditing. Run `polish doctor` to check what's installed; it reports any missing skill with a ready-to-run install command. Pass `--install` to `polish doctor` to auto-install missing ones.
 
 | Skill / Tool | What It Does | How It Complements polish |
 |---|---|---|
@@ -181,13 +181,34 @@ The same `target` parameter is used across all three entry points — CLI, MCP, 
 ## CLI Usage
 
 ```bash
-polish audit  <target> [--ignore=a,b]  # Scan a directory and output findings JSON
-polish plan  <findings.json>   # Convert findings to an ordered action list
-polish diff  <plan.json>       # Generate mechanical patches from a plan
-polish apply <patches.json>    # Apply patches (creates .backup files)
-polish doctor                 # Check optional dependencies and environment health
-polish mcp                     # Start MCP server (JSON-RPC over stdin/stdout)
+polish audit  <target> [--ignore=a,b] [--summary]  # Scan and output findings
+polish plan  <findings.json> [--summary]   # Convert findings to an ordered action list
+polish diff  <plan.json> [--summary]       # Generate mechanical patches from a plan
+polish apply <patches.json> [--summary]    # Apply patches (creates .backup files)
+polish doctor [--install] [--summary]      # Check optional deps; --install auto-installs missing ones
+polish mcp                       # Start MCP server (JSON-RPC over stdin/stdout)
 ```
+
+**`--summary`** prints a human-readable summary instead of raw JSON — ideal when reading results in a terminal. Works for all commands:
+
+```bash
+polish audit ./my-project --summary
+# Token Audit Summary
+# ...
+# Found 130 issues:
+#   [Judgmental] 10 conflict
+#   [Mechanical] 34 duplicate-value
+# ...
+```
+
+**`--install`** (doctor only) automatically installs missing optional dependencies. Without it, doctor just reports what's missing and shows the install commands to run manually:
+
+```bash
+polish doctor              # Check what's installed, show install commands for missing
+polish doctor --install    # Check and auto-install missing optional dependencies
+```
+
+Without `--summary`, all commands output raw JSON for piping and programmatic use.
 
 ## MCP Server
 

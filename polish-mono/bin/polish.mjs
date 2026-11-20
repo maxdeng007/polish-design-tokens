@@ -15,12 +15,16 @@ import { apply } from '../src/apply.js';
 const USAGE = `polish — Design token superpower tool
 
 Usage:
-  polish audit  <target> [--ignore=a,b]  Scan a directory and output findings JSON
-  polish plan   <findings.json>          Convert findings into ordered action list
-  polish diff   <plan.json>              Generate mechanical patches from a plan
-  polish apply  <patches.json> [--target=dir]   Execute patches with backup protection (target defaults to cwd)
-  polish doctor                           Check optional dependencies and environment health
-  polish mcp                             Start MCP server (JSON-RPC over stdin/stdout)
+  polish audit  <target> [--ignore=a,b] [--summary]  Scan a directory and output findings
+  polish plan   <findings.json> [--summary]          Convert findings into ordered action list
+  polish diff   <plan.json> [--summary]              Generate mechanical patches from a plan
+  polish apply  <patches.json> [--target=dir] [--summary]   Execute patches with backup protection
+  polish doctor  [--install] [--summary]              Check dependencies, optionally install missing ones
+  polish mcp                                      Start MCP server (JSON-RPC over stdin/stdout)
+
+Flags:
+  --summary     Print human-readable summary instead of JSON
+  --install     Install missing optional dependencies (doctor only)
 
 Exit codes:
   0  success
@@ -50,15 +54,21 @@ async function main() {
 
   const cmd = args[0];
 
-  // Parse --ignore=a,b and --target=dir style flags from remaining args
+  // Parse --ignore=a,b, --target=dir, --summary, and --install flags
   let ignoreFlag = null;
   let targetFlag = null;
+  let summaryFlag = false;
+  let installFlag = false;
   const positional = [];
   for (let i = 1; i < args.length; i++) {
     if (args[i].startsWith('--ignore=')) {
       ignoreFlag = args[i].slice('--ignore='.length);
     } else if (args[i].startsWith('--target=')) {
       targetFlag = args[i].slice('--target='.length);
+    } else if (args[i] === '--summary') {
+      summaryFlag = true;
+    } else if (args[i] === '--install') {
+      installFlag = true;
     } else {
       positional.push(args[i]);
     }
@@ -69,7 +79,12 @@ async function main() {
     const ignore = ignoreFlag ? ignoreFlag.split(',').map(s => s.trim()).filter(Boolean) : [];
     const graph = scan(target, { ignore });
     const report = cross(graph);
-    console.log(JSON.stringify(report, null, 2));
+    if (summaryFlag) {
+      const { formatAudit } = await import('../src/format.js');
+      console.log(formatAudit(report));
+    } else {
+      console.log(JSON.stringify(report, null, 2));
+    }
     process.exit(0);
   }
 
@@ -78,14 +93,26 @@ async function main() {
   if (cmd === 'plan') {
     const data = loadJson(file);
     const findings = data.findings || data;
-    console.log(JSON.stringify(plan(findings), null, 2));
+    const result = plan(findings);
+    if (summaryFlag) {
+      const { formatPlan } = await import('../src/format.js');
+      console.log(formatPlan(result));
+    } else {
+      console.log(JSON.stringify(result, null, 2));
+    }
     process.exit(0);
   }
 
   if (cmd === 'diff') {
     const data = loadJson(file);
     const planItems = data.plan || data;
-    console.log(JSON.stringify(generateDiffs(planItems), null, 2));
+    const result = generateDiffs(planItems);
+    if (summaryFlag) {
+      const { formatDiff } = await import('../src/format.js');
+      console.log(formatDiff(result));
+    } else {
+      console.log(JSON.stringify(result, null, 2));
+    }
     process.exit(0);
   }
 
@@ -94,7 +121,12 @@ async function main() {
     const patches = data.patches || data;
     const target = resolve(targetFlag || process.cwd());
     const result = await apply(patches, target);
-    console.log(JSON.stringify(result, null, 2));
+    if (summaryFlag) {
+      const { formatApply } = await import('../src/format.js');
+      console.log(formatApply(result));
+    } else {
+      console.log(JSON.stringify(result, null, 2));
+    }
     process.exit(result.failed.length > 0 ? 1 : 0);
   }
 
@@ -105,8 +137,13 @@ async function main() {
 
   if (cmd === 'doctor') {
     const { polish_doctor } = await import('../src/handlers/polish-doctor.js');
-    const report = await polish_doctor({}, {});
-    console.log(JSON.stringify(report, null, 2));
+    const report = await polish_doctor({ install: installFlag }, {});
+    if (summaryFlag) {
+      const { formatDoctor } = await import('../src/format.js');
+      console.log(formatDoctor(report));
+    } else {
+      console.log(JSON.stringify(report, null, 2));
+    }
     process.exit(0);
   }
 

@@ -82,7 +82,7 @@ npm install -g .
 
 ## 可选技能
 
-polish 零依赖，开箱即用。以下四个可选技能与工具可增强体验——均非令牌审计所必需。运行 `polish doctor` 检查已安装项，缺失的技能会附带可直接执行的安装命令。
+polish 零依赖，开箱即用。以下四个可选技能与工具可增强体验——均非令牌审计所必需。运行 `polish doctor` 检查已安装项，缺失的技能会附带可直接执行的安装命令。对 doctor 使用 `--install` 可自动安装缺失项。
 
 | 技能 / 工具 | 功能 | 如何与 polish 配合 |
 |---|---|---|
@@ -181,13 +181,34 @@ CLI、MCP 和 Node.js API 三种入口使用相同的 `target` 参数。
 ## CLI 用法
 
 ```bash
-polish audit  <target> [--ignore=a,b]  # 扫描目录并输出发现 JSON
-polish plan  <findings.json>   # 将发现转换为有序操作列表
-polish diff  <plan.json>       # 从计划生成机械性补丁
-polish apply <patches.json>    # 应用补丁（创建 .backup 文件）
-polish doctor                 # 检查可选依赖和环境健康状态
+polish audit  <target> [--ignore=a,b] [--summary]  # 扫描并输出发现
+polish plan  <findings.json> [--summary]   # 将发现转换为有序操作列表
+polish diff  <plan.json> [--summary]       # 从计划生成机械性补丁
+polish apply <patches.json> [--summary]    # 应用补丁（创建 .backup 文件）
+polish doctor [--install] [--summary]      # 检查可选依赖；--install 自动安装缺失项
 polish mcp                     # 启动 MCP 服务器（stdin/stdout 上的 JSON-RPC）
 ```
+
+**`--summary`** 以人类可读的摘要替代原始 JSON 输出——在终端查看结果时非常理想。适用于所有命令：
+
+```bash
+polish audit ./my-project --summary
+# 令牌审计摘要
+# ...
+# 发现 130 个问题：
+#   [判断性] 10 个 conflict
+#   [机械性] 34 个 duplicate-value
+# ...
+```
+
+**`--install`**（仅 doctor）自动安装缺失的可选依赖。不加此标志时，doctor 仅报告缺失项并展示需手动执行的安装命令：
+
+```bash
+polish doctor              # 检查已安装项，对缺失项展示安装命令
+polish doctor --install    # 检查并自动安装缺失的可选依赖
+```
+
+不加 `--summary` 时，所有命令输出原始 JSON，便于管道传递和程序化使用。
 
 ## MCP 服务器
 

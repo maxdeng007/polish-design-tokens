@@ -3,13 +3,19 @@
  * Check that all dependencies are installed.
  * Gracefully degrades: missing skills are reported with install instructions
  * and marked optional — they are not errors.
+ *
+ * When params.install is true, missing dependencies are installed
+ * automatically by executing their install command, then re-checked.
+ *
  * @param {object} params - Tool parameters
+ * @param {boolean} [params.install] - If true, install missing dependencies
  * @param {object} deps - Dependencies
  * @returns {Promise<object>} Doctor report
  */
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
+import { execSync } from 'child_process';
 const require = createRequire(import.meta.url);
 
 const DEPENDENCIES = [
@@ -83,21 +89,87 @@ const DEPENDENCIES = [
   }
 ];
 
+/** Execute an install command. Returns { success, error }. */
+function tryInstall(command) {
+  try {
+    execSync(command, { stdio: 'pipe', timeout: 120000 });
+    return { success: true, error: null };
+  } catch (e) {
+    const parts = [];
+    if (e.stdout) {
+      const out = e.stdout.toString().trim();
+      if (out) parts.push(out);
+    }
+    if (e.stderr) {
+      const errOut = e.stderr.toString().trim();
+      if (errOut) parts.push(errOut);
+    }
+    if (!parts.length) parts.push(e.message || 'install command failed');
+    return { success: false, error: parts.filter(Boolean).join('\n') };
+  }
+}
+
 export async function polish_doctor(params, deps) {
+  const shouldInstall = params.install === true;
   const results = [];
   let optionalMissing = 0;
 
   for (const dep of DEPENDENCIES) {
     const check = dep.check();
-    if (!check.installed && dep.optional) optionalMissing++;
-    results.push({
-      name: dep.name,
-      type: dep.type,
-      optional: dep.optional,
-      installed: check.installed,
-      path: check.path || null,
-      install: check.installed ? null : dep.install
-    });
+
+    if (check.installed) {
+      results.push({
+        name: dep.name,
+        type: dep.type,
+        optional: dep.optional,
+        installed: true,
+        path: check.path || null,
+        install: null
+      });
+      continue;
+    }
+
+    if (shouldInstall && dep.install) {
+      const installResult = tryInstall(dep.install);
+      const recheck = dep.check();
+
+      if (recheck.installed) {
+        results.push({
+          name: dep.name,
+          type: dep.type,
+          optional: dep.optional,
+          installed: true,
+          path: recheck.path || null,
+          install: null,
+          installAttempted: true,
+          installResult: 'success',
+          installError: null
+        });
+      } else {
+        optionalMissing++;
+        results.push({
+          name: dep.name,
+          type: dep.type,
+          optional: dep.optional,
+          installed: false,
+          path: null,
+          install: dep.install,
+          installAttempted: true,
+          installResult: 'failed',
+          installError: installResult.error
+        });
+      }
+    } else {
+      optionalMissing++;
+      results.push({
+        name: dep.name,
+        type: dep.type,
+        optional: dep.optional,
+        installed: false,
+        path: null,
+        install: dep.install
+      });
+    }
   }
 
   return {

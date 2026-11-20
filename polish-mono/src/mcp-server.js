@@ -211,10 +211,15 @@ const toolDefinitions = [
   },
   {
     name: 'polish_doctor',
-    description: 'Check that optional dependencies are installed. dembrandt and skills (taste, awesome-design-md, impeccable) are all optional — they enhance the experience but are not required for token auditing. Returns install commands for missing ones.',
+    description: 'Check that optional dependencies are installed. dembrandt and skills (taste, awesome-design-md, impeccable) are all optional — they enhance the experience but are not required for token auditing. Pass { install: true } to install missing ones automatically.',
     inputSchema: {
       type: 'object',
-      properties: {}
+      properties: {
+        install: {
+          type: 'boolean',
+          description: 'If true, install missing optional dependencies automatically'
+        }
+      }
     }
   },
   {
