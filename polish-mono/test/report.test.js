@@ -116,3 +116,49 @@ test('polish report HTML includes download decisions button', () => {
   assert.ok(html.includes('decisions.json'), 'should mention decisions.json download');
   cleanup();
 });
+
+test('polish report CSS insets section titles and cards from edges', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+
+  const h2Rule = html.match(/\.severity-section h2\s*\{[^}]*\}/);
+  assert.ok(h2Rule, 'should have a .severity-section h2 rule');
+  assert.ok(h2Rule[0].includes('padding-left'), 'section title should have left padding, not flush at 0');
+  assert.ok(h2Rule[0].includes('padding-top'), 'section title should have top padding, not flush at 0');
+
+  const cardRule = html.match(/\.card\s*\{[^}]*\}/);
+  assert.ok(cardRule, 'should have a .card rule');
+  assert.ok(cardRule[0].includes('margin-left'), 'cards should have left margin, not flush at 0');
+  assert.ok(cardRule[0].includes('margin-right'), 'cards should have right margin, not flush at 0');
+  cleanup();
+});
+
+test('polish report card margins are uniform on all four sides', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+
+  const cardRule = html.match(/\.card\s*\{[^}]*\}/);
+  assert.ok(cardRule, 'should have a .card rule');
+
+  const margins = ['top', 'right', 'bottom', 'left'].map(dir => {
+    const m = cardRule[0].match(new RegExp(`margin-${dir}:\\s*([^;]+);`));
+    return m ? m[1].trim() : null;
+  });
+  assert.ok(margins.every(v => v !== null), 'card should define margin-top/right/bottom/left');
+  const [first, ...rest] = margins;
+  assert.ok(rest.every(v => v === first), `all card margins should share one value, got ${JSON.stringify(margins)}`);
+  cleanup();
+});
+
+test('polish report severity sections have rounded corners', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  const rule = html.match(/\.severity-section\s*\{[^}]*\}/);
+  assert.ok(rule, 'should have a .severity-section rule');
+  assert.ok(rule[0].includes('border-radius'), 'severity section should have rounded corners');
+  cleanup();
+});

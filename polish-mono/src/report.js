@@ -213,10 +213,17 @@ export function generateReport(report) {
     color: #166534;
     margin-bottom: 2rem;
   }
-  .severity-section { margin-bottom: 2rem; }
+  .severity-section {
+    margin-bottom: 2rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
   .severity-section h2 {
     font-size: 1.1rem;
     margin-bottom: 1rem;
+    padding-top: 0.5rem;
+    padding-left: 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid var(--border);
   }
@@ -225,7 +232,10 @@ export function generateReport(report) {
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 1.25rem;
+    margin-top: 1rem;
+    margin-right: 1rem;
     margin-bottom: 1rem;
+    margin-left: 1rem;
   }
   .card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
   .badge {
