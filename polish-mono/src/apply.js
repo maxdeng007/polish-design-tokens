@@ -68,13 +68,18 @@ export async function apply(patches, target = process.cwd()) {
   }
 
   for (const [file, filePatches] of byFile) {
+    // Patches from diff.js carry file paths relative to the scan target.
+    // Resolve them against the target so reads, writes, backups, and the
+    // boundary check all operate on the correct location.
+    const absFile = path.isAbsolute(file) ? file : path.resolve(resolvedTarget, file);
+
     // Boundary check: reject paths outside the target directory
     if (resolvedTarget) {
-      const resolvedFile = realpathSafe(file);
+      const resolvedFile = realpathSafe(absFile);
       const withinTarget = resolvedFile === resolvedTarget ||
         resolvedFile.startsWith(resolvedTarget + path.sep);
       if (!withinTarget) {
-        failed.push({ file, error: `file path is outside target directory: ${resolvedTarget}` });
+        failed.push({ file: absFile, error: `file path is outside target directory: ${resolvedTarget}` });
         continue;
       }
     }
@@ -85,20 +90,20 @@ export async function apply(patches, target = process.cwd()) {
     filePatches.sort((a, b) => (b.line || 0) - (a.line || 0));
 
     try {
-      const content = await fs.readFile(file, 'utf8');
+      const content = await fs.readFile(absFile, 'utf8');
       const lines = content.split('\n');
 
       // Back up once per file. If a backup already exists (from a previous
       // apply call), keep it — it holds the original pre-modification content.
-      if (!backedUp.has(file)) {
-        const backupPath = file + '.backup';
+      if (!backedUp.has(absFile)) {
+        const backupPath = absFile + '.backup';
         try {
           await fs.access(backupPath);
         } catch {
-          await fs.copyFile(file, backupPath);
+          await fs.copyFile(absFile, backupPath);
           backupCount++;
         }
-        backedUp.add(file);
+        backedUp.add(absFile);
       }
 
       for (const patch of filePatches) {
@@ -106,30 +111,30 @@ export async function apply(patches, target = process.cwd()) {
           // Insert a new line before the specified line, or append if no line
           const insertIdx = patch.line ? patch.line - 1 : lines.length;
           lines.splice(insertIdx, 0, patch.after);
-          applied.push({ file, line: patch.line || 'end' });
+          applied.push({ file: absFile, line: patch.line || 'end' });
           continue;
         }
 
         const lineIdx = patch.line - 1;
         if (lineIdx < 0 || lineIdx >= lines.length) {
-          failed.push({ file, line: patch.line, error: 'line out of range' });
+          failed.push({ file: absFile, line: patch.line, error: 'line out of range' });
           continue;
         }
 
         const before = lines[lineIdx];
         if (!before.includes(patch.before)) {
-          failed.push({ file, line: patch.line, error: `before text "${patch.before}" not found` });
+          failed.push({ file: absFile, line: patch.line, error: `before text "${patch.before}" not found` });
           continue;
         }
 
         const after = before.replace(patch.before, patch.after);
         lines[lineIdx] = after;
-        applied.push({ file, line: patch.line });
+        applied.push({ file: absFile, line: patch.line });
       }
 
-      await fs.writeFile(file, lines.join('\n'), 'utf8');
+      await fs.writeFile(absFile, lines.join('\n'), 'utf8');
     } catch (e) {
-      failed.push({ file, error: e.message });
+      failed.push({ file: absFile, error: e.message });
     }
   }
 
