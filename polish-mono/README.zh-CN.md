@@ -111,6 +111,8 @@ polish diff plan.json > patches.json
 polish apply patches.json
 ```
 
+**或者直接运行 `polish`（不带参数）** 即可启动交互式向导——它会逐步引导你完成全部四个步骤，每步都有确认提示，无需记忆 JSON 文件或命令参数。详见下方 [交互式向导](#交互式向导)。
+
 ## AI 代理部署
 
 **适合 AI 编程代理。** 最常见的工作流：将 GitHub 仓库地址交给你的 AI 编程代理（Qoder、Claude 等），让它设置并运行 polish。代理会：
@@ -181,6 +183,8 @@ CLI、MCP 和 Node.js API 三种入口使用相同的 `target` 参数。
 ## CLI 用法
 
 ```bash
+polish                                  # 启动交互式向导
+polish wizard [--target=dir] [--ignore=a,b]  # 带确认提示的引导式流水线
 polish audit  <target> [--ignore=a,b] [--summary]  # 扫描并输出发现
 polish plan  <findings.json> [--summary]   # 将发现转换为有序操作列表
 polish diff  <plan.json> [--summary]       # 从计划生成机械性补丁
@@ -217,6 +221,38 @@ polish doctor --install    # 检查并自动安装缺失的可选依赖
 polish explain conflict
 polish explain hardcoded
 ```
+
+## 交互式向导
+
+不带参数运行 `polish`（或运行 `polish wizard`）即启动交互式向导，逐步引导你完成完整流水线——审计、计划、补丁、应用——每一步都有确认提示。无需重定向 JSON 文件，无需记忆命令参数。
+
+```bash
+polish
+# ▸ polish — 设计令牌超级工具
+#
+# 第 1 步：审计
+# 要扫描的项目目录 [.]: .
+# 正在扫描...
+#   发现 130 个问题：10 个 conflict，34 个 duplicate-value，……
+# 继续构建操作计划？[Y/n/q] y
+#
+# 第 2 步：计划
+#   10 个判断性操作（建议人工审查）
+#   34 个机械性操作（可自动修复）
+# 继续生成补丁？[Y/n/q] y
+#
+# 第 3 步：补丁
+#   已生成 34 个机械性补丁。
+# 立即应用这些补丁？[Y/n/q] y
+#
+#   ✓ 已应用 34 个补丁，0 个失败
+#   已创建 2 个备份文件
+# 完成。
+```
+
+每一步都可以回答 **y**（继续）、**n**（跳到下一步）或 **q**（完全退出——不做任何更改）。也可以传入 `--target=dir` 和 `--ignore=a,b` 来跳过初始的目录与忽略模式提示。
+
+向导在你确认应用之前不会修改任何文件。即使确认应用，每个被修改的文件也会先以 `.backup` 后缀备份，再写入更改。
 
 不加 `--summary` 时，所有命令输出原始 JSON，便于管道传递和程序化使用。
 
@@ -267,10 +303,13 @@ polish 通过 Model Context Protocol 暴露 8 个工具，因此任何 AI 编程
 
 ```javascript
 import { plan, generateDiffs, apply } from 'polish-design-tokens';
-import { extract, audit, runPipeline, measure } from 'polish-design-tokens';
+import { extract, audit, runPipeline, measure, runWizard } from 'polish-design-tokens';
 
 // 完整流水线：扫描 → 审计 → 计划 → 差异（不应用）
 const { graph, findings, plan, patches } = runPipeline('./my-project');
+
+// 交互式向导（审计 → 计划 → 差异 → 应用，带确认提示）
+const wizardResult = await runWizard({ target: './my-project' });
 
 // 手动逐步操作
 const graph = extract('./my-project');
@@ -293,6 +332,7 @@ const result = await apply(patches);
 | `plan` | `(findings: Finding[]) → PlanAction[]` | 将发现排序分类为操作队列 |
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | 从计划生成机械性补丁 |
 | `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | 带备份保护应用补丁（target 默认为 cwd） |
+| `runWizard` | `(opts?: WizardOptions) → Promise<WizardResult>` | 交互式引导流水线，带确认提示 |
 
 已内置 TypeScript 类型定义——无需 `@types` 包。所有类型从包根目录导出。
 

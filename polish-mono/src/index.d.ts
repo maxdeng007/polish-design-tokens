@@ -13,6 +13,8 @@ import type {
   Patch,
   ApplyResult,
   PipelineResult,
+  WizardResult,
+  WizardOptions,
 } from './types.js';
 
 // Re-export shared types for consumers.
@@ -39,6 +41,8 @@ export type {
   Patch,
   ApplyResult,
   PipelineResult,
+  WizardResult,
+  WizardOptions,
 } from './types.js';
 
 // Re-export from sub-modules.
@@ -49,6 +53,7 @@ export { measure } from './measure.js';
 export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS } from './plan.js';
 export { generateDiffs } from './diff.js';
 export { apply } from './apply.js';
+export { runWizard } from './wizard.js';
 
 /**
  * Extract tokens from a directory (alias for scan).

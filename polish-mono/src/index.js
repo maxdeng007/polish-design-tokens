@@ -10,8 +10,9 @@ import { measure } from './measure.js';
 import { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS } from './plan.js';
 import { generateDiffs } from './diff.js';
 import { apply } from './apply.js';
+import { runWizard } from './wizard.js';
 
-export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, apply, measure };
+export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, apply, measure, runWizard };
 
 /**
  * Extract tokens from a directory.

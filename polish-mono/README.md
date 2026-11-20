@@ -111,6 +111,8 @@ polish diff plan.json > patches.json
 polish apply patches.json
 ```
 
+**Or just run `polish` with no arguments** to launch the interactive wizard — it walks you through all four steps with confirmation prompts, no JSON files or command flags to remember. See [Interactive Wizard](#interactive-wizard) below.
+
 ## AI Agent Deployment
 
 **For AI coding agents.** The most common workflow: give your AI coding agent (Qoder, Claude, etc.) the GitHub repo URL and ask it to set up and run polish. The agent will:
@@ -181,6 +183,8 @@ The same `target` parameter is used across all three entry points — CLI, MCP, 
 ## CLI Usage
 
 ```bash
+polish                                 # Launch the interactive wizard
+polish wizard [--target=dir] [--ignore=a,b]  # Guided pipeline with confirmation prompts
 polish audit  <target> [--ignore=a,b] [--summary]  # Scan and output findings
 polish plan  <findings.json> [--summary]   # Convert findings to an ordered action list
 polish diff  <plan.json> [--summary]       # Generate mechanical patches from a plan
@@ -217,6 +221,38 @@ polish doctor --install    # Check and auto-install missing optional dependencie
 polish explain conflict
 polish explain hardcoded
 ```
+
+## Interactive Wizard
+
+Running `polish` with no arguments (or `polish wizard`) launches an interactive wizard that walks you through the entire pipeline — audit, plan, diff, and apply — step by step with confirmation prompts. No JSON files to redirect, no command flags to remember.
+
+```bash
+polish
+# ▸ Polish — Design Token Superpower Tool
+#
+# Step 1: Audit
+# Project directory to scan [.]: .
+# Scanning...
+#   Found 130 issues: 10 conflict, 34 duplicate-value, ...
+# Proceed to build an action plan? [Y/n/q] y
+#
+# Step 2: Plan
+#   10 judgmental actions (review recommended)
+#   34 mechanical actions (auto-fixable)
+# Proceed to generate patches? [Y/n/q] y
+#
+# Step 3: Diff
+#   Generated 34 mechanical patches.
+# Apply patches now? [Y/n/q] y
+#
+#   ✓ 34 patches applied, 0 failed
+#   2 backup files created
+# Done.
+```
+
+At each step you can answer **y** (continue), **n** (skip to the next step), or **q** (quit entirely — no changes are made). You can also pass `--target=dir` and `--ignore=a,b` to skip the initial directory and ignore-pattern prompts.
+
+The wizard never modifies files until you confirm at the apply step. Even then, every modified file is backed up with a `.backup` suffix before any change is written.
 
 Without `--summary`, all commands output raw JSON for piping and programmatic use.
 
@@ -267,10 +303,13 @@ Available tools:
 
 ```javascript
 import { plan, generateDiffs, apply } from 'polish-design-tokens';
-import { extract, audit, runPipeline, measure } from 'polish-design-tokens';
+import { extract, audit, runPipeline, measure, runWizard } from 'polish-design-tokens';
 
 // Full pipeline: scan → audit → plan → diff (does NOT apply)
 const { graph, findings, plan, patches } = runPipeline('./my-project');
+
+// Interactive wizard (audit → plan → diff → apply with prompts)
+const wizardResult = await runWizard({ target: './my-project' });
 
 // Manual step-by-step
 const graph = extract('./my-project');
@@ -293,6 +332,7 @@ const result = await apply(patches);
 | `plan` | `(findings: Finding[]) → PlanAction[]` | Rank and classify findings into an action queue |
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | Generate mechanical patches from a plan |
 | `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | Apply patches with backup protection (target defaults to cwd) |
+| `runWizard` | `(opts?: WizardOptions) → Promise<WizardResult>` | Interactive guided pipeline with confirmation prompts |
 
 TypeScript definitions are bundled — no `@types` package needed. All types are exported from the package root.
 

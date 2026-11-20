@@ -15,6 +15,8 @@ import { apply } from '../src/apply.js';
 const USAGE = `polish — Design token superpower tool
 
 Usage:
+  polish                                  Launch the interactive wizard
+  polish wizard [--target=dir] [--ignore=a,b]   Interactive guided pipeline
   polish audit  <target> [--ignore=a,b] [--summary]  Scan a directory and output findings
   polish plan   <findings.json> [--summary]          Convert findings into ordered action list
   polish diff   <plan.json> [--summary]              Generate mechanical patches from a plan
@@ -48,12 +50,10 @@ function loadJson(filePath) {
 async function main() {
   const args = process.argv.slice(2);
 
-  if (args.length === 0 || args[0] === '--help' || args[0] === '-h') {
+  if (args[0] === '--help' || args[0] === '-h') {
     console.log(USAGE);
-    process.exit(args.length === 0 ? 2 : 0);
+    process.exit(0);
   }
-
-  const cmd = args[0];
 
   // Parse --ignore=a,b, --target=dir, --summary, and --install flags
   let ignoreFlag = null;
@@ -74,6 +74,16 @@ async function main() {
       positional.push(args[i]);
     }
   }
+
+  // Bare `polish` launches the interactive wizard.
+  if (args.length === 0 || args[0] === 'wizard') {
+    const { runWizard } = await import('../src/wizard.js');
+    const ignore = ignoreFlag ? ignoreFlag.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const result = await runWizard({ target: targetFlag, ignore });
+    process.exit(result.status === 'error' ? 1 : 0);
+  }
+
+  const cmd = args[0];
 
   if (cmd === 'audit') {
     const target = resolve(positional[0] || '.');

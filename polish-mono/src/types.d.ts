@@ -232,3 +232,32 @@ export interface PipelineResult {
   plan: PlanAction[];
   patches: Patch[];
 }
+
+/** Result summary returned by runWizard(). */
+export interface WizardResult {
+  target: string | null;
+  status:
+    | 'completed'
+    | 'clean'
+    | 'quit'
+    | 'stopped'
+    | 'aborted'
+    | 'no-mechanical'
+    | 'no-patches'
+    | 'partial'
+    | 'error';
+  findings: number;
+  planActions: number;
+  patches: number;
+  applied: number;
+  failed: number;
+  backups: number;
+}
+
+/** Options for runWizard(). */
+export interface WizardOptions {
+  target?: string;
+  ignore?: string[];
+  prompt?: (question: string) => Promise<string>;
+  write?: (text: string) => void;
+}
