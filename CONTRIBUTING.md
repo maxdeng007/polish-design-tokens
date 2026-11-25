@@ -70,7 +70,25 @@ All tests must pass before a change is considered complete.
   resolving), never `path.resolve()` alone. Backups (`<file>.backup`) are
   created before modification and never overwritten.
 - **Version bumps.** New feature → minor bump; fix/polish → patch bump.
-  Update `CHANGELOG.md` with the change.
+  See [Version bumps and release](#version-bumps-and-release) for the full
+  release process.
+
+## Version bumps and release
+
+New feature → minor bump; fix/polish → patch bump. Update `CHANGELOG.md`
+with the change.
+
+Releases are fully tag-driven:
+
+1. Bump the version in `polish-mono/package.json` and update `CHANGELOG.md`.
+2. Commit the bump and push to `main`.
+3. Tag the release: `git tag v1.9.0 && git push github v1.9.0`.
+
+The **Release** workflow (`.github/workflows/release.yml`) triggers on the tag:
+it re-runs the test suite, verifies the tag matches `package.json`, publishes
+to npm (using the `NPM_TOKEN` secret), and creates a GitHub release with
+auto-generated notes. No manual publish step is needed — and never run
+`npm publish` locally from a tag you also pushed.
 
 ## Submitting changes
 

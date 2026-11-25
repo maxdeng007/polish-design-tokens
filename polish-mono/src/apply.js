@@ -13,6 +13,11 @@
  *   allow writes elsewhere.
  * - Patches within a file are applied in line-descending order so that
  *   inserts don't shift the line numbers of subsequent patches.
+ * - `delete` patches that carry the expected original line text (`before`)
+ *   are verified against the file first; a mismatch is refused as stale, so a
+ *   file changed since the patch was generated can never lose the wrong line.
+ * - Files are written atomically (temp file + rename), so a failed write can
+ *   never leave a half-written file behind.
  *
  * Failed patches don't abort the batch — they're recorded and the rest
  * proceed.
@@ -126,6 +131,20 @@ export async function apply(patches, target = process.cwd()) {
             failed.push({ file: absFile, line: patch.line, error: 'line out of range' });
             continue;
           }
+          // Stale-safety: when the patch carries the expected original line
+          // text, refuse to delete unless the file still matches. The file may
+          // have changed since the patch was generated; blind line-number
+          // deletion could then remove the wrong line.
+          if (patch.before) {
+            const current = lines[lineIdx];
+            if (current.trim() !== String(patch.before).trim()) {
+              failed.push({
+                file: absFile, line: patch.line,
+                error: 'stale delete: line content does not match expected original text'
+              });
+              continue;
+            }
+          }
           lines.splice(lineIdx, 1);
           applied.push({ file: absFile, line: patch.line });
           continue;
@@ -158,7 +177,18 @@ export async function apply(patches, target = process.cwd()) {
         applied.push({ file: absFile, line: patch.line });
       }
 
-      await fs.writeFile(absFile, lines.join('\n'), 'utf8');
+      // Write atomically: stage the new content in a temp file next to the
+      // target and rename it into place, so a crash mid-write can never leave
+      // a half-written file behind.
+      const nextContent = lines.join('\n');
+      const tmpFile = `${absFile}.tmp-${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      try {
+        await fs.writeFile(tmpFile, nextContent, 'utf8');
+        await fs.rename(tmpFile, absFile);
+      } catch (e) {
+        await fs.rm(tmpFile, { force: true }).catch(() => {});
+        throw e;
+      }
     } catch (e) {
       failed.push({ file: absFile, error: e.message });
     }

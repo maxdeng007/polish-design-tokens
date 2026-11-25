@@ -8,17 +8,29 @@ on:
 
 jobs:
   test:
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18, 20, 22]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        working-directory: polish-mono
+        run: npm ci
+
+      - name: Typecheck declarations
+        working-directory: polish-mono
+        run: npm run typecheck
 
       - name: Run test suite
         working-directory: polish-mono
-        run: node --test test/
+        run: npm test
 
       - name: Run pipeline on demo project
         working-directory: polish-mono

@@ -6,8 +6,8 @@ import type { DeclarationGraph } from './types.js';
 
 /** Options for scan(). */
 export interface ScanOptions {
-  /** Comma-separated glob-ish substrings to skip. */
-  ignore?: string;
+  /** Comma-separated glob-ish substrings to skip, or an array of such. */
+  ignore?: string | string[];
 }
 
 /**

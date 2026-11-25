@@ -328,3 +328,55 @@ test('apply records failed rewrite when file does not exist', async () => {
   assert.equal(result.failed.length, 1);
   cleanup();
 });
+
+test('delete patch with before verifies the original line content', async () => {
+  const file = makeTempCss(':root {\n  --unused: #ffffff;\n  --primary: #4f46e5;\n}\n');
+  const result = await apply([
+    { type: 'delete', file, line: 2, before: '  --unused: #ffffff;', reason: 'delete orphan', findingId: 'orphan' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 1, 'matching delete should apply');
+  assert.equal(result.failed.length, 0);
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(!content.includes('--unused'), 'line should be deleted');
+  assert.ok(content.includes('--primary'), 'other lines should remain');
+  cleanup();
+});
+
+test('delete patch rejects when the line content has changed (stale)', async () => {
+  const file = makeTempCss(':root {\n  --unused: #ffffff;\n  --primary: #4f46e5;\n}\n');
+  // Simulate a stale patch: the patch was generated from an older audit, and
+  // the line now holds a different declaration.
+  const result = await apply([
+    { type: 'delete', file, line: 2, before: '  --unused: #000000;', reason: 'delete orphan', findingId: 'orphan' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 0, 'stale delete must not apply');
+  assert.equal(result.failed.length, 1, 'stale delete should be recorded as failed');
+  assert.ok(result.failed[0].error.includes('stale'), 'failure should explain the stale content');
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(content.includes('--unused'), 'file must be unchanged on stale delete');
+  cleanup();
+});
+
+test('delete patch without before still applies (backward compatible)', async () => {
+  const file = makeTempCss(':root {\n  --unused: #ffffff;\n  --primary: #4f46e5;\n}\n');
+  const result = await apply([
+    { type: 'delete', file, line: 2, reason: 'delete orphan', findingId: 'orphan' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 1, 'delete without before should still apply');
+  assert.equal(result.failed.length, 0);
+  cleanup();
+});
+
+test('apply writes atomically and leaves no temp files', async () => {
+  const file = makeTempCss(':root {\n  --bg: #1a1a2e;\n  --background: #1a1a2e;\n}\n');
+  const result = await apply([
+    { type: 'replace', file, line: 3, before: '#1a1a2e', after: 'var(--bg)', reason: 'test', findingId: 'duplicate-value' }
+  ], TMP_DIR);
+  assert.equal(result.applied.length, 1);
+  const entries = fs.readdirSync(TMP_DIR);
+  const leftovers = entries.filter(e => e !== 'tokens.css' && e !== 'tokens.css.backup');
+  assert.deepEqual(leftovers, [], `no temp files should remain: ${JSON.stringify(leftovers)}`);
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(content.includes('--background: var(--bg);'));
+  cleanup();
+});

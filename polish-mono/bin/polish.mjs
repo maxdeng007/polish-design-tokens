@@ -202,7 +202,7 @@ async function main() {
     const decisions = data.decisions || data;
     const target = resolve(targetFlag || process.cwd());
     const graph = scan(target);
-    const patches = resolveDecisions(decisions, graph);
+    const patches = resolveDecisions(decisions, graph, target);
     const result = await apply(patches, target);
     if (summaryFlag) {
       const { formatApply } = await import('../src/format.js');

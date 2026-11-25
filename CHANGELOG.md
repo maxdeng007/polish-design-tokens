@@ -30,6 +30,25 @@ new capabilities bump the minor version, fixes and polish bump the patch version
   `setProperty()` arguments). Line numbers are preserved through masking.
   Added regression tests covering each boundary.
 
+- **Stale deletes could remove the wrong line** — `delete` patches carried no
+  original-line text, so apply() deleted purely by line number and could
+  remove an unrelated line if the file changed after the audit. `confirm`
+  now embeds the declaration's original line text in each delete patch (and
+  drops decisions whose target line can no longer be verified), and `apply`
+  refuses deletes whose line content no longer matches, reporting them as
+  stale. File writes are now atomic (temp file + rename), so a failed write
+  can never leave a half-written file.
+
+### Added
+
+- **Release infrastructure** — CI now runs the test suite across a Node 18/20/
+  22 matrix with `npm ci`, plus a `typecheck` step validating the published
+  `.d.ts` declarations (`tsc --noEmit`, new `tsconfig.json`). A new
+  tag-driven **Release** workflow verifies the tag matches `package.json`,
+  publishes to npm with the `NPM_TOKEN` secret, and creates a GitHub release
+  with auto-generated notes. CONTRIBUTING documents the tag-driven release
+  process.
+
 ## [1.8.0]
 
 ### Added

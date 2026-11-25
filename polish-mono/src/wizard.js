@@ -194,7 +194,7 @@ export async function runWizard(opts = {}) {
       if (decisions.length > 0) {
         out('');
         out(`Resolving ${decisions.length} decision(s) into patches...`);
-        const resolved = resolveDecisions(decisions, graph);
+        const resolved = resolveDecisions(decisions, graph, target);
         confirmedPatches.push(...resolved);
         out(c(ANSI.green, `  ${resolved.length} patch(es) from confirmed decisions`));
       }

@@ -34,7 +34,8 @@
   "scripts": {
     "start": "node bin/polish.mjs",
     "mcp": "node src/mcp-server.js",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "typecheck": "tsc"
   },
   "keywords": [
     "design-tokens",
