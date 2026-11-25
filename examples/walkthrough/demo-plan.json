@@ -3,8 +3,8 @@
     "finding": {
       "id": "conflict",
       "severity": "error",
-      "title": "--card 在 root 作用域内有 2 个不同的值",
-      "detail": "#16213e（1 处，如 src/tokens.css:15）；#1f2937（1 处，如 src/tokens.css:20）",
+      "title": "--card has 2 different values within the root scope",
+      "detail": "#16213e (1 occurrences, e.g. src/tokens.css:15); #1f2937 (1 occurrences, e.g. src/tokens.css:20)",
       "evidence": [
         {
           "file": "src/tokens.css",
@@ -21,7 +21,7 @@
           "themes": []
         }
       ],
-      "suggestion": "根作用域应只有一个真值——合并后其余位置改为引用。"
+      "suggestion": "The root scope should have a single canonical value — merge and reference it everywhere else."
     },
     "action": "fix",
     "type": "judgmental",
@@ -33,8 +33,8 @@
     "finding": {
       "id": "dangling",
       "severity": "error",
-      "title": "btn-* 家族有 1 个悬空引用（占全部 1 个的 100%）",
-      "detail": "整个命名族被引用却从未声明——这是生成端的系统性缺口，不是 1 个独立 bug。最可能的原因是该组件库的页面级样式按需生成但输出不完整。",
+      "title": "btn-* family has 1 dangling references (100% of all 1)",
+      "detail": "The entire naming family is referenced but never declared — this is a systematic gap in the generator, not 1 independent bugs. The most likely cause is that the component library's page-level styles are generated on demand but output incompletely.",
       "evidence": [
         {
           "name": "--btn-bg",
@@ -43,21 +43,21 @@
           "line": 29
         }
       ],
-      "suggestion": "排查 btn-* 的生成器配置，重新导出页面样式。其余 0 个非 btn-* 的悬空引用见下方。",
+      "suggestion": "Investigate the btn-* generator configuration and re-export page styles. The remaining 0 non-btn-* dangling references are listed below.",
       "refCount": 1
     },
     "action": "fix",
-    "type": "mechanical",
+    "type": "judgmental",
     "priority": 2,
-    "mechanical": true,
-    "judgmental": false
+    "mechanical": false,
+    "judgmental": true
   },
   {
     "finding": {
       "id": "orphan",
       "severity": "warn",
-      "title": "4 个令牌声明了却从未被引用",
-      "detail": "按作用域分布：root 4 个。典型来源是共享样式表被另一个页面的变量体系取代了。",
+      "title": "4 tokens are declared but never referenced",
+      "detail": "Distribution by scope: root: 4. A common cause is a shared stylesheet being replaced by another page's variable system.",
       "evidence": [
         {
           "name": "--bg",
@@ -96,7 +96,7 @@
           "line": 12
         }
       ],
-      "suggestion": "逐个确认：删掉，或让真正的消费方引用它。"
+      "suggestion": "Review each one: delete it, or have the real consumer reference it."
     },
     "action": "review",
     "type": "judgmental",
@@ -108,7 +108,7 @@
     "finding": {
       "id": "duplicate-value",
       "severity": "warn",
-      "title": "2 组颜色被多个令牌名重复表达",
+      "title": "2 color values are expressed by multiple token names",
       "detail": "#1a1a2e = --bg = --background = --nm-bg；#e05800 = --accent = --gold",
       "evidence": [
         {
@@ -126,6 +126,20 @@
           "secondaryLine": 7
         },
         {
+          "value": "#1a1a2e",
+          "names": [
+            "--bg",
+            "--background",
+            "--nm-bg"
+          ],
+          "primary": "--bg",
+          "secondary": "--nm-bg",
+          "primaryFile": "src/tokens.css",
+          "primaryLine": 6,
+          "secondaryFile": "src/tokens.css",
+          "secondaryLine": 8
+        },
+        {
           "value": "#e05800",
           "names": [
             "--accent",
@@ -139,7 +153,7 @@
           "secondaryLine": 12
         }
       ],
-      "suggestion": "同一颜色保留一个主名，其余改成别名引用，减少\"该用哪个\"的猜测。"
+      "suggestion": "Keep one canonical name per color and alias the rest to it, reducing guesswork about which one to use."
     },
     "action": "review",
     "type": "mechanical",
@@ -151,7 +165,7 @@
     "finding": {
       "id": "namespace",
       "severity": "info",
-      "title": "并存 6 个命名族",
+      "title": "6 naming families coexist",
       "detail": "--bg-*（1），--background-*（1），--nm-*（1），--accent-*（1），--gold-*（1），--card-*（1）",
       "evidence": [
         {
@@ -209,7 +223,7 @@
           "line": 15
         }
       ],
-      "suggestion": "选定一到两个命名族作为主体系，其余降级为别名或逐步废弃。"
+      "suggestion": "Choose one or two naming families as the primary system, and demote the rest to aliases or phase them out."
     },
     "action": "note",
     "type": "judgmental",
