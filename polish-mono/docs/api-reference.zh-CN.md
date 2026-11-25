@@ -123,7 +123,7 @@ const report = cross(graph);
 
 ### `measure(docs?)`
 
-将原始运行时观测数据规范化为 `cross()` 所需的格式。不执行浏览器测量——那由 `token-audit-mcp` 处理。
+将原始运行时观测数据规范化为 `cross()` 所需的格式。不执行浏览器测量——请先从 Chrome DevTools 或类似工具采集值。
 
 ```typescript
 import { measure } from 'polish-design-tokens/measure';

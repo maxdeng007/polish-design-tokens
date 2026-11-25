@@ -123,7 +123,7 @@ const report = cross(graph);
 
 ### `measure(docs?)`
 
-Normalize raw runtime observation data into the format `cross()` expects. Does not perform browser measurement — that's handled by `token-audit-mcp`.
+Normalize raw runtime observation data into the format `cross()` expects. Does not perform browser measurement — collect values from Chrome DevTools or a similar tool first.
 
 ```typescript
 import { measure } from 'polish-design-tokens/measure';

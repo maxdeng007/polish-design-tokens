@@ -24,7 +24,7 @@ import { measure, audit, runPipeline } from '../../polish-mono/src/index.js';
 // ── Step 1: Simulated runtime observations ──────────────────────────────
 //
 // In real usage these come from a browser (DevTools → Computed Style panel,
-// or the companion token-audit-mcp package). Here we simulate three pages
+// or a browser measurement tool). Here we simulate three pages
 // of the same light theme plus one dark theme page, with two planted
 // runtime issues:
 //
@@ -162,6 +162,7 @@ console.log('  3. runPipeline() accepts the observation too, so the full');
 console.log('     extract → audit → plan → diff flow runs with runtime data.');
 console.log('');
 console.log('  In a real agent workflow, the observation comes from');
-console.log('  polish_measure (MCP) or the token-audit-mcp browser tool,');
-console.log('  then flows into polish_audit as the observation argument.');
+console.log('  browser-measured values (e.g. Chrome DevTools), normalized');
+console.log('  with polish_measure (MCP), then flows into polish_audit as the');
+console.log('  observation argument.');
 console.log('');

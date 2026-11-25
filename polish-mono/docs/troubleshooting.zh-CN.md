@@ -83,7 +83,7 @@ git push -u origin fix/esm-sources
 
 **原因：** 这些发现类型需要来自 `measure()` 的 `RuntimeObservation`。仅静态审计（不含观测数据）不会产生它们。
 
-**修复：** 提供运行时观测数据。使用 `token-audit-mcp` 配套工具收集浏览器测量值，或手动构造观测数据：
+**修复：** 提供运行时观测数据。从 Chrome DevTools（或其他测量工具）收集浏览器测量值，用 `polish_measure` 规范化，或手动构造观测数据：
 
 ```json
 {

@@ -4,7 +4,7 @@
  * Accepts runtime data collected from a browser (via DevTools or similar)
  * and normalizes it into the format cross() expects. Does not perform
  * browser measurement itself — that requires Chrome DevTools and is
- * handled by the companion token-audit-mcp package.
+ * handled by a separate browser-measurement tool.
  */
 
 /**

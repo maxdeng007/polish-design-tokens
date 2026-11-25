@@ -1,6 +1,6 @@
 {
   "name": "polish-design-tokens",
-  "version": "1.7.2",
+  "version": "1.8.0",
   "description": "Design token superpower tool: extract · critique · apply · publish via npm",
   "type": "module",
   "bin": {
@@ -39,7 +39,7 @@
   "keywords": [
     "design-tokens",
     "css-variables",
-    "token-audit",
+    "polish",
     "mcp"
   ],
   "license": "MIT",

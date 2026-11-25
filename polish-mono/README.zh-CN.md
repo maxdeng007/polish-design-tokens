@@ -108,7 +108,7 @@ polish plan findings.json > plan.json
 polish diff plan.json > patches.json
 
 # 4. 应用补丁（自动创建 .backup 文件）
-polish apply patches.json
+polish apply patches.json --target=./my-project
 ```
 
 **或者直接运行 `polish`（不带参数）** 即可启动交互式向导——它会逐步引导你完成全部五个步骤，每步都有确认提示，无需记忆 JSON 文件或命令参数。详见下方 [交互式向导](#交互式向导)。
@@ -500,7 +500,7 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 
 参见 [`examples/walkthrough/`](https://github.com/maxdeng007/polish-design-tokens/tree/main/examples/walkthrough/)——在演示项目上运行完整流水线（审计 → 计划 → 差异 → 应用）的完整可执行演练，包含真实流水线输出、可视化流程图和终端截图。
 
-另见 [`examples/noah-sample/`](https://github.com/maxdeng007/polish-design-tokens/tree/main/examples/noah-sample/)——覆盖所有发现类型的丰富测试用例，包含重复值、硬编码颜色和悬空引用的真实样式表。
+另见 [`examples/legacy-token-audit/noah-sample/`](https://github.com/maxdeng007/polish-design-tokens/tree/main/examples/legacy-token-audit/noah-sample/)——token-audit 时代的归档产物：覆盖所有发现类型的丰富测试用例，包含重复值、硬编码颜色和悬空引用的真实样式表。由旧工具生成，仅供参考。
 
 ## 许可证
 

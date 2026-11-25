@@ -37,8 +37,8 @@ The script runs three steps against the shared
 
 ### Step 1 — Collect runtime observations
 
-Simulates data collected from a browser (DevTools → Computed Style, or the
-companion token-audit-mcp package). Four pages across two themes:
+Simulates data collected from a browser (DevTools → Computed Style, or a
+browser measurement tool). Four pages across two themes:
 
 | Page | Theme | `--bg` | `--accent` | `--fg` |
 |------|-------|--------|------------|--------|
@@ -110,9 +110,9 @@ so runtime findings flow through classification and patch generation too.
 
 ## In a real agent workflow
 
-The observation comes from `polish_measure` (MCP tool) or the
-token-audit-mcp browser tool, then flows into `polish_audit` as the
-`observation` argument:
+The observation comes from `polish_measure` (MCP tool), fed with
+browser-measured values (e.g. from Chrome DevTools), then flows into
+`polish_audit` as the `observation` argument:
 
 ```json
 // MCP: polish_measure

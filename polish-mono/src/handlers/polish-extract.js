@@ -1,6 +1,6 @@
 /**
  * Handle polish_extract tool call.
- * Extract tokens from a directory using token-audit's scan.
+ * Extract tokens from a directory using polish's scan.
  * @param {object} params - Tool parameters
  * @param {string} params.target - Directory path to scan
  * @param {string[]} [params.ignore] - Path fragments to skip

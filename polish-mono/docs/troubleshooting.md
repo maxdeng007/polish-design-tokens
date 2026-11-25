@@ -83,7 +83,7 @@ Verify Node.js version: `node --version` (must be ≥ 18).
 
 **Cause:** These finding types require a `RuntimeObservation` from `measure()`. Static-only audits (without observation data) won't produce them.
 
-**Fix:** Provide runtime observation data. Use the `token-audit-mcp` companion to collect browser-measured values, or manually construct observation data:
+**Fix:** Provide runtime observation data. Collect browser-measured values from Chrome DevTools (or a similar measurement tool), normalize them with `polish_measure`, or manually construct observation data:
 
 ```json
 {
