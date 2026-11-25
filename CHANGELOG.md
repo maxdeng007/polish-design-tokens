@@ -8,6 +8,18 @@ new capabilities bump the minor version, fixes and polish bump the patch version
 
 ## [Unreleased]
 
+### Fixed
+
+- **False references from comments and strings** — the parser extracted
+  `var()` references from raw source text, so `var(--x)` inside CSS/JS
+  comments, JS documentation strings, and template literals was treated as a
+  real reference and produced phantom `dangling` findings. References are now
+  extracted from a lexically masked copy: comments are always masked, CSS
+  string literals are masked, and JS strings/templates survive only when they
+  sit in a CSS context (style-object values, custom-property values, or
+  `setProperty()` arguments). Line numbers are preserved through masking.
+  Added regression tests covering each boundary.
+
 ## [1.8.0]
 
 ### Added

@@ -34,6 +34,247 @@ function lineCounter(text) {
   };
 }
 
+/**
+ * Common CSS property names used to tell style objects from documentation
+ * objects when deciding whether a JS string literal is a CSS context.
+ * Keys starting with `--` or containing `-` are always treated as CSS-like
+ * and do not need to be listed here.
+ */
+const CSS_PROPS = new Set([
+  'alignment', 'animation', 'backdrop-filter', 'background', 'background-clip',
+  'background-color', 'background-image', 'background-position', 'background-size',
+  'border', 'border-bottom', 'border-bottom-color', 'border-bottom-left-radius',
+  'border-bottom-right-radius', 'border-bottom-width', 'border-collapse',
+  'border-color', 'border-image', 'border-left', 'border-left-color',
+  'border-left-width', 'border-radius', 'border-right', 'border-right-color',
+  'border-right-width', 'border-spacing', 'border-style', 'border-top',
+  'border-top-color', 'border-top-left-radius', 'border-top-right-radius',
+  'border-top-width', 'border-width', 'bottom', 'box-shadow', 'box-sizing',
+  'break-after', 'break-before', 'break-inside', 'caption-side', 'caret-color',
+  'clear', 'clip', 'clip-path', 'color', 'column-count', 'column-gap',
+  'column-rule', 'column-rule-color', 'column-rule-style', 'column-rule-width',
+  'column-span', 'column-width', 'columns', 'content', 'counter-increment',
+  'counter-reset', 'cursor', 'direction', 'display', 'filter', 'flex',
+  'flex-basis', 'flex-direction', 'flex-flow', 'flex-grow', 'flex-shrink',
+  'flex-wrap', 'font', 'font-family', 'font-feature-settings', 'font-kerning',
+  'font-size', 'font-size-adjust', 'font-stretch', 'font-style', 'font-variant',
+  'font-weight', 'gap', 'grid', 'grid-area', 'grid-auto-columns',
+  'grid-auto-flow', 'grid-auto-rows', 'grid-column', 'grid-column-end',
+  'grid-column-gap', 'grid-column-start', 'grid-gap', 'grid-row',
+  'grid-row-end', 'grid-row-gap', 'grid-row-start', 'grid-template',
+  'grid-template-areas', 'grid-template-columns', 'grid-template-rows',
+  'height', 'hyphens', 'image-rendering', 'inset', 'isolation',
+  'justify-content', 'justify-items', 'justify-self', 'left', 'letter-spacing',
+  'line-break', 'line-height', 'list-style', 'list-style-image',
+  'list-style-position', 'list-style-type', 'margin', 'margin-bottom',
+  'margin-left', 'margin-right', 'margin-top', 'max-height', 'max-width',
+  'min-height', 'min-width', 'mix-blend-mode', 'object-fit', 'object-position',
+  'opacity', 'order', 'orphans', 'outline', 'outline-color', 'outline-offset',
+  'outline-style', 'outline-width', 'overflow', 'overflow-wrap', 'overflow-x',
+  'overflow-y', 'overscroll-behavior', 'padding', 'padding-bottom',
+  'padding-left', 'padding-right', 'padding-top', 'position', 'quotes',
+  'resize', 'right', 'row-gap', 'scroll-behavior', 'scroll-margin',
+  'scroll-padding', 'scroll-snap-align', 'scroll-snap-type', 'scrollbar-color',
+  'scrollbar-width', 'shape-margin', 'shape-outside', 'shape-rendering',
+  'src', 'tab-size', 'table-layout', 'text-align', 'text-align-last',
+  'text-combine-upright', 'text-decoration', 'text-decoration-color',
+  'text-decoration-line', 'text-decoration-style', 'text-emphasis',
+  'text-indent', 'text-justify', 'text-orientation', 'text-overflow',
+  'text-shadow', 'text-transform', 'text-underline-offset',
+  'text-underline-position', 'top', 'touch-action', 'transform',
+  'transform-origin', 'transform-style', 'transition', 'transition-delay',
+  'transition-duration', 'transition-property', 'transition-timing-function',
+  'unicode-bidi', 'user-select', 'vertical-align', 'visibility',
+  'white-space', 'width', 'will-change', 'word-break', 'word-spacing',
+  'word-wrap', 'writing-mode', 'z-index', 'zoom'
+]);
+
+function isCssLikeKey(key) {
+  if (!key) return false;
+  const k = key.toLowerCase();
+  return k.startsWith('--') || k.includes('-') || CSS_PROPS.has(k);
+}
+
+/** Walk backward from a closing quote to its opening quote, honouring escapes. */
+function skipStringBackward(out, close) {
+  let k = close - 1;
+  while (k >= 0) {
+    if (out[k] === '\\') { k -= 2; continue; }
+    if (out[k] === out[close]) return k;
+    k--;
+  }
+  return -1;
+}
+
+/**
+ * Decide whether a JS string literal at offset `i` (the opening quote) sits
+ * in a CSS context, by looking at the masked output built so far.
+ * Style-object values (`background: 'var(--x)'`) and setProperty arguments
+ * are real references; documentation strings (`const doc = "var(--x)"`) are not.
+ */
+function jsStringIsCssContext(out, i) {
+  let j = i - 1;
+  while (j >= 0 && /\s/.test(out[j])) j--;
+  if (j < 0) return false;
+  if (out[j] === ':') {
+    j--;
+    while (j >= 0 && /\s/.test(out[j])) j--;
+    let k = j;
+    while (k >= 0 && /[A-Za-z0-9_-]/.test(out[k])) k--;
+    return isCssLikeKey(out.slice(k + 1, j + 1));
+  }
+  if (out[j] === ',' || out[j] === '(') {
+    let k = j - 1;
+    while (k >= 0 && /\s/.test(out[k])) k--;
+    if (k >= 0 && (out[k] === '"' || out[k] === "'" || out[k] === '`')) {
+      k = skipStringBackward(out, k);
+      while (k >= 0 && /\s/.test(out[k])) k--;
+    }
+    let m = k;
+    while (m >= 0 && /[A-Za-z0-9_$]/.test(out[m])) m--;
+    return out.slice(m + 1, k + 1) === 'setProperty';
+  }
+  return false;
+}
+
+/**
+ * Replace comments and quoted strings with spaces, preserving length and
+ * newlines so offsets and line numbers stay aligned with the original text.
+ */
+function maskLexicalCss(text) {
+  let out = '';
+  let i = 0;
+  const n = text.length;
+  while (i < n) {
+    const ch = text[i];
+    if (ch === '/' && text[i + 1] === '*') {
+      let j = i + 2;
+      while (j < n && !(text[j] === '*' && text[j + 1] === '/')) j++;
+      const stop = Math.min(j + 2, n);
+      for (let k = i; k < stop; k++) out += text[k] === '\n' ? '\n' : ' ';
+      i = stop;
+      continue;
+    }
+    if (ch === '"' || ch === "'") {
+      const quote = ch;
+      out += ' ';
+      let j = i + 1;
+      while (j < n) {
+        if (text[j] === '\\') {
+          out += ' ';
+          if (j + 1 < n) out += text[j + 1] === '\n' ? '\n' : ' ';
+          j += 2;
+          continue;
+        }
+        if (text[j] === quote) { out += ' '; j++; break; }
+        out += text[j] === '\n' ? '\n' : ' ';
+        j++;
+      }
+      i = j;
+      continue;
+    }
+    out += ch;
+    i++;
+  }
+  return out;
+}
+
+/**
+ * JS lexical masking. Comments are always masked. String and template
+ * literals are kept (so real CSS-in-JS references survive) unless
+ * `maskStrings` is true, in which case only strings in a CSS context are kept.
+ */
+function maskLexicalJs(text, maskStrings) {
+  const out = [];
+  let i = 0;
+  const n = text.length;
+  const stack = [{ mode: 'code', braceDepth: 0, interp: false }];
+  const emit = (ch) => out.push(ch);
+  const maskChar = (ch) => out.push(ch === '\n' ? '\n' : ' ');
+
+  while (i < n) {
+    const ctx = stack[stack.length - 1];
+    const ch = text[i];
+
+    if (ctx.mode === 'code') {
+      if (ch === '/' && text[i + 1] === '/') {
+        let j = i;
+        while (j < n && text[j] !== '\n') j++;
+        for (let k = i; k < j; k++) emit(' ');
+        i = j;
+        continue;
+      }
+      if (ch === '/' && text[i + 1] === '*') {
+        let j = i + 2;
+        while (j < n && !(text[j] === '*' && text[j + 1] === '/')) j++;
+        const stop = Math.min(j + 2, n);
+        for (let k = i; k < stop; k++) maskChar(text[k]);
+        i = stop;
+        continue;
+      }
+      if (ch === "'" || ch === '"') {
+        const keep = !maskStrings || jsStringIsCssContext(out.join(''), i);
+        emit(ch);
+        i++;
+        while (i < n) {
+          if (text[i] === '\\') { emit(text[i]); if (i + 1 < n) emit(text[i + 1]); i += 2; continue; }
+          if (keep) emit(text[i]); else maskChar(text[i]);
+          if (text[i] === ch) { i++; break; }
+          i++;
+        }
+        continue;
+      }
+      if (ch === '`') {
+        const keep = !maskStrings || jsStringIsCssContext(out.join(''), i);
+        if (keep) {
+          emit(ch);
+          i++;
+          stack.push({ mode: 'tpl', braceDepth: 0, interp: false });
+          continue;
+        }
+        emit(' ');
+        i++;
+        while (i < n) {
+          if (text[i] === '\\') {
+            maskChar(text[i]);
+            if (i + 1 < n) maskChar(text[i + 1]);
+            i += 2;
+            continue;
+          }
+          if (text[i] === '`') { emit(' '); i++; break; }
+          maskChar(text[i]);
+          i++;
+        }
+        continue;
+      }
+      if (ch === '}' && ctx.interp) {
+        if (ctx.braceDepth === 0) { emit(ch); stack.pop(); i++; continue; }
+        ctx.braceDepth--;
+      } else if (ch === '{' && ctx.interp) {
+        ctx.braceDepth++;
+      }
+      emit(ch);
+      i++;
+      continue;
+    }
+
+    if (ctx.mode === 'tpl') {
+      if (text[i] === '\\') { emit(text[i]); if (i + 1 < n) emit(text[i + 1]); i += 2; continue; }
+      if (text[i] === '`') { emit('`'); stack.pop(); i++; continue; }
+      if (text[i] === '$' && text[i + 1] === '{') {
+        emit('$', '{');
+        stack.push({ mode: 'code', braceDepth: 0, interp: true });
+        i += 2;
+        continue;
+      }
+      emit(text[i]);
+      i++;
+    }
+  }
+  return out.join('');
+}
+
+
 /** Every [data-theme=x] value appearing in a selector or at-rule condition. */
 function themesIn(text) {
   const out = [];
@@ -116,7 +357,7 @@ function parseCss(text, file) {
       themes: ctx.themes,
       file,
       line: bufLine,
-      aliases: refsIn(value)
+      aliases: refsIn(maskLexicalCss(value))
     });
   };
 
@@ -182,12 +423,16 @@ function parseCss(text, file) {
   }
   flush();
 
-  // References live anywhere in the file, not just inside declarations.
+  // References live anywhere in the file, not just inside declarations —
+  // but not inside comments or string literals, so scan a lexically masked
+  // copy. Masking preserves length and newlines, so offsets still map to the
+  // original text for line numbers.
+  const refText = maskLexicalCss(text);
   const whole = VAR_REF_RE.source;
   const re = new RegExp(whole, 'g');
   const lineAt = lineCounter(text);
   let m;
-  while ((m = re.exec(text))) {
+  while ((m = re.exec(refText))) {
     references.push({
       name: m[1],
       file,
@@ -232,7 +477,7 @@ function parseHtml(text, file) {
   const scriptRe = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
   const scriptLineAt = lineCounter(text);
   while ((m = scriptRe.exec(text))) {
-    const body = m[1];
+    const body = maskLexicalJs(m[1], false);
     const shift = scriptLineAt(m.index);
     const objLineAt = lineCounter(body);
     const objRe = /(["'])--([A-Za-z0-9_-]+)\1\s*:\s*(["'])([^"']*)\3/g;
@@ -280,10 +525,13 @@ function parseHtml(text, file) {
 function parseJs(text, file) {
   const declarations = [];
   const references = [];
+  // Declaration regexes need string literals intact (the values ARE strings),
+  // so only comments are masked for them.
+  const codeText = maskLexicalJs(text, false);
   const objLineAt = lineCounter(text);
   const objRe = /(["'])--([A-Za-z0-9_-]+)\1\s*:\s*(["'])([^"']*)\3/g;
   let m;
-  while ((m = objRe.exec(text))) {
+  while ((m = objRe.exec(codeText))) {
     const value = m[4];
     declarations.push({
       name: '--' + m[2],
@@ -301,7 +549,7 @@ function parseJs(text, file) {
   }
   const spLineAt = lineCounter(text);
   const spRe = /setProperty\(\s*(["'])--([A-Za-z0-9_-]+)\1\s*,\s*(["'])([^"']*)\3/g;
-  while ((m = spRe.exec(text))) {
+  while ((m = spRe.exec(codeText))) {
     const value = m[4];
     declarations.push({
       name: '--' + m[2],
@@ -317,9 +565,12 @@ function parseJs(text, file) {
       origin: 'js-setproperty'
     });
   }
+  // Whole-file reference scan on a lexically masked copy: comments are gone,
+  // and strings/templates survive only when they sit in a CSS context.
+  const refText = maskLexicalJs(text, true);
   const refLineAt = lineCounter(text);
   const re = new RegExp(VAR_REF_RE.source, 'g');
-  while ((m = re.exec(text))) {
+  while ((m = re.exec(refText))) {
     references.push({ name: m[1], file, line: refLineAt(m.index) + 1 });
   }
   return { declarations, references };
