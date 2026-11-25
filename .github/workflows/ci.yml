@@ -49,3 +49,17 @@ jobs:
             console.log('Pipeline OK: ' + findings.length + ' findings, ' + patches.length + ' patches');
           });
           "
+
+      - name: Pack smoke test (tarball install + CLI run)
+        working-directory: polish-mono
+        run: |
+          set -e
+          tarball="$(npm pack --silent)"
+          mkdir -p "$RUNNER_TEMP/unpacked"
+          tar -xzf "$tarball" -C "$RUNNER_TEMP/unpacked"
+          pkg="$RUNNER_TEMP/unpacked/package"
+          node "$pkg/bin/polish.mjs" --help > /dev/null
+          # The demo project is intentionally flawed, so check exits 1 —
+          # assert the report output instead of the exit code.
+          node "$pkg/bin/polish.mjs" check "$GITHUB_WORKSPACE/examples/walkthrough/demo-project" --summary | grep -q "Token Health Check"
+          echo "Pack smoke OK"

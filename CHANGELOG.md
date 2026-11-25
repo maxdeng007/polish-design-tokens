@@ -30,6 +30,11 @@ new capabilities bump the minor version, fixes and polish bump the patch version
   priority rank and a full explanation (previously it was detectable
   but undocumented).
 
+- **Type declarations for the `./parse` subpath** — the `./parse` package
+  export now ships matching `src/parse.d.ts` declarations, so TypeScript
+  consumers importing `polish-design-tokens/parse` get the full parser
+  API typed (previously the subpath resolved without types).
+
 ### Fixed
 
 - **Parser lexical boundaries** — `.jsx`/`.tsx` files no longer treat JSX
@@ -53,6 +58,12 @@ new capabilities bump the minor version, fixes and polish bump the patch version
   the `observation` data it received instead of only a document count. The
   `ignore` option is documented as an array of path fragments (the module
   API still accepts a comma-separated string as well).
+
+- **Release/CI pack smoke assertion** — the tarball smoke step in
+  `.github/workflows/ci.yml` and `release.yml` now asserts the `check`
+  report output instead of the exit code: the demo project is intentionally
+  flawed, so a correct run exits 1 and would have failed the step under
+  `set -e`.
 
 ## [1.8.1]
 

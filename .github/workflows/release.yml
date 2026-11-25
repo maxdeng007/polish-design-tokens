@@ -30,6 +30,20 @@ jobs:
         working-directory: polish-mono
         run: npm test
 
+      - name: Pack smoke test (tarball install + CLI run)
+        working-directory: polish-mono
+        run: |
+          set -e
+          tarball="$(npm pack --silent)"
+          mkdir -p "$RUNNER_TEMP/unpacked"
+          tar -xzf "$tarball" -C "$RUNNER_TEMP/unpacked"
+          pkg="$RUNNER_TEMP/unpacked/package"
+          node "$pkg/bin/polish.mjs" --help > /dev/null
+          # The demo project is intentionally flawed, so check exits 1 —
+          # assert the report output instead of the exit code.
+          node "$pkg/bin/polish.mjs" check "$GITHUB_WORKSPACE/examples/walkthrough/demo-project" --summary | grep -q "Token Health Check"
+          echo "Pack smoke OK"
+
   publish:
     needs: test
     runs-on: ubuntu-latest
@@ -51,14 +65,24 @@ jobs:
             exit 1
           fi
 
-      - name: Publish to npm
+      - name: Publish to npm (idempotent — skips already-published versions)
         working-directory: polish-mono
-        continue-on-error: true
-        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          if npm view "polish-design-tokens@$version" version > /dev/null 2>&1; then
+            echo "polish-design-tokens@$version is already published — skipping npm publish"
+          else
+            npm publish --access public
+          fi
 
-      - name: Create GitHub release
+      - name: Create GitHub release (idempotent — skips existing releases)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release create "$GITHUB_REF_NAME" --generate-notes
+        run: |
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            echo "Release $GITHUB_REF_NAME already exists — skipping"
+          else
+            gh release create "$GITHUB_REF_NAME" --generate-notes
+          fi

@@ -49,9 +49,16 @@ write path is deliberately conservative:
   file changed after the patch was generated, the delete is refused instead
   of removing the wrong line. A delete without `before` is rejected outright.
   Writes are atomic (temp file + rename).
-- **No network access.** The tool reads local files only. It does not fetch
-  URLs, and the MCP server only reads and writes within the directories you
-  explicitly target.
+- **No network access in the audit and apply paths.** Scanning, planning,
+  patching and reporting read local files only — the tool never fetches URLs,
+  and the MCP server only reads and writes within the directories you
+  explicitly target. The single exception is the explicit opt-in
+  `polish doctor --install` (MCP `polish_doctor` with `install: true`), which
+  runs the install commands printed in the doctor report (currently
+  `npm install -g dembrandt` and `git clone` commands for optional skill
+  packs) via the system shell. It writes to global/npm and home-directory
+  locations — always inspect the printed commands before enabling it, and
+  never enable it when handing polish to an unsupervised agent.
 
 Because the tool's whole purpose is to modify source files, treat its output
 with the same care as any other code-modification tool: review patches and
