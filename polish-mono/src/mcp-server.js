@@ -14,6 +14,7 @@ import { polish_audit } from './handlers/polish-audit.js';
 import { polish_plan } from './handlers/polish-plan.js';
 import { polish_diff } from './handlers/polish-diff.js';
 import { polish_apply } from './handlers/polish-apply.js';
+import { polish_rollback } from './handlers/polish-rollback.js';
 import { polish_doctor } from './handlers/polish-doctor.js';
 import { polish_style_lookup } from './handlers/polish-style-lookup.js';
 import { measure } from './measure.js';
@@ -29,6 +30,7 @@ tools['polish_audit'] = async (args) => { return await polish_audit(args, {}); }
 tools['polish_plan'] = async (args) => { return await polish_plan(args, {}); };
 tools['polish_diff'] = async (args) => { return await polish_diff(args, {}); };
 tools['polish_apply'] = async (args) => { return await polish_apply(args, {}); };
+tools['polish_rollback'] = async (args) => { return await polish_rollback(args, {}); };
 tools['polish_doctor'] = async (args) => { return await polish_doctor(args, {}); };
 tools['polish_style_lookup'] = async (args) => { return await polish_style_lookup(args, {}); };
 tools['polish_measure'] = async (args) => {
@@ -207,6 +209,29 @@ const toolDefinitions = [
         target: { type: 'string', description: 'Target directory to resolve and bound relative file paths. Required — patches outside this directory are rejected.' }
       },
       required: ['patches', 'target']
+    }
+  },
+  {
+    name: 'polish_rollback',
+    description: 'Restore files from the backup manifest produced by polish_apply. Pass the backups array from an apply result. Only files within the target directory are restored.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        backups: {
+          type: 'array',
+          description: 'Backup manifest entries from polish_apply output',
+          items: {
+            type: 'object',
+            properties: {
+              file: { type: 'string', description: 'File that was backed up' },
+              backup: { type: 'string', description: 'Path to the backup file' }
+            },
+            required: ['file']
+          }
+        },
+        target: { type: 'string', description: 'Target directory to bound the restore. Required — files outside this directory are refused.' }
+      },
+      required: ['backups', 'target']
     }
   },
   {

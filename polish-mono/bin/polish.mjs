@@ -12,6 +12,7 @@ import { plan } from '../src/plan.js';
 import { generateDiffs } from '../src/diff.js';
 import { confirm as resolveDecisions } from '../src/confirm.js';
 import { apply } from '../src/apply.js';
+import { rollback } from '../src/rollback.js';
 
 const USAGE = `polish — Design token superpower tool
 
@@ -25,6 +26,7 @@ Usage:
   polish plan   <findings.json> [--summary]          Convert findings into ordered action list
   polish diff   <plan.json> [--summary]              Generate mechanical patches from a plan
   polish apply  <patches.json> [--target=dir] [--summary]   Execute patches with backup protection
+  polish rollback <backups.json> [--target=dir] [--summary]  Restore files from an apply run's backup manifest
   polish confirm <decisions.json> [--target=dir] [--summary]  Apply designer-confirmed judgmental decisions
   polish doctor  [--install] [--summary]              Check dependencies, optionally install missing ones
   polish explain <finding-type>                      Explain what a finding type means
@@ -191,6 +193,20 @@ async function main() {
     if (summaryFlag) {
       const { formatApply } = await import('../src/format.js');
       console.log(formatApply(result));
+    } else {
+      console.log(JSON.stringify(result, null, 2));
+    }
+    process.exit(result.failed.length > 0 ? 1 : 0);
+  }
+
+  if (cmd === 'rollback') {
+    const data = loadJson(file);
+    const backups = data.backups || data;
+    const target = resolve(targetFlag || process.cwd());
+    const result = await rollback(backups, target);
+    if (summaryFlag) {
+      const { formatRollback } = await import('../src/format.js');
+      console.log(formatRollback(result));
     } else {
       console.log(JSON.stringify(result, null, 2));
     }

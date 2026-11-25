@@ -175,12 +175,44 @@ export function formatApply(result) {
   lines.push(`${c(ANSI.green, 'Applied:')}  ${applied} patches`);
   lines.push(`${failed > 0 ? c(ANSI.red, 'Failed:') : 'Failed:'}   ${failed} patches`);
   lines.push(`${c(ANSI.blue, 'Backups:')}  ${backups} files`);
+
+  if ((result.rolledBack || []).length) {
+    lines.push(`${c(ANSI.yellow, 'Rolled back:')} ${result.rolledBack.length} files (execution failure)`);
+  }
   lines.push('');
 
   if (failed === 0) {
     lines.push(c(ANSI.green, 'All patches applied successfully.'));
   } else {
     lines.push(c(ANSI.red, 'Some patches failed. Review the errors below:'));
+    lines.push('');
+    for (const f of result.failed) {
+      const file = f.file || '?';
+      lines.push(`  ${c(ANSI.red, file)}: ${f.error}`);
+    }
+  }
+
+  return lines.join('\n');
+}
+
+/** Format a rollback result (output of rollback()) as a plain-language summary. */
+export function formatRollback(result) {
+  const lines = [];
+  lines.push(c(ANSI.bold, 'Rollback Results'));
+  lines.push('================');
+  lines.push('');
+
+  const restored = (result.restored || []).length;
+  const failed = (result.failed || []).length;
+
+  lines.push(`${c(ANSI.green, 'Restored:')}  ${restored} files`);
+  lines.push(`${failed > 0 ? c(ANSI.red, 'Failed:') : 'Failed:'}   ${failed} entries`);
+  lines.push('');
+
+  if (failed === 0) {
+    lines.push(c(ANSI.green, 'All files restored from backup.'));
+  } else {
+    lines.push(c(ANSI.red, 'Some entries failed. Review the errors below:'));
     lines.push('');
     for (const f of result.failed) {
       const file = f.file || '?';

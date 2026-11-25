@@ -17,6 +17,7 @@ TypeScript definitions are bundled with the package — no `@types` install need
 | `polish-design-tokens/plan` | `plan`, `PRIORITY_ORDER`, `MECHANICAL_IDS`, `JUDGMENTAL_IDS` |
 | `polish-design-tokens/diff` | `generateDiffs` |
 | `polish-design-tokens/apply` | `apply` |
+| `polish-design-tokens/rollback` | `rollback` |
 
 ## Core Functions
 
@@ -185,15 +186,39 @@ Apply patches to files with automatic backup protection.
 import { apply } from 'polish-design-tokens/apply';
 
 const result = await apply(patches);
-// { applied: [{ file, line }], failed: [{ file, error }], backupCount: 3 }
+// { applied: [{ file, line }], failed: [{ file, error }], backupCount: 3,
+//   backups: [{ file, backup }], rolledBack: [{ file }] }
 ```
 
 **Parameters:**
 - `patches` (Patch[]): Output of `generateDiffs()`
+- `target` (string): Optional directory that patches must stay within. Defaults to `process.cwd()`.
 
-**Returns:** `Promise<ApplyResult>` — `{ applied, failed, backupCount }`
+**Returns:** `Promise<ApplyResult>` — `{ applied, failed, backupCount, backups, rolledBack }`
 
-**Safety:** Each file is backed up as `file.backup` before the first patch touches it. Failed patches don't abort the batch.
+**Safety:** Every patch is pre-validated against the current file contents before any write. Each file is backed up as `file.backup` before the first patch touches it. If a patch fails at execution time, every file written by the run is automatically restored from its backup and reported in `rolledBack`. The `backups` manifest can be passed to `rollback()` for a later manual restore. Failed patches don't abort the batch.
+
+---
+
+### `rollback(backups, target?)`
+
+Restore files from the backup manifest produced by an `apply()` run.
+
+```typescript
+import { rollback } from 'polish-design-tokens/rollback';
+
+const { backups } = await apply(patches, './src');
+const result = await rollback(backups, './src');
+// { restored: [{ file }], failed: [{ file, error }] }
+```
+
+**Parameters:**
+- `backups` (Array<{ file: string; backup: string }>): The `backups` array from an `apply()` result
+- `target` (string): Directory that files must stay within. Defaults to `process.cwd()`.
+
+**Returns:** `Promise<RollbackResult>` — `{ restored, failed }`
+
+**Safety:** Only files inside the target directory are restored; other entries are refused. A missing backup is reported as failed and the file is left untouched. Backups themselves are never modified or deleted.
 
 ## Types
 
@@ -275,6 +300,18 @@ interface ApplyResult {
   applied: Array<{ file: string; line: number | string }>;
   failed: Array<{ file: string | null; line?: number; error: string }>;
   backupCount: number;
+  backups: Array<{ file: string; backup: string }>;
+  rolledBack: Array<{ file: string }>;
+}
+
+### `RollbackResult`
+
+Result of restoring files from backups via `rollback()`:
+
+```typescript
+interface RollbackResult {
+  restored: Array<{ file: string }>;
+  failed: Array<{ file: string | null; error: string }>;
 }
 ```
 

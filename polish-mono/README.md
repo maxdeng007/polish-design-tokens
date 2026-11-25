@@ -210,6 +210,7 @@ polish report <target> [--ignore=a,b] [--output=f] # Generate interactive HTML r
 polish plan  <findings.json> [--summary]   # Convert findings to an ordered action list
 polish diff  <plan.json> [--summary]       # Generate mechanical patches from a plan
 polish apply <patches.json> [--summary]    # Apply patches (creates .backup files)
+polish rollback <backups.json> [--target=dir] [--summary]  # Restore files from an apply run backup manifest
 polish confirm <decisions.json> [--target=dir] [--summary]  # Apply designer-confirmed judgmental decisions
 polish doctor [--install] [--summary]      # Check optional deps; --install auto-installs missing ones
 polish explain <finding-type>              # Explain what a finding type means and how to fix it
@@ -323,7 +324,7 @@ Without `--summary`, all commands output raw JSON for piping and programmatic us
 
 ## MCP Server
 
-polish exposes 8 tools via the Model Context Protocol, so any AI coding agent (Qoder, Claude, etc.) can drive the full pipeline.
+polish exposes 9 tools via the Model Context Protocol, so any AI coding agent (Qoder, Claude, etc.) can drive the full pipeline.
 
 Add to your MCP config (`mcp.json`, `.mcp.json`, or your agent's config):
 
@@ -360,7 +361,8 @@ Available tools:
 | `polish_measure` | Normalize runtime observation data for audit |
 | `polish_plan` | Convert findings to a ranked, classified action queue |
 | `polish_diff` | Generate mechanical patches from a plan |
-| `polish_apply` | Execute patches with backup protection |
+| `polish_apply` | Execute patches with backup protection and automatic rollback on failure |
+| `polish_rollback` | Restore files from an apply run's backup manifest |
 | `polish_doctor` | Check optional dependencies and environment health |
 | `polish_style_lookup` | Query brand DESIGN.md design token data |
 
@@ -419,7 +421,7 @@ Files inside `node_modules`, `dist`, `build`, `.git`, `.next`, `.cache`, and oth
 
 ### MCP Integration Details
 
-All 8 MCP tools accept and return JSON. Key parameters:
+All 9 MCP tools accept and return JSON. Key parameters:
 
 - **`polish_extract`** — `{ target: string, ignore?: string[] }` → `DeclarationGraph`
 - **`polish_audit`** — `{ target: string, ignore?: string[], observation?: object }` → `{ findings, summary, graphSummary, observation }`
@@ -427,6 +429,7 @@ All 8 MCP tools accept and return JSON. Key parameters:
 - **`polish_plan`** — `{ findings: Finding[] }` → `{ plan, summary }`
 - **`polish_diff`** — `{ plan: PlanAction[], target?: string }` → `{ patches, preview }`
 - **`polish_apply`** — `{ patches: Patch[], target: string }` → `ApplyResult`
+- **`polish_rollback`** — `{ backups: { file, backup }[], target: string }` → `RollbackResult`
 - **`polish_doctor`** — `{}` → dependency health check
 - **`polish_style_lookup`** — `{ brand?: string }` → brand design token reference
 

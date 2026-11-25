@@ -8,6 +8,19 @@ new capabilities bump the minor version, fixes and polish bump the patch version
 
 ## [Unreleased]
 
+### Added
+
+- **Transactional apply with rollback** — `apply()` now runs in two phases:
+  every patch is pre-validated against the current file contents before any
+  write, and if a patch fails at execution time (line shifted or changed
+  mid-run), every file written by that run is automatically restored from its
+  backup. Every run returns a backups manifest (`{ file, backup }` entries)
+  that can be passed to the new `rollback()` to restore files later.
+  Surfaced as a new `polish rollback <backups.json> [--target=dir]` CLI
+  command and a `polish_rollback` MCP tool (both require an explicit target
+  and refuse to touch anything outside it). `apply()` results now include
+  `backups` and `rolledBack`.
+
 ### Fixed
 
 - **Parser lexical boundaries** — `.jsx`/`.tsx` files no longer treat JSX

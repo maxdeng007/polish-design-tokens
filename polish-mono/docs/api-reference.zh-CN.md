@@ -17,6 +17,7 @@ TypeScript 类型定义已随包内置——无需安装 `@types`。
 | `polish-design-tokens/plan` | `plan`、`PRIORITY_ORDER`、`MECHANICAL_IDS`、`JUDGMENTAL_IDS` |
 | `polish-design-tokens/diff` | `generateDiffs` |
 | `polish-design-tokens/apply` | `apply` |
+| `polish-design-tokens/rollback` | `rollback` |
 
 ## 核心函数
 
@@ -185,15 +186,39 @@ const patches = generateDiffs(actions);
 import { apply } from 'polish-design-tokens/apply';
 
 const result = await apply(patches);
-// { applied: [{ file, line }], failed: [{ file, error }], backupCount: 3 }
+// { applied: [{ file, line }], failed: [{ file, error }], backupCount: 3,
+//   backups: [{ file, backup }], rolledBack: [{ file }] }
 ```
 
 **参数：**
 - `patches` (Patch[])：`generateDiffs()` 的输出
+- `target` (string)：可选，补丁必须位于该目录内。默认为 `process.cwd()`。
 
-**返回：** `Promise<ApplyResult>` — `{ applied, failed, backupCount }`
+**返回：** `Promise<ApplyResult>` — `{ applied, failed, backupCount, backups, rolledBack }`
 
-**安全：** 每个文件在首次补丁触及前会备份为 `file.backup`。失败的补丁不会中止批次。
+**安全：** 任何写入前，每个补丁都会针对当前文件内容预先校验。每个文件在首次补丁触及前会备份为 `file.backup`。若某补丁在执行时失败，本次运行写入的所有文件都会自动从备份恢复并记录在 `rolledBack` 中。`backups` 清单可传给 `rollback()` 做后续手动恢复。失败的补丁不会中止批次。
+
+---
+
+### `rollback(backups, target?)`
+
+从 `apply()` 运行产生的备份清单恢复文件。
+
+```typescript
+import { rollback } from 'polish-design-tokens/rollback';
+
+const { backups } = await apply(patches, './src');
+const result = await rollback(backups, './src');
+// { restored: [{ file }], failed: [{ file, error }] }
+```
+
+**参数：**
+- `backups` (Array<{ file: string; backup: string }>)：`apply()` 结果中的 `backups` 数组
+- `target` (string)：文件必须位于该目录内。默认为 `process.cwd()`。
+
+**返回：** `Promise<RollbackResult>` — `{ restored, failed }`
+
+**安全：** 仅恢复目标目录内的文件，其余条目会被拒绝。备份缺失时记为失败且不改动原文件。备份文件本身永不被修改或删除。
 
 ## 类型
 
@@ -275,6 +300,18 @@ interface ApplyResult {
   applied: Array<{ file: string; line: number | string }>;
   failed: Array<{ file: string | null; line?: number; error: string }>;
   backupCount: number;
+  backups: Array<{ file: string; backup: string }>;
+  rolledBack: Array<{ file: string }>;
+}
+
+### `RollbackResult`
+
+Result of restoring files from backups via `rollback()`:
+
+```typescript
+interface RollbackResult {
+  restored: Array<{ file: string }>;
+  failed: Array<{ file: string | null; error: string }>;
 }
 ```
 

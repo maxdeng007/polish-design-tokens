@@ -1,7 +1,7 @@
 {
   "name": "polish-design-tokens",
   "version": "1.8.1",
-  "description": "Design token superpower tool: extract · critique · apply · publish via npm",
+  "description": "Design token superpower tool: extract \u00b7 critique \u00b7 apply \u00b7 publish via npm",
   "type": "module",
   "bin": {
     "polish": "bin/polish.mjs"
@@ -20,7 +20,8 @@
     "./plan": "./src/plan.js",
     "./wizard": "./src/wizard.js",
     "./report": "./src/report.js",
-    "./mcp": "./src/mcp-server.js"
+    "./mcp": "./src/mcp-server.js",
+    "./rollback": "./src/rollback.js"
   },
   "files": [
     "bin",

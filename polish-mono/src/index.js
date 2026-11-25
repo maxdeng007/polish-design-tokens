@@ -11,10 +11,11 @@ import { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS } from './plan.js'
 import { generateDiffs } from './diff.js';
 import { confirm } from './confirm.js';
 import { apply } from './apply.js';
+import { rollback } from './rollback.js';
 import { runWizard } from './wizard.js';
 import { generateReport } from './report.js';
 
-export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, confirm, apply, measure, runWizard, generateReport };
+export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, confirm, apply, rollback, measure, runWizard, generateReport };
 
 /**
  * Extract tokens from a directory.

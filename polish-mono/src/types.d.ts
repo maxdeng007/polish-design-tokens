@@ -231,6 +231,16 @@ export interface ApplyResult {
   applied: Array<{ file: string; line: number | string }>;
   failed: Array<{ file: string | null; line?: number; error: string }>;
   backupCount: number;
+  /** Run-level backup manifest: [{file, backup}] for restore via rollback(). */
+  backups: Array<{ file: string; backup: string }>;
+  /** Files auto-restored when a later patch failed at execution time. */
+  rolledBack: Array<{ file: string }>;
+}
+
+/** Result of restoring files from backups via rollback(). */
+export interface RollbackResult {
+  restored: Array<{ file: string }>;
+  failed: Array<{ file: string | null; error: string }>;
 }
 
 /** Output of runPipeline(). */

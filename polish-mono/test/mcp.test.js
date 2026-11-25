@@ -156,10 +156,75 @@ test('MCP tools return the documented wrapper shapes', () => {
   assert.equal(typeof diff.preview, 'string', 'diff should include a preview');
 
   const apply = unwrap(5);
-  assert.deepEqual(Object.keys(apply).sort(), ['applied', 'backupCount', 'failed'],
-    'apply must return { applied, failed, backupCount }');
+  assert.deepEqual(Object.keys(apply).sort(), ['applied', 'backupCount', 'backups', 'failed', 'rolledBack'],
+    'apply must return { applied, failed, backupCount, backups, rolledBack }');
+  assert.ok(Array.isArray(apply.backups), 'apply should return a backups manifest');
+  assert.ok(Array.isArray(apply.rolledBack), 'apply should report auto-rolled-back files');
 
   cleanup();
+});
+
+test('polish_rollback schema requires backups and target', () => {
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/list' }
+  ]);
+  const tools = responses.get(2).result.tools;
+  const rbTool = tools.find(t => t.name === 'polish_rollback');
+  assert.ok(rbTool, 'polish_rollback tool should exist');
+  assert.deepEqual(rbTool.inputSchema.required, ['backups', 'target'],
+    'rollback must require backups and target');
+});
+
+test('MCP polish_rollback restores files from an apply run manifest', () => {
+  const dir = makeProject(':root {\n  --bg: #ffffff;\n  --background: #ffffff;\n}\n');
+  const apply = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    {
+      jsonrpc: '2.0', id: 2, method: 'tools/call',
+      params: {
+        name: 'polish_apply',
+        arguments: {
+          target: dir,
+          patches: [{ file: 'tokens.css', type: 'replace', line: 3, before: '#ffffff', after: 'var(--bg)', findingId: 'duplicate-value' }]
+        }
+      }
+    }
+  ]);
+  const applyReport = JSON.parse(apply.get(2).result.content[0].text);
+  assert.equal(applyReport.backups.length, 1, 'apply should produce a backup manifest');
+  assert.ok(fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8').includes('var(--bg)'), 'file should be modified');
+
+  const rb = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    {
+      jsonrpc: '2.0', id: 2, method: 'tools/call',
+      params: {
+        name: 'polish_rollback',
+        arguments: { target: dir, backups: applyReport.backups }
+      }
+    }
+  ]);
+  const rbReport = JSON.parse(rb.get(2).result.content[0].text);
+  assert.equal(rbReport.restored.length, 1, 'rollback should restore the file');
+  assert.equal(rbReport.failed.length, 0, `rollback should not fail: ${JSON.stringify(rbReport.failed)}`);
+
+  const content = fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8');
+  assert.ok(content.includes('--background: #ffffff;'), 'restored file should hold original content');
+  cleanup();
+});
+
+test('MCP polish_rollback without target returns a protocol error', () => {
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    {
+      jsonrpc: '2.0', id: 2, method: 'tools/call',
+      params: { name: 'polish_rollback', arguments: { backups: [] } }
+    }
+  ]);
+  const call = responses.get(2);
+  assert.ok(call.error, 'missing target should be a JSON-RPC error');
+  assert.equal(call.error.code, -32603, 'handler errors surface as internal error');
 });
 
 test('MCP wire-level round trip applies mechanical patches chained from audit', () => {

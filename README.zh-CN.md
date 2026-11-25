@@ -210,6 +210,7 @@ polish report <target> [--ignore=a,b] [--output=f] # 生成交互式 HTML 报告
 polish plan  <findings.json> [--summary]   # 将发现转换为有序操作列表
 polish diff  <plan.json> [--summary]       # 从计划生成机械性补丁
 polish apply <patches.json> [--summary]    # 应用补丁（创建 .backup 文件）
+polish rollback <backups.json> [--target=dir] [--summary]  # 从 apply 运行的备份清单恢复文件
 polish confirm <decisions.json> [--target=dir] [--summary]  # 应用设计师确认的判断性决策
 polish doctor [--install] [--summary]      # 检查可选依赖；--install 自动安装缺失项
 polish explain <finding-type>              # 解释某类发现的含义与修复方法
@@ -323,7 +324,7 @@ polish
 
 ## MCP 服务器
 
-polish 通过 Model Context Protocol 暴露 8 个工具，因此任何 AI 编程代理（Qoder、Claude 等）都能驱动完整流水线。
+polish 通过 Model Context Protocol 暴露 9 个工具，因此任何 AI 编程代理（Qoder、Claude 等）都能驱动完整流水线。
 
 添加到你的 MCP 配置（`mcp.json`、`.mcp.json` 或你的代理配置）：
 
@@ -360,7 +361,8 @@ polish 通过 Model Context Protocol 暴露 8 个工具，因此任何 AI 编程
 | `polish_measure` | 为审计规范化运行时观测数据 |
 | `polish_plan` | 将发现转换为排序后的分类操作队列 |
 | `polish_diff` | 从计划生成机械性补丁 |
-| `polish_apply` | 带备份保护执行补丁 |
+| `polish_apply` | 带备份保护执行补丁，失败时自动回滚 |
+| `polish_rollback` | 从 apply 运行的备份清单恢复文件 |
 | `polish_doctor` | 检查可选依赖和环境健康状态 |
 | `polish_style_lookup` | 查询品牌 DESIGN.md 设计令牌数据 |
 
@@ -419,7 +421,7 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 
 ### MCP 集成详情
 
-所有 8 个 MCP 工具均接受和返回 JSON。关键参数：
+所有 9 个 MCP 工具均接受和返回 JSON。关键参数：
 
 - **`polish_extract`** — `{ target: string, ignore?: string[] }` → `DeclarationGraph`
 - **`polish_audit`** — `{ target: string, ignore?: string[], observation?: object }` → `{ findings, summary, graphSummary, observation }`
@@ -427,6 +429,7 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 - **`polish_plan`** — `{ findings: Finding[] }` → `{ plan, summary }`
 - **`polish_diff`** — `{ plan: PlanAction[], target?: string }` → `{ patches, preview }`
 - **`polish_apply`** — `{ patches: Patch[], target: string }` → `ApplyResult`
+- **`polish_rollback`** — `{ backups: { file, backup }[], target: string }` → `RollbackResult`
 - **`polish_doctor`** — `{}` → 依赖健康检查
 - **`polish_style_lookup`** — `{ brand?: string }` → 品牌设计令牌参考
 

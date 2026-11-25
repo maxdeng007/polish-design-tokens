@@ -37,7 +37,13 @@ write path is deliberately conservative:
   reject anything outside it. Symbolic links are resolved physically
   (`fs.realpathSync`) so boundaries cannot be escaped lexically.
 - **Backups.** Every file is backed up (`<file>.backup`) before the first
-  modification, and backups are never overwritten by later runs.
+  modification, and backups are never overwritten by later runs. `apply()`
+  returns a backups manifest that `polish rollback` / `polish_rollback`
+  restore from on demand.
+- **Transactional execution.** Patches are pre-validated read-only before any
+  write, and if a patch fails at execution time (line shifted or changed
+  mid-run), every file written by that run is rolled back from its backup
+  automatically.
 - **Stale-delete protection.** `delete` patches must carry the original line
   text (`before`); it is verified against the file before deletion — if the
   file changed after the patch was generated, the delete is refused instead

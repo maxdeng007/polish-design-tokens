@@ -12,6 +12,7 @@ import type {
   PlanAction,
   Patch,
   ApplyResult,
+  RollbackResult,
   PipelineResult,
   WizardResult,
   WizardOptions,
@@ -40,6 +41,7 @@ export type {
   PlanAction,
   Patch,
   ApplyResult,
+  RollbackResult,
   PipelineResult,
   WizardResult,
   WizardOptions,
@@ -54,6 +56,7 @@ export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS } from './plan.js'
 export { generateDiffs } from './diff.js';
 export { confirm } from './confirm.js';
 export { apply } from './apply.js';
+export { rollback } from './rollback.js';
 export { runWizard } from './wizard.js';
 
 /**
