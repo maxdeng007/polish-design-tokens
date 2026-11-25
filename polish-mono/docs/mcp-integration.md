@@ -70,7 +70,7 @@ With runtime observation:
 }
 ```
 
-**Output:** `AuditReport` — findings sorted by severity, with summary counts.
+**Output:** `{ findings, summary, graphSummary, observation }` — `findings` sorted by severity, `summary` with `declarations`, `uniqueTokens`, `runtimeVariables`, `runtimeDocuments`, `findings` and `bySeverity` counts, `graphSummary` describing the scanned token graph, and `observation` echoing the input (or `null` when no runtime data was passed).
 
 **Use when:** You need to know what's wrong with a project's tokens. This is the main entry point for the audit phase.
 
@@ -105,7 +105,7 @@ Convert findings to a ranked, classified action queue.
 { "findings": [ { "id": "dangling", "severity": "error", "title": "...", "detail": "...", "evidence": [], "suggestion": "..." } ] }
 ```
 
-**Output:** `PlanAction[]` — sorted by priority. Each action has `type` (mechanical/judgmental), `priority`, `action` (fix/review/note), and the original finding.
+**Output:** `{ plan, summary }` — `plan` is a sorted `PlanAction[]`; each action has `type` (mechanical/judgmental), `priority`, `action` (fix/review/note), and the original finding. `summary` has `total`, `mechanical`, `judgmental`, and `topPriority` counts.
 
 **Use when:** After `polish_audit`, before generating patches. Classifies what can be auto-fixed vs. what needs human judgment.
 
@@ -120,7 +120,7 @@ Generate mechanical patches from a plan.
 { "plan": [ { "finding": {...}, "action": "fix", "type": "mechanical", "priority": 2 } ] }
 ```
 
-**Output:** `Patch[]` — only mechanical items produce patches. Each patch has `type`, `file`, `line`, `before`, `after`, `reason`, `findingId`.
+**Output:** `{ patches, preview }` — `patches` is a `Patch[]`; only mechanical items produce patches. Each patch has `type`, `file`, `line`, `before`, `after`, `reason`, `findingId`. `preview` is a short human-readable summary of the first ten patches.
 
 **Use when:** After `polish_plan`, to get concrete patches for mechanical fixes.
 
@@ -176,11 +176,13 @@ Find design tokens by brand name or pattern.
 ## Typical Workflow
 
 ```
-1. polish_audit(target)           → AuditReport with findings
-2. polish_plan(findings)          → PlanAction[] (ranked)
-3. polish_diff(plan)              → Patch[] (mechanical only)
-4. polish_apply(patches)          → ApplyResult (files modified + backups)
+1. polish_audit(target)      → { findings, summary, graphSummary, observation }
+2. polish_plan(findings.findings) → { plan, summary } (ranked)
+3. polish_diff(plan.plan, target) → { patches, preview } (mechanical only)
+4. polish_apply(patches.patches, target) → ApplyResult (files modified + backups)
 ```
+
+Note how each stage unwraps the previous stage's response: `polish_plan` takes `findings` from the audit result, `polish_diff` takes `plan` from the plan result, and `polish_apply` takes `patches` from the diff result.
 
 For runtime-aware audits, insert `polish_measure` between step 1 and 2 to provide observation data.
 

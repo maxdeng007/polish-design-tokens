@@ -123,3 +123,79 @@ test('MCP polish_apply without target returns a protocol error', () => {
   assert.equal(call.error.code, -32603, 'handler errors surface as internal error');
   cleanup();
 });
+
+test('MCP tools return the documented wrapper shapes', () => {
+  const dir = makeProject(':root {\n  --bg: #ffffff;\n  --background: #ffffff;\n}\n.card {\n  background: var(--bg);\n}\n');
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'polish_audit', arguments: { target: dir } } },
+    { jsonrpc: '2.0', id: 3, method: 'tools/call', params: { name: 'polish_plan', arguments: { findings: [] } } },
+    { jsonrpc: '2.0', id: 4, method: 'tools/call', params: { name: 'polish_diff', arguments: { plan: [] } } },
+    { jsonrpc: '2.0', id: 5, method: 'tools/call', params: { name: 'polish_apply', arguments: { patches: [], target: dir } } }
+  ]);
+  const unwrap = (id) => JSON.parse(responses.get(id).result.content[0].text);
+
+  const audit = unwrap(2);
+  assert.deepEqual(Object.keys(audit).sort(), ['findings', 'graphSummary', 'observation', 'summary'],
+    'audit must return { findings, summary, graphSummary, observation }');
+  assert.ok(audit.findings.some(f => f.id === 'duplicate-value'), 'audit should find the duplicate value');
+  assert.equal(typeof audit.summary.findings, 'number', 'summary should carry findings counts');
+  assert.ok(audit.summary.bySeverity, 'summary should break findings down by severity');
+  assert.ok(audit.graphSummary, 'graphSummary should describe the scanned graph');
+
+  const plan = unwrap(3);
+  assert.deepEqual(Object.keys(plan).sort(), ['plan', 'summary'],
+    'plan must return { plan, summary }');
+  assert.ok(Array.isArray(plan.plan), 'plan.plan should be the action array');
+  assert.ok(plan.summary.mechanical >= 1 || plan.summary.total === 0, 'summary should classify actions');
+
+  const diff = unwrap(4);
+  assert.deepEqual(Object.keys(diff).sort(), ['patches', 'preview'],
+    'diff must return { patches, preview }');
+  assert.ok(Array.isArray(diff.patches), 'diff.patches should be the patch array');
+  assert.equal(typeof diff.preview, 'string', 'diff should include a preview');
+
+  const apply = unwrap(5);
+  assert.deepEqual(Object.keys(apply).sort(), ['applied', 'backupCount', 'failed'],
+    'apply must return { applied, failed, backupCount }');
+
+  cleanup();
+});
+
+test('MCP wire-level round trip applies mechanical patches chained from audit', () => {
+  const dir = makeProject(':root {\n  --bg: #ffffff;\n  --background: #ffffff;\n}\n.card {\n  background: var(--bg);\n}\n');
+  // Chain in two batches: the audit result feeds the plan, the plan feeds the diff.
+  const first = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'polish_audit', arguments: { target: dir } } }
+  ]);
+  const audit = JSON.parse(first.get(2).result.content[0].text);
+
+  const second = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'polish_plan', arguments: { findings: audit.findings } } }
+  ]);
+  const plan = JSON.parse(second.get(2).result.content[0].text);
+
+  const third = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'polish_diff', arguments: { plan: plan.plan, target: dir } } }
+  ]);
+  const diff = JSON.parse(third.get(2).result.content[0].text);
+  assert.ok(diff.patches.length >= 1, 'diff should generate at least one mechanical patch');
+  assert.ok(diff.preview.length > 0, 'preview should summarize the generated patches');
+
+  const fourth = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'polish_apply', arguments: { patches: diff.patches, target: dir } } }
+  ]);
+  const apply = JSON.parse(fourth.get(2).result.content[0].text);
+  assert.equal(apply.applied.length, diff.patches.length, 'all patches should apply');
+  assert.equal(apply.failed.length, 0, `no patch should fail: ${JSON.stringify(apply.failed)}`);
+  assert.equal(apply.backupCount, 1, 'file should be backed up once');
+
+  const content = fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8');
+  assert.ok(content.includes('var(--bg)'), 'secondary token should be aliased to the primary');
+  cleanup();
+});
+

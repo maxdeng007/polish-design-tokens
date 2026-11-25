@@ -70,7 +70,7 @@ polish 通过 Model Context Protocol 暴露 8 个工具（stdin/stdout 上的 JS
 }
 ```
 
-**输出：** `AuditReport` — 按严重程度排序的发现，含摘要计数。
+**输出：** `{ findings, summary, graphSummary, observation }` — `findings` 按严重程度排序，`summary` 含 `declarations`、`uniqueTokens`、`runtimeVariables`、`runtimeDocuments`、`findings` 及 `bySeverity` 计数，`graphSummary` 描述扫描到的令牌图，`observation` 回显传入的运行时数据（未传则为 `null`）。
 
 **使用时机：** 需要了解项目令牌存在的问题时。这是审计阶段的主要入口。
 
@@ -105,7 +105,7 @@ polish 通过 Model Context Protocol 暴露 8 个工具（stdin/stdout 上的 JS
 { "findings": [ { "id": "dangling", "severity": "error", "title": "...", "detail": "...", "evidence": [], "suggestion": "..." } ] }
 ```
 
-**输出：** `PlanAction[]` — 按优先级排序。每条操作含 `type`（mechanical/judgmental）、`priority`、`action`（fix/review/note）及原始发现。
+**输出：** `{ plan, summary }` — `plan` 为按优先级排序的 `PlanAction[]`，每条操作含 `type`（mechanical/judgmental）、`priority`、`action`（fix/review/note）及原始发现。`summary` 含 `total`、`mechanical`、`judgmental`、`topPriority` 计数。
 
 **使用时机：** `polish_audit` 之后、生成补丁之前。分类哪些可以自动修复、哪些需要人工判断。
 
@@ -120,7 +120,7 @@ polish 通过 Model Context Protocol 暴露 8 个工具（stdin/stdout 上的 JS
 { "plan": [ { "finding": {...}, "action": "fix", "type": "mechanical", "priority": 2 } ] }
 ```
 
-**输出：** `Patch[]` — 仅机械性条目生成补丁。每个补丁含 `type`、`file`、`line`、`before`、`after`、`reason`、`findingId`。
+**输出：** `{ patches, preview }` — `patches` 为 `Patch[]`，仅机械性条目生成补丁。每个补丁含 `type`、`file`、`line`、`before`、`after`、`reason`、`findingId`。`preview` 为前十个补丁的简短可读摘要。
 
 **使用时机：** `polish_plan` 之后，获取机械性修复的具体补丁。
 
@@ -176,11 +176,13 @@ polish 通过 Model Context Protocol 暴露 8 个工具（stdin/stdout 上的 JS
 ## 典型工作流
 
 ```
-1. polish_audit(target)           → AuditReport（含发现）
-2. polish_plan(findings)          → PlanAction[]（已排序）
-3. polish_diff(plan)              → Patch[]（仅机械性）
-4. polish_apply(patches)          → ApplyResult（已修改文件 + 备份）
+1. polish_audit(target)           → { findings, summary, graphSummary, observation }
+2. polish_plan(findings.findings) → { plan, summary }（已排序）
+3. polish_diff(plan.plan, target) → { patches, preview }（仅机械性）
+4. polish_apply(patches.patches, target) → ApplyResult（已修改文件 + 备份）
 ```
+
+注意每一层如何解包上一层的返回：`polish_plan` 取审计结果里的 `findings`，`polish_diff` 取计划结果里的 `plan`，`polish_apply` 取差异结果里的 `patches`。
 
 对于运行时感知审计，在步骤 1 和 2 之间插入 `polish_measure` 以提供观测数据。
 

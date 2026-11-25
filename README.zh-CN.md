@@ -422,10 +422,10 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 所有 8 个 MCP 工具均接受和返回 JSON。关键参数：
 
 - **`polish_extract`** — `{ target: string, ignore?: string }` → `DeclarationGraph`
-- **`polish_audit`** — `{ target: string, ignore?: string, observation?: object }` → `AuditReport`
+- **`polish_audit`** — `{ target: string, ignore?: string, observation?: object }` → `{ findings, summary, graphSummary, observation }`
 - **`polish_measure`** — `{ documents: unknown[] }` → `RuntimeObservation`
-- **`polish_plan`** — `{ findings: Finding[] }` → `PlanAction[]`
-- **`polish_diff`** — `{ plan: PlanAction[] }` → `Patch[]`
+- **`polish_plan`** — `{ findings: Finding[] }` → `{ plan, summary }`
+- **`polish_diff`** — `{ plan: PlanAction[], target?: string }` → `{ patches, preview }`
 - **`polish_apply`** — `{ patches: Patch[], target: string }` → `ApplyResult`
 - **`polish_doctor`** — `{}` → 依赖健康检查
 - **`polish_style_lookup`** — `{ brand?: string }` → 品牌设计令牌参考

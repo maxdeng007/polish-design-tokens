@@ -10,6 +10,16 @@ new capabilities bump the minor version, fixes and polish bump the patch version
 
 ### Fixed
 
+- **MCP output contract** — `polish_audit`, `polish_plan`, and `polish_diff`
+  returned wrapper objects (`{ findings, summary, graphSummary, observation }`,
+  `{ plan, summary }`, `{ patches, preview }`) while the README and MCP
+  integration guide documented bare `AuditReport` / `PlanAction[]` / `Patch[]`.
+  The wrappers are kept (they carry useful summary data), and all documentation
+  now describes the actual response shapes. Tool descriptions in the MCP server
+  now state the wrapper shapes explicitly. Added wire-level round-trip tests
+  driving `audit → plan → diff → apply` over the JSON-RPC protocol, plus a
+  contract test asserting each tool's documented wrapper keys.
+
 - **False references from comments and strings** — the parser extracted
   `var()` references from raw source text, so `var(--x)` inside CSS/JS
   comments, JS documentation strings, and template literals was treated as a

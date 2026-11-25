@@ -55,7 +55,7 @@ const toolDefinitions = [
   },
   {
     name: 'polish_audit',
-    description: 'Full critique: scan a directory and cross-reference tokens. Returns findings with severity levels. Pass observation data to enable runtime-drift and hardcoded detection.',
+    description: 'Full critique: scan a directory and cross-reference tokens. Returns { findings, summary, graphSummary, observation }. Pass observation data to enable runtime-drift and hardcoded detection.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -119,7 +119,7 @@ const toolDefinitions = [
   },
   {
     name: 'polish_plan',
-    description: 'Convert audit findings into an ordered, classified action list. Mechanical items can be auto-fixed; judgmental items need agent judgement.',
+    description: 'Convert audit findings into an ordered, classified action list. Returns { plan, summary }. Mechanical items can be auto-fixed; judgmental items need agent judgement.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -156,7 +156,7 @@ const toolDefinitions = [
   },
   {
     name: 'polish_diff',
-    description: 'Generate mechanical patches (before/after) for a plan. Only processes mechanical items; judgmental items are skipped.',
+    description: 'Generate mechanical patches (before/after) for a plan. Returns { patches, preview }. Only processes mechanical items; judgmental items are skipped.',
     inputSchema: {
       type: 'object',
       properties: {
