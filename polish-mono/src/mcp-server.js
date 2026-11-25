@@ -125,7 +125,7 @@ const toolDefinitions = [
       properties: {
         findings: {
           type: 'array',
-          description: 'Findings array from token-audit cross.js output',
+          description: 'Findings array from polish_audit output',
           items: {
             type: 'object',
             properties: {
@@ -193,7 +193,7 @@ const toolDefinitions = [
           items: {
             type: 'object',
             properties: {
-              type: { type: 'string', enum: ['replace', 'rewrite', 'rename', 'add', 'remove'] },
+              type: { type: 'string', enum: ['replace', 'rewrite', 'rename', 'add', 'delete'] },
               file: { type: 'string' },
               line: { type: 'number' },
               before: { type: 'string' },
