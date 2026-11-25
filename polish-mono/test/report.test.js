@@ -194,3 +194,53 @@ test('polish report shows the polish confirm command hint', () => {
   assert.ok(html.includes('id="confirm-hint"'), 'should have a confirm hint element');
   cleanup();
 });
+
+test('polish report has a filter input and severity chips', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('id="filter-input"'), 'should have a filter search input');
+  assert.ok(html.includes('data-severity-filter="all"'), 'should have an All severity chip');
+  for (const sev of ['error', 'warn', 'info']) {
+    assert.ok(html.includes(`data-severity-filter="${sev}"`), `should have a ${sev} severity chip`);
+  }
+  cleanup();
+});
+
+test('polish report cards carry a data-severity attribute', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  const card = html.match(/<div class="card" data-severity="warn">/);
+  assert.ok(card, 'duplicate-value cards should carry data-severity="warn"');
+  cleanup();
+});
+
+test('polish report has a finding count and a filter empty state', () => {
+  const dir = makeProject(':root {\n  --text: #111827;\n  --heading: #111827;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('id="finding-count"'), 'should have a visible finding count element');
+  assert.ok(html.includes('id="filter-empty"'), 'should have a filter empty state element');
+  cleanup();
+});
+
+test('polish report filter script scopes decisions to visible cards', () => {
+  const dir = makeProject(':root {\n  --unused: #fff;\n  --primary: #4f46e5;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  const script = html.match(/<script>([\s\S]*)<\/script>/);
+  assert.ok(script, 'should have an inline script');
+  const code = script[1];
+  assert.ok(code.includes('applyFilter'), 'script should implement the filter logic');
+  assert.ok(code.includes('visibleCards'), 'script should compute visible cards');
+  assert.ok(
+    code.includes("card.querySelectorAll('input[type=\"checkbox\"][data-decision]:checked')"),
+    'decision collection should be scoped to visible cards only'
+  );
+  cleanup();
+});

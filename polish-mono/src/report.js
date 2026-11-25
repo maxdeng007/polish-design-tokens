@@ -133,7 +133,7 @@ function renderFinding(finding) {
       : '');
 
   return `
-    <div class="card">
+    <div class="card" data-severity="${esc(sevClass)}">
       ${header}
       ${title}
       ${detail}
@@ -309,6 +309,40 @@ export function generateReport(report) {
     z-index: 10;
   }
   .toolbar-inner { display: flex; align-items: center; gap: 1rem; }
+  .filter-group { display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 0; }
+  .filter-input {
+    flex: 1;
+    min-width: 12rem;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--card-bg);
+    font-size: 0.875rem;
+    color: var(--text);
+  }
+  .filter-input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .filter-chips { display: flex; gap: 0.25rem; }
+  .chip {
+    background: var(--card-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip.is-active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .filter-empty {
+    background: var(--card-bg);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
   .toolbar-count { font-size: 0.9rem; color: var(--muted); }
   .download-btn {
     background: var(--accent);
@@ -353,11 +387,24 @@ export function generateReport(report) {
 
   <div class="toolbar">
     <div class="toolbar-inner">
+      <div class="filter-group">
+        <input type="search" id="filter-input" class="filter-input"
+          placeholder="Filter by token name or finding…" autocomplete="off"
+          aria-label="Filter findings">
+        <div class="filter-chips" role="group" aria-label="Filter by severity">
+          <button type="button" class="chip is-active" data-severity-filter="all">All</button>
+          <button type="button" class="chip" data-severity-filter="error">Error</button>
+          <button type="button" class="chip" data-severity-filter="warn">Warn</button>
+          <button type="button" class="chip" data-severity-filter="info">Info</button>
+        </div>
+      </div>
+      <span class="toolbar-count" id="finding-count">Showing 0 of 0 findings</span>
       <span class="toolbar-count" id="decision-count">0 decisions selected</span>
       <button class="download-btn" id="download-btn" disabled>Download decisions.json</button>
       <button class="download-btn copy-btn" id="copy-btn" disabled>Copy decisions.json</button>
     </div>
   </div>
+  <div class="filter-empty" id="filter-empty" hidden>No findings match your filters.</div>
   ${confirmHint}
 
   ${sections}
@@ -373,11 +420,52 @@ export function generateReport(report) {
   var countEl = document.getElementById('decision-count');
   var btn = document.getElementById('download-btn');
   var copyBtn = document.getElementById('copy-btn');
+  var cards = document.querySelectorAll('.card');
+  var filterInput = document.getElementById('filter-input');
+  var chips = document.querySelectorAll('[data-severity-filter]');
+  var findingCount = document.getElementById('finding-count');
+  var filterEmpty = document.getElementById('filter-empty');
+  var severityFilter = 'all';
+
+  function visibleCards() {
+    var term = filterInput.value.trim().toLowerCase();
+    return Array.prototype.filter.call(cards, function(card) {
+      if (severityFilter !== 'all' && card.getAttribute('data-severity') !== severityFilter) return false;
+      if (term && card.textContent.toLowerCase().indexOf(term) === -1) return false;
+      return true;
+    });
+  }
+
+  function visibleCheckedCheckboxes() {
+    var checked = [];
+    visibleCards().forEach(function(card) {
+      card.querySelectorAll('input[type="checkbox"][data-decision]:checked').forEach(function(cb) {
+        checked.push(cb);
+      });
+    });
+    return checked;
+  }
+
+  function applyFilter() {
+    var visible = visibleCards();
+    cards.forEach(function(card) {
+      card.style.display = visible.indexOf(card) === -1 ? 'none' : '';
+    });
+    document.querySelectorAll('.severity-section').forEach(function(section) {
+      var anyVisible = Array.prototype.some.call(
+        section.querySelectorAll('.card'),
+        function(card) { return card.style.display !== 'none'; }
+      );
+      section.style.display = anyVisible ? '' : 'none';
+    });
+    findingCount.textContent = 'Showing ' + visible.length + ' of ' + cards.length + ' findings';
+    filterEmpty.hidden = visible.length !== 0;
+    updateCount();
+  }
 
   function buildDecisions() {
-    var checked = document.querySelectorAll('input[type="checkbox"][data-decision]:checked');
     var decisions = [];
-    checked.forEach(function(cb) {
+    visibleCheckedCheckboxes().forEach(function(cb) {
       try {
         decisions.push(JSON.parse(cb.getAttribute('data-decision')));
       } catch (e) { /* skip malformed */ }
@@ -386,7 +474,7 @@ export function generateReport(report) {
   }
 
   function updateCount() {
-    var checked = document.querySelectorAll('input[type="checkbox"][data-decision]:checked');
+    var checked = visibleCheckedCheckboxes();
     countEl.textContent = checked.length + ' decision' + (checked.length === 1 ? '' : 's') + ' selected';
     btn.disabled = checked.length === 0;
     copyBtn.disabled = checked.length === 0;
@@ -394,6 +482,17 @@ export function generateReport(report) {
 
   checkboxes.forEach(function(cb) {
     cb.addEventListener('change', updateCount);
+  });
+
+  filterInput.addEventListener('input', applyFilter);
+
+  chips.forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      chips.forEach(function(c) { c.classList.remove('is-active'); });
+      chip.classList.add('is-active');
+      severityFilter = chip.getAttribute('data-severity-filter');
+      applyFilter();
+    });
   });
 
   btn.addEventListener('click', function() {
@@ -439,7 +538,7 @@ export function generateReport(report) {
     document.body.removeChild(ta);
   }
 
-  updateCount();
+  applyFilter();
 })();
 </script>
 </body>
