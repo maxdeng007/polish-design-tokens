@@ -183,14 +183,38 @@ function maskLexicalCss(text) {
  * JS lexical masking. Comments are always masked. String and template
  * literals are kept (so real CSS-in-JS references survive) unless
  * `maskStrings` is true, in which case only strings in a CSS context are kept.
+ *
+ * When `jsx` is true (.jsx/.tsx files), JSX text content between tags is
+ * masked so prose like `<p>Use var(--bg)</p>` does not read as a reference.
+ * Strings inside JSX text still follow the same keep/mask rule, so a genuine
+ * quoted reference is never lost even if tag tracking is imperfect.
  */
-function maskLexicalJs(text, maskStrings) {
+function maskLexicalJs(text, maskStrings, jsx) {
   const out = [];
   let i = 0;
   const n = text.length;
   const stack = [{ mode: 'code', braceDepth: 0, interp: false }];
   const emit = (ch) => out.push(ch);
   const maskChar = (ch) => out.push(ch === '\n' ? '\n' : ' ');
+  const isTagStart = (j) => {
+    const c = text[j + 1];
+    return c === '/' || c === '>' || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+  };
+  const readString = (quote, keep) => {
+    emit(quote);
+    i++;
+    while (i < n) {
+      if (text[i] === '\\') {
+        emit(text[i]);
+        if (i + 1 < n) emit(text[i + 1]);
+        i += 2;
+        continue;
+      }
+      if (keep) emit(text[i]); else maskChar(text[i]);
+      if (text[i] === quote) { i++; break; }
+      i++;
+    }
+  };
 
   while (i < n) {
     const ctx = stack[stack.length - 1];
@@ -214,14 +238,7 @@ function maskLexicalJs(text, maskStrings) {
       }
       if (ch === "'" || ch === '"') {
         const keep = !maskStrings || jsStringIsCssContext(out.join(''), i);
-        emit(ch);
-        i++;
-        while (i < n) {
-          if (text[i] === '\\') { emit(text[i]); if (i + 1 < n) emit(text[i + 1]); i += 2; continue; }
-          if (keep) emit(text[i]); else maskChar(text[i]);
-          if (text[i] === ch) { i++; break; }
-          i++;
-        }
+        readString(ch, keep);
         continue;
       }
       if (ch === '`') {
@@ -247,6 +264,12 @@ function maskLexicalJs(text, maskStrings) {
         }
         continue;
       }
+      if (jsx && ch === '<' && isTagStart(i)) {
+        emit(ch);
+        i++;
+        stack.push({ mode: 'jsxTag', closing: text[i] === '/' });
+        continue;
+      }
       if (ch === '}' && ctx.interp) {
         if (ctx.braceDepth === 0) { emit(ch); stack.pop(); i++; continue; }
         ctx.braceDepth--;
@@ -258,11 +281,54 @@ function maskLexicalJs(text, maskStrings) {
       continue;
     }
 
+    if (ctx.mode === 'jsxTag') {
+      if (ch === "'" || ch === '"') {
+        const keep = !maskStrings || jsStringIsCssContext(out.join(''), i);
+        readString(ch, keep);
+        continue;
+      }
+      if (ch === '>') {
+        emit(ch);
+        i++;
+        stack.pop();
+        if (!ctx.closing) stack.push({ mode: 'jsxText' });
+        continue;
+      }
+      emit(ch);
+      i++;
+      continue;
+    }
+
+    if (ctx.mode === 'jsxText') {
+      if (ch === '{') {
+        emit(ch);
+        i++;
+        stack.push({ mode: 'code', braceDepth: 0, interp: true });
+        continue;
+      }
+      if (ch === "'" || ch === '"') {
+        const keep = !maskStrings || jsStringIsCssContext(out.join(''), i);
+        readString(ch, keep);
+        continue;
+      }
+      if (jsx && ch === '<' && isTagStart(i)) {
+        emit(ch);
+        i++;
+        stack.pop();
+        stack.push({ mode: 'jsxTag', closing: text[i] === '/' });
+        continue;
+      }
+      maskChar(ch);
+      i++;
+      continue;
+    }
+
     if (ctx.mode === 'tpl') {
       if (text[i] === '\\') { emit(text[i]); if (i + 1 < n) emit(text[i + 1]); i += 2; continue; }
       if (text[i] === '`') { emit('`'); stack.pop(); i++; continue; }
       if (text[i] === '$' && text[i + 1] === '{') {
-        emit('$', '{');
+        emit('$');
+        emit('{');
         stack.push({ mode: 'code', braceDepth: 0, interp: true });
         i += 2;
         continue;
@@ -522,12 +588,13 @@ function parseHtml(text, file) {
 }
 
 /** Parse a JS/TS file for inline style objects. */
-function parseJs(text, file) {
+function parseJs(text, file, opts) {
+  const jsx = !!(opts && opts.jsx);
   const declarations = [];
   const references = [];
   // Declaration regexes need string literals intact (the values ARE strings),
   // so only comments are masked for them.
-  const codeText = maskLexicalJs(text, false);
+  const codeText = maskLexicalJs(text, false, jsx);
   const objLineAt = lineCounter(text);
   const objRe = /(["'])--([A-Za-z0-9_-]+)\1\s*:\s*(["'])([^"']*)\3/g;
   let m;
@@ -567,7 +634,7 @@ function parseJs(text, file) {
   }
   // Whole-file reference scan on a lexically masked copy: comments are gone,
   // and strings/templates survive only when they sit in a CSS context.
-  const refText = maskLexicalJs(text, true);
+  const refText = maskLexicalJs(text, true, jsx);
   const refLineAt = lineCounter(text);
   const re = new RegExp(VAR_REF_RE.source, 'g');
   while ((m = re.exec(refText))) {
@@ -576,9 +643,51 @@ function parseJs(text, file) {
   return { declarations, references };
 }
 
+/** Parse a Vue/Svelte single-file component: dispatch template, script, style. */
+function parseSfc(text, file) {
+  const declarations = [];
+  const references = [];
+  const lineAt = lineCounter(text);
+  const blank = (s) => s.replace(/[^\n]/g, ' ');
+  const blockShift = (match) =>
+    lineAt(match.index) + countNewlines(match[0].slice(0, match[0].indexOf('>') + 1));
+  const pushShifted = (parsed, shift) => {
+    parsed.declarations.forEach(d => { d.line += shift; declarations.push(d); });
+    parsed.references.forEach(r => { r.line += shift; references.push(r); });
+  };
+
+  const tplMatch = /<template\b[^>]*>([\s\S]*?)<\/template>/i.exec(text);
+  let templateText;
+  let templateShift;
+  if (tplMatch) {
+    templateText = tplMatch[1];
+    templateShift = blockShift(tplMatch);
+  } else {
+    templateText = text
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, blank)
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, blank);
+    templateShift = 0;
+  }
+  pushShifted(parseHtml(templateText, file), templateShift);
+
+  let m;
+  const scriptRe = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
+  while ((m = scriptRe.exec(text))) {
+    pushShifted(parseJs(m[1], file), blockShift(m));
+  }
+  const styleRe = /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
+  while ((m = styleRe.exec(text))) {
+    pushShifted(parseCss(m[1], file), blockShift(m));
+  }
+
+  return { declarations, references };
+}
+
 function parseSource(text, file) {
   if (/\.html?$/i.test(file)) return parseHtml(text, file);
-  if (/\.(jsx?|tsx?|mjs|cjs)$/i.test(file)) return parseJs(text, file);
+  if (/\.(vue|svelte)$/i.test(file)) return parseSfc(text, file);
+  if (/\.(jsx|tsx)$/i.test(file)) return parseJs(text, file, { jsx: true });
+  if (/\.(js|ts|mjs|cjs)$/i.test(file)) return parseJs(text, file);
   return parseCss(text, file);
 }
 
@@ -747,7 +856,8 @@ function isNumericIndex(value) {
 }
 
 export {
-  parseCss, parseHtml, parseJs, parseSource,
+  parseCss, parseHtml, parseJs, parseSfc, parseSource,
+  maskLexicalJs,
   resolveVar, resolveValue, classify, refsIn, themesIn, findVarRefs,
   normalizeValue, isAlias, isKeyword, isNumericIndex
 };

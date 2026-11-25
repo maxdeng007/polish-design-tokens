@@ -412,8 +412,8 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 | CSS | `.css` | 所有 `--name: value` 声明和 `var(--name)` 引用 |
 | SCSS / LESS | `.scss`, `.less` | 与 CSS 相同 |
 | HTML | `.html`, `.htm` | `<style>` 块、内联 `style=""` 属性、`<script>` 样式对象 |
-| JavaScript / TypeScript | `.js`, `.ts`, `.jsx`, `.tsx`, `.mjs`, `.cjs` | 内联样式对象和 `setProperty()` 调用 |
-| Vue / Svelte | `.vue`, `.svelte` | 组件作用域 CSS 和内联样式 |
+| JavaScript / TypeScript | `.js`, `.ts`, `.jsx`, `.tsx`, `.mjs`, `.cjs` | 内联样式对象和 `setProperty()` 调用；JSX 文本内容会被忽略 |
+| Vue / Svelte | `.vue`, `.svelte` | `<template>` 内联样式、`<script>` 样式对象、`<style>` 块 |
 
 `node_modules`、`dist`、`build`、`.git`、`.next`、`.cache` 及其他常见构建/依赖目录中的文件会自动跳过。使用 `ignore` 选项可排除更多路径片段。
 

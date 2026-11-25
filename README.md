@@ -412,8 +412,8 @@ polish scans the following file types. Each is parsed for CSS custom property de
 | CSS | `.css` | All `--name: value` declarations and `var(--name)` references |
 | SCSS / LESS | `.scss`, `.less` | Same as CSS |
 | HTML | `.html`, `.htm` | `<style>` blocks, inline `style=""` attributes, `<script>` style objects |
-| JavaScript / TypeScript | `.js`, `.ts`, `.jsx`, `.tsx`, `.mjs`, `.cjs` | Inline style objects and `setProperty()` calls |
-| Vue / Svelte | `.vue`, `.svelte` | Component-scoped CSS and inline styles |
+| JavaScript / TypeScript | `.js`, `.ts`, `.jsx`, `.tsx`, `.mjs`, `.cjs` | Inline style objects and `setProperty()` calls; JSX text content is ignored |
+| Vue / Svelte | `.vue`, `.svelte` | `<template>` inline styles, `<script>` style objects, `<style>` blocks |
 
 Files inside `node_modules`, `dist`, `build`, `.git`, `.next`, `.cache`, and other common build/dependency directories are automatically skipped. Use the `ignore` option to exclude additional path fragments.
 

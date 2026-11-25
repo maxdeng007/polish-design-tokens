@@ -6,6 +6,21 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html):
 new capabilities bump the minor version, fixes and polish bump the patch version.
 
+## [Unreleased]
+
+### Fixed
+
+- **Parser lexical boundaries** — `.jsx`/`.tsx` files no longer treat JSX
+  prose text as code: `var(--x)` inside JSX text content no longer produces
+  phantom `dangling` references, while references in `style` objects,
+  attributes, and quoted strings are still detected. `.vue` and `.svelte`
+  single-file components are now dispatched properly: `<template>` inline
+  styles, `<script>` style objects, and `<style>` blocks are each parsed
+  with the right lexer (previously both fell through to the CSS parser).
+  Also fixed a masking bug where the `{` of a template interpolation was
+  dropped from the masked copy, breaking the length-preservation invariant
+  that keeps offsets and line numbers aligned.
+
 ## [1.8.1]
 
 ### Fixed

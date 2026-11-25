@@ -4,6 +4,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import { scan } from '../src/scan.js';
+import { maskLexicalJs } from '../src/lib/parse.js';
 
 function withFixtures(files, fn) {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'polish-parse-boundary-'));
@@ -136,4 +137,109 @@ const tokens = { '--bg': 'var(--primary)' };
     const bg = graph.declarations.find(d => d.name === '--bg');
     assert.ok(bg.aliases.includes('--primary'), 'reference from script value still detected as alias');
   });
+});
+
+test('reference line numbers stay correct after template interpolation', () => {
+  withFixtures({
+    'a.js': `const a = 1;
+const doc = \`line1
+line2 \${a}
+line3\`;
+const style = { color: 'var(--primary)' };
+:root { --primary: #1a73e8; }
+`
+  }, (tmp) => {
+    const graph = scan(tmp);
+    const ref = graph.references.find(r => r.name === '--primary');
+    assert.ok(ref, '--primary reference found');
+    assert.equal(ref.line, 5, 'reference line must account for multi-line template with ${}');
+  });
+});
+
+test('JSX text content containing var() is not a reference', () => {
+  withFixtures({
+    'a.jsx': `const doc = "var(--js-doc)";
+<div>
+  Use var(--from-jsx-text) for backgrounds.
+</div>
+<div style={{ color: 'var(--primary)' }}>
+  text
+</div>
+:root { --primary: #1a73e8; }
+`
+  }, (tmp) => {
+    const graph = scan(tmp);
+    assert.ok(!refNames(graph).includes('--from-jsx-text'), 'JSX prose text must not be a reference');
+    assert.ok(!danglingNames(graph).includes('--from-jsx-text'), 'no dangling from JSX prose');
+    assert.ok(!refNames(graph).includes('--js-doc'), 'documentation string still not a reference');
+    assert.ok(refNames(graph).includes('--primary'), 'JSX style object reference still detected');
+  });
+});
+
+test('Vue SFC dispatches template, script and style blocks', () => {
+  withFixtures({
+    'a.vue': `<template>
+  <div style="color: var(--primary)">
+    <span>var(--template-prose)</span>
+  </div>
+</template>
+<script setup>
+const tokens = { '--bg': 'var(--primary)' };
+</script>
+<style>
+:root { --primary: #1a73e8; }
+.card { color: var(--primary); }
+</style>
+`
+  }, (tmp) => {
+    const graph = scan(tmp);
+    assert.ok(!refNames(graph).includes('--template-prose'), 'Vue template prose must not be a reference');
+    assert.ok(!danglingNames(graph).includes('--template-prose'), 'no dangling from Vue template prose');
+    assert.ok(graph.declarations.some(d => d.name === '--bg'), 'Vue script token declaration detected');
+    assert.ok(graph.declarations.some(d => d.name === '--primary'), 'Vue style block declaration detected');
+    const bg = graph.declarations.find(d => d.name === '--bg');
+    assert.ok(bg.aliases.includes('--primary'), 'script alias detected');
+    assert.ok(refNames(graph).includes('--primary'), 'template style attribute reference detected');
+  });
+});
+
+test('Svelte SFC dispatches template, script and style blocks', () => {
+  withFixtures({
+    'a.svelte': `<div style="color: var(--primary)">
+  var(--svelte-prose)
+</div>
+<script>
+const tokens = { '--bg': 'var(--primary)' };
+</script>
+<style>
+:root { --primary: #1a73e8; }
+</style>
+`
+  }, (tmp) => {
+    const graph = scan(tmp);
+    assert.ok(!refNames(graph).includes('--svelte-prose'), 'Svelte template prose must not be a reference');
+    assert.ok(!danglingNames(graph).includes('--svelte-prose'), 'no dangling from Svelte prose');
+    assert.ok(graph.declarations.some(d => d.name === '--bg'), 'Svelte script token declaration detected');
+    assert.ok(graph.declarations.some(d => d.name === '--primary'), 'Svelte style block declaration detected');
+    assert.ok(refNames(graph).includes('--primary'), 'Svelte style attribute reference detected');
+  });
+});
+
+test('maskLexicalJs preserves length and newlines across lexical edge cases', () => {
+  const samples = [
+    'const a = `x${b}y${c}`;',
+    'const s = "a${b}c"; // ${d}\nconst t = `e\\${f}g`;',
+    '<div>${a}<span>${b}</span></div>',
+    'const u = `${a\n${b}}`;',
+    '/* ${a} */ `${b}` \'${c}\' "${d}"'
+  ];
+  for (const text of samples) {
+    for (const jsx of [false, true]) {
+      for (const maskStrings of [false, true]) {
+        const masked = maskLexicalJs(text, maskStrings, jsx);
+        assert.equal(masked.length, text.length, `length preserved for jsx=${jsx} maskStrings=${maskStrings}`);
+        assert.equal(masked.split('\n').length, text.split('\n').length, `newline count preserved for jsx=${jsx} maskStrings=${maskStrings}`);
+      }
+    }
+  }
 });
