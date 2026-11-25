@@ -137,6 +137,21 @@ export type FindingId =
 /** Severity level of a finding. */
 export type Severity = 'error' | 'warn' | 'info';
 
+/** Classification of a finding: mechanical (auto-fixable) or judgmental. */
+export type FindingClassification = 'mechanical' | 'judgmental';
+
+/** Registry metadata for a finding type (single source of truth). */
+export interface FindingMeta {
+  id: FindingId;
+  severity: Severity;
+  priority: number;
+  classification: FindingClassification;
+  title: string;
+  summary: string;
+  why: string;
+  fix: string;
+}
+
 /** Structured evidence attached to a finding. */
 export interface FindingEvidence {
   name?: string;

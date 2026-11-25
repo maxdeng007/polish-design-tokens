@@ -21,6 +21,15 @@ new capabilities bump the minor version, fixes and polish bump the patch version
   and refuse to touch anything outside it). `apply()` results now include
   `backups` and `rolledBack`.
 
+- **Finding metadata registry** — all 12 finding types now live in one
+  registry (`src/findings.js`) holding severity, priority, classification
+  (mechanical vs judgmental), and the plain-language explanation.
+  `cross()`, `plan()`, and `polish explain` all read from it, so the
+  severities in the audit output, the plan ranking, and the explain
+  text can no longer drift apart. `tailwind-utility-var` gains a
+  priority rank and a full explanation (previously it was detectable
+  but undocumented).
+
 ### Fixed
 
 - **Parser lexical boundaries** — `.jsx`/`.tsx` files no longer treat JSX

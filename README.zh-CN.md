@@ -24,7 +24,7 @@
 2. **审查** — 交叉比对声明与引用，发现问题
 3. **应用** — 为机械性修复生成并执行补丁，附带备份
 
-**范围说明：** polish 检测的 11 类发现中，仅 `duplicate-value` 会被自动修复。其余 10 类会被标记，交由人工或 AI 代理审查——polish 告诉你哪里有问题，但如何修复的决定权在你。
+**范围说明：** polish 检测的 12 类发现中，仅 `duplicate-value` 会被自动修复。其余 11 类会被标记，交由人工或 AI 代理审查——polish 告诉你哪里有问题，但如何修复的决定权在你。
 
 ## 为什么不用 Stylelint 或 ESLint？
 
@@ -172,6 +172,7 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 | 9 | `state-variation` | 令牌值在不同组件状态间变化 | 判断性 |
 | 10 | `theme-variation` | 令牌值在不同主题间变化 | 判断性 |
 | 11 | `dynamic-variable` | 具有动态（非静态）值的令牌 | 判断性 |
+| 12 | `tailwind-utility-var` | Tailwind v4 单工具变量 | 判断性 |
 
 只有**机械性**发现（`duplicate-value`）会在下一阶段生成补丁。
 

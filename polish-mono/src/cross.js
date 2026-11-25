@@ -6,6 +6,7 @@
  */
 
 import { normalizeValue, isAlias, isKeyword } from './lib/parse.js';
+import { severityOf } from './findings.js';
 
 const STATE_CLASS_RE = /^(is|has)[-_]|(^|[-_])(active|selected|disabled|hover|focus|open|closed|full|tight|empty|loading|error|warn|ok|done|on|off|muted|dim)([-_]|$)/i;
 
@@ -83,7 +84,7 @@ function cross(graph, observation) {
     if (allInt && allInline && variants.length > 3) {
       push({
         id: 'dynamic-variable',
-        severity: 'info',
+        severity: severityOf('dynamic-variable'),
         title: `${c.name} has ${variants.length} values — a per-element dynamic variable, not a token`,
         detail: `All come from inline styles or JS objects, with values ${variants.map(v => v.value).slice(0, 6).join(', ')}${variants.length > 6 ? ' …' : ''}. This is a common technique for writing data into CSS variables — not a design token conflict.`,
         evidence: variants[0].locations.slice(0, 3),
@@ -112,7 +113,7 @@ function cross(graph, observation) {
       if (hasTheme) {
         push({
           id: 'theme-variation',
-          severity: 'info',
+          severity: severityOf('theme-variation'),
           title: `${c.name} has ${variants.length} values across different scopes/themes`,
           detail: variants.map(v => `${v.value} @ ${v.scopes.join('/')}${v.themes.length ? '[' + v.themes.join(',') + ']' : ''}`).join('；'),
           evidence: variants.flatMap(v => v.locations.slice(0, 1)).slice(0, 4),
@@ -121,7 +122,7 @@ function cross(graph, observation) {
       } else {
         push({
           id: 'cascade-override',
-          severity: 'info',
+          severity: severityOf('cascade-override'),
           title: `${c.name} is defined separately in ${kinds.join(' and ')} scopes`,
           detail: variants.map(v => `${v.value} @ ${v.scopes.join('/')}`).join('；'),
           evidence: variants.flatMap(v => v.locations.slice(0, 1)).slice(0, 4),
@@ -143,7 +144,7 @@ function cross(graph, observation) {
         if (allState) {
           push({
             id: 'state-variation',
-            severity: 'info',
+            severity: severityOf('state-variation'),
             title: `${c.name} switches between ${group.length} values by state class`,
             detail: `Selector differences come only from state modifier classes (${[...new Set(group.flatMap(v => v.selectors))].slice(0, 4).join(' / ')}), which is state-color semantics, not a token conflict.`,
             evidence: group.flatMap(v => v.locations.slice(0, 1)).slice(0, 4),
@@ -160,7 +161,7 @@ function cross(graph, observation) {
       if (isTailwindInternal && ctxKind === 'selector') {
         push({
           id: 'tailwind-utility-var',
-          severity: 'info',
+          severity: severityOf('tailwind-utility-var'),
           title: `${c.name} is a Tailwind v4 per-utility variable`,
           detail: `Each Tailwind v4 utility class (.leading-tight, .shadow-md, etc.) sets its own ${c.name} under its own selector. Multiple values are the framework's intended mechanism, not a token conflict.`,
           evidence: group.flatMap(v => v.locations.slice(0, 2)).slice(0, 6),
@@ -169,7 +170,7 @@ function cross(graph, observation) {
         continue;
       }
 
-      const severity = ctxKind === 'root' ? 'error' : 'warn';
+      const severity = ctxKind === 'root' ? severityOf('conflict') : 'warn';
       push({
         id: 'conflict',
         severity,
@@ -208,7 +209,7 @@ function cross(graph, observation) {
       const firstRef = refMap.get(ds[0].name) || {};
       push({
         id: 'dangling',
-        severity: 'error',
+        severity: severityOf('dangling'),
         title: `${fam}-* family has ${ds.length} dangling references (${Math.round(ds.length / danglingList.length * 100)}% of all ${danglingList.length})`,
         detail: `The entire naming family is referenced but never declared — this is a systematic gap in the generator, not ${ds.length} independent bugs. The most likely cause is that the component library's page-level styles are generated on demand but output incompletely.`,
         evidence: ds.slice(0, 15).map(d => {
@@ -223,7 +224,7 @@ function cross(graph, observation) {
         const loc = refMap.get(d.name) || {};
         push({
           id: 'dangling',
-          severity: 'error',
+          severity: severityOf('dangling'),
           title: `${d.name} is referenced ${d.count} times but never declared`,
           detail: 'References will receive an invalid value (most browsers fall back to the initial/inherited value).',
           evidence: [{ name: d.name, count: d.count, file: loc.file, line: loc.line }],
@@ -236,7 +237,7 @@ function cross(graph, observation) {
         const loc = refMap.get(d.name) || {};
         push({
           id: 'dangling',
-          severity: 'error',
+          severity: severityOf('dangling'),
           title: `${d.name} is referenced ${d.count} times but never declared`,
           detail: 'References will receive an invalid value (most browsers fall back to the initial/inherited value).',
           evidence: [{ name: d.name, count: d.count, file: loc.file, line: loc.line }],
@@ -257,7 +258,7 @@ function cross(graph, observation) {
     }, {});
     push({
       id: 'orphan',
-      severity: 'warn',
+      severity: severityOf('orphan'),
       title: `${orphanList.length} tokens are declared but never referenced`,
       detail: 'Distribution by scope: ' + Object.entries(byScope).map(([k, v]) => `${k}: ${v}`).join(', ') + '. A common cause is a shared stylesheet being replaced by another page\'s variable system.',
       evidence: orphanList.slice(0, 10).map(o => {
@@ -279,7 +280,7 @@ function cross(graph, observation) {
   if (families.size > 1) {
     push({
       id: 'namespace',
-      severity: 'info',
+      severity: severityOf('namespace'),
       title: `${families.size} naming families coexist`,
       detail: [...families.entries()].sort((a, b) => b[1].size - a[1].size)
         .map(([f, names]) => `--${f}-*（${names.size}）`).join('，'),
@@ -319,7 +320,7 @@ function cross(graph, observation) {
   if (dupes.length) {
     push({
       id: 'duplicate-value',
-      severity: 'warn',
+      severity: severityOf('duplicate-value'),
       title: `${dupes.length} color values are expressed by multiple token names`,
       detail: dupes.slice(0, 8).map(d => `${d.value} = ${d.names.join(' = ')}`).join('；'),
       evidence: dupes.slice(0, 8).flatMap(d => {
@@ -376,7 +377,7 @@ function cross(graph, observation) {
     if (hardcoded.length) {
       push({
         id: 'hardcoded',
-        severity: 'warn',
+        severity: severityOf('hardcoded'),
         title: `${hardcoded.length} colors are hardcoded across documents in the same theme with no matching token`,
         detail: hardcoded.slice(0, 10).map(d => `${d.value} (${d.theme}) appears in ${d.documents.slice(0, 3).join(', ')}`).join('; '),
         evidence: hardcoded.slice(0, 10).map(d => ({ value: d.value, theme: d.theme, documents: d.documents.slice(0, 5) })),
@@ -413,7 +414,7 @@ function cross(graph, observation) {
     if (drifting.length) {
       push({
         id: 'runtime-drift',
-        severity: 'error',
+        severity: severityOf('runtime-drift'),
         title: `${drifting.length} tokens resolve to different values across documents in the same theme`,
         detail: drifting.slice(0, 10).map(d => `${d.name} [${d.theme}]: ${d.values.join(' / ')} (${d.where.length} documents)`).join('; '),
         evidence: drifting.slice(0, 12).map(d => ({ name: d.name, theme: d.theme, values: d.values, documents: d.where.slice(0, 6) })),

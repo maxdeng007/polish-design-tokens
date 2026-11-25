@@ -37,12 +37,13 @@ test('explainFinding returns null for empty input', () => {
 
 // --- listFindingTypes ---
 
-test('listFindingTypes returns all 11 finding types', () => {
+test('listFindingTypes returns all 12 finding types', () => {
   const types = listFindingTypes();
-  assert.equal(types.length, 11);
+  assert.equal(types.length, 12);
   assert.ok(types.includes('conflict'));
   assert.ok(types.includes('dangling'));
   assert.ok(types.includes('hardcoded'));
+  assert.ok(types.includes('tailwind-utility-var'), 'tailwind-utility-var should be documented');
   assert.ok(types.includes('duplicate-value'));
   assert.ok(types.includes('dynamic-variable'));
 });

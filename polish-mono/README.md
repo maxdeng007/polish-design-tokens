@@ -24,7 +24,7 @@ Design tokens — CSS custom properties like `--color-primary` — are powerful 
 2. **Critique** — cross-reference declarations and references to find problems
 3. **Apply** — generate and execute patches for mechanical fixes, with backups
 
-**Important scope note:** of the 11 finding types polish detects, only `duplicate-value` is auto-fixed. The remaining 10 are flagged for human or agent review — polish tells you what's wrong, but the decision on how to fix it is yours.
+**Important scope note:** of the 12 finding types polish detects, only `duplicate-value` is auto-fixed. The remaining 11 are flagged for human or agent review — polish tells you what's wrong, but the decision on how to fix it is yours.
 
 ## Why Not Stylelint or ESLint?
 
@@ -172,6 +172,7 @@ Findings are ranked by priority:
 | 9 | `state-variation` | Token values differ across component states | Judgmental |
 | 10 | `theme-variation` | Token values differ across themes | Judgmental |
 | 11 | `dynamic-variable` | Tokens with dynamic (non-static) values | Judgmental |
+| 12 | `tailwind-utility-var` | Tailwind v4 per-utility variables | Judgmental |
 
 Only **mechanical** findings (`duplicate-value`) produce patches in the next phase.
 
