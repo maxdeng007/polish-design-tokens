@@ -90,12 +90,12 @@ Low-level scan function. Same as `extract` but takes an options object.
 ```typescript
 import { scan } from 'polish-design-tokens/scan';
 
-const graph = scan('./src/styles', { ignore: 'vendor,test' });
+const graph = scan('./src/styles', { ignore: ['vendor', 'test'] });
 ```
 
 **Parameters:**
 - `target` (string): File or directory path
-- `opts.ignore` (string): Comma-separated path fragments to skip
+- `opts.ignore` (string[] | string): Path fragments to skip, either as an array or a comma-separated string
 
 **Returns:** `DeclarationGraph`
 
@@ -254,7 +254,7 @@ A concrete patch:
 
 ```typescript
 interface Patch {
-  type: 'replace' | 'add' | 'rename' | 'rewrite';
+  type: 'replace' | 'add' | 'delete' | 'rewrite';
   file: string | null;
   line: number | null;
   before: string;
@@ -263,6 +263,8 @@ interface Patch {
   findingId: FindingId;
 }
 ```
+
+Note: `delete` patches must carry `before` (the expected original line text). The line is verified against the file before deletion, and a delete without `before` is rejected — blind line-number deletion is never performed.
 
 ### `ApplyResult`
 

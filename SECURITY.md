@@ -38,10 +38,11 @@ write path is deliberately conservative:
   (`fs.realpathSync`) so boundaries cannot be escaped lexically.
 - **Backups.** Every file is backed up (`<file>.backup`) before the first
   modification, and backups are never overwritten by later runs.
-- **Stale-delete protection.** `delete` patches carry the original line text
-  and are verified against the file before deletion — if the file changed
-  after the patch was generated, the delete is refused instead of removing
-  the wrong line. Writes are atomic (temp file + rename).
+- **Stale-delete protection.** `delete` patches must carry the original line
+  text (`before`); it is verified against the file before deletion — if the
+  file changed after the patch was generated, the delete is refused instead
+  of removing the wrong line. A delete without `before` is rejected outright.
+  Writes are atomic (temp file + rename).
 - **No network access.** The tool reads local files only. It does not fetch
   URLs, and the MCP server only reads and writes within the directories you
   explicitly target.

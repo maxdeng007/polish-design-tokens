@@ -21,6 +21,17 @@ new capabilities bump the minor version, fixes and polish bump the patch version
   dropped from the masked copy, breaking the length-preservation invariant
   that keeps offsets and line numbers aligned.
 
+- **MCP/apply contract tightening** — `delete` patches now require `before`
+  (the expected original line text); a delete without it is rejected instead
+  of deleting blindly by line number. The patch vocabulary is unified to
+  `replace` / `add` / `delete` / `rewrite`: the schema no longer advertises
+  `rename`, and namespace-rename patches from `polish_diff` now emit
+  `rewrite` (previously they emitted a `rename` type that `apply` did not
+  implement, so the patch silently did nothing). `polish_audit` now echoes
+  the `observation` data it received instead of only a document count. The
+  `ignore` option is documented as an array of path fragments (the module
+  API still accepts a comma-separated string as well).
+
 ## [1.8.1]
 
 ### Fixed

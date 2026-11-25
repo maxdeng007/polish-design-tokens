@@ -193,7 +193,7 @@ const toolDefinitions = [
           items: {
             type: 'object',
             properties: {
-              type: { type: 'string', enum: ['replace', 'rewrite', 'rename', 'add', 'delete'] },
+              type: { type: 'string', enum: ['replace', 'add', 'delete', 'rewrite'] },
               file: { type: 'string' },
               line: { type: 'number' },
               before: { type: 'string' },

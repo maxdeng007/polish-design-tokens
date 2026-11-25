@@ -90,12 +90,12 @@ console.log(result.applied, result.failed, result.backupCount);
 ```typescript
 import { scan } from 'polish-design-tokens/scan';
 
-const graph = scan('./src/styles', { ignore: 'vendor,test' });
+const graph = scan('./src/styles', { ignore: ['vendor', 'test'] });
 ```
 
 **参数：**
 - `target` (string)：文件或目录路径
-- `opts.ignore` (string)：逗号分隔的路径片段，跳过匹配的文件
+- `opts.ignore` (string[] | string)：要跳过的路径片段，可传数组或逗号分隔的字符串
 
 **返回：** `DeclarationGraph`
 
@@ -254,7 +254,7 @@ interface PlanAction {
 
 ```typescript
 interface Patch {
-  type: 'replace' | 'add' | 'rename' | 'rewrite';
+  type: 'replace' | 'add' | 'delete' | 'rewrite';
   file: string | null;
   line: number | null;
   before: string;
@@ -263,6 +263,8 @@ interface Patch {
   findingId: FindingId;
 }
 ```
+
+注意：`delete` 补丁必须携带 `before`（预期的原始行文本）。删除前会先与文件内容核对，缺少 `before` 的删除会被拒绝——绝不会执行仅凭行号的盲目删除。
 
 ### `ApplyResult`
 

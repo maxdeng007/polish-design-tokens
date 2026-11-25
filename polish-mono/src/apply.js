@@ -13,9 +13,11 @@
  *   allow writes elsewhere.
  * - Patches within a file are applied in line-descending order so that
  *   inserts don't shift the line numbers of subsequent patches.
- * - `delete` patches that carry the expected original line text (`before`)
- *   are verified against the file first; a mismatch is refused as stale, so a
- *   file changed since the patch was generated can never lose the wrong line.
+ * - `delete` patches must carry the expected original line text (`before`).
+ *   The line is verified against the file before deletion; a mismatch is
+ *   refused as stale, so a file changed since the patch was generated can
+ *   never lose the wrong line. A delete without `before` is rejected —
+ *   blind line-number deletion is never performed.
  * - Files are written atomically (temp file + rename), so a failed write can
  *   never leave a half-written file behind.
  *
@@ -131,19 +133,24 @@ export async function apply(patches, target = process.cwd()) {
             failed.push({ file: absFile, line: patch.line, error: 'line out of range' });
             continue;
           }
-          // Stale-safety: when the patch carries the expected original line
-          // text, refuse to delete unless the file still matches. The file may
-          // have changed since the patch was generated; blind line-number
-          // deletion could then remove the wrong line.
-          if (patch.before) {
-            const current = lines[lineIdx];
-            if (current.trim() !== String(patch.before).trim()) {
-              failed.push({
-                file: absFile, line: patch.line,
-                error: 'stale delete: line content does not match expected original text'
-              });
-              continue;
-            }
+          // Stale-safety: delete patches must carry the expected original
+          // line text. The file may have changed since the patch was
+          // generated; blind line-number deletion could then remove the
+          // wrong line, so a delete without `before` is rejected outright.
+          if (!patch.before) {
+            failed.push({
+              file: absFile, line: patch.line,
+              error: 'delete patch requires before: the expected original line text'
+            });
+            continue;
+          }
+          const current = lines[lineIdx];
+          if (current.trim() !== String(patch.before).trim()) {
+            failed.push({
+              file: absFile, line: patch.line,
+              error: 'stale delete: line content does not match expected original text'
+            });
+            continue;
           }
           lines.splice(lineIdx, 1);
           applied.push({ file: absFile, line: patch.line });

@@ -36,7 +36,8 @@ function walk(root, out) {
 /**
  * @param {string} target file or directory to scan
  * @param {object} [opts]
- * @param {string} [opts.ignore] comma-separated glob-ish substrings to skip,
+ * @param {string} [opts.ignore] glob-ish substrings to skip, either as an
+ *   array or a comma-separated string
  *                              or an array of such substrings
  * @returns {object} DeclarationGraph
  */

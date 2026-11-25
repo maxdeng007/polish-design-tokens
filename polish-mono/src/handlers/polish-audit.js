@@ -30,8 +30,6 @@ export async function polish_audit(params, deps) {
       info: (report.findings || []).filter(f => f.severity === 'info').length
     },
     graphSummary: graph.summary,
-    observation: observation
-      ? { documents: observation.documents.length }
-      : null
+    observation: observation || null
   };
 }

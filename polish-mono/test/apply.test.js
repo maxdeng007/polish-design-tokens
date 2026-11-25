@@ -217,7 +217,7 @@ test('apply resolves symlinks in boundary check so symlinked dirs are accepted',
 test('apply removes the target line for a delete patch', async () => {
   const file = makeTempCss(':root {\n  --a: #111;\n  --b: #222;\n  --c: #333;\n}\n');
   const result = await apply([
-    { type: 'delete', file, line: 3, before: '', after: '', reason: 'test', findingId: 'orphan' }
+    { type: 'delete', file, line: 3, before: '  --b: #222;', after: '', reason: 'test', findingId: 'orphan' }
   ], TMP_DIR);
   assert.equal(result.applied.length, 1);
   assert.equal(result.failed.length, 0);
@@ -231,7 +231,7 @@ test('apply removes the target line for a delete patch', async () => {
 test('apply creates a backup when deleting a line', async () => {
   const file = makeTempCss(':root {\n  --a: #111;\n  --b: #222;\n}\n');
   await apply([
-    { type: 'delete', file, line: 3, before: '', after: '', reason: 'test', findingId: 'orphan' }
+    { type: 'delete', file, line: 3, before: '  --b: #222;', after: '', reason: 'test', findingId: 'orphan' }
   ], TMP_DIR);
   assert.ok(fs.existsSync(file + '.backup'), 'backup should exist');
   const backup = fs.readFileSync(file + '.backup', 'utf8');
@@ -242,7 +242,7 @@ test('apply creates a backup when deleting a line', async () => {
 test('apply records failed delete for out-of-range line', async () => {
   const file = makeTempCss(':root {\n  --a: #111;\n}\n');
   const result = await apply([
-    { type: 'delete', file, line: 99, before: '', after: '', reason: 'test', findingId: 'orphan' }
+    { type: 'delete', file, line: 99, before: '  --a: #111;', after: '', reason: 'test', findingId: 'orphan' }
   ], TMP_DIR);
   assert.equal(result.applied.length, 0);
   assert.equal(result.failed.length, 1);
@@ -253,8 +253,8 @@ test('apply records failed delete for out-of-range line', async () => {
 test('apply deletes lines in descending order so line numbers stay valid', async () => {
   const file = makeTempCss(':root {\n  --a: #111;\n  --b: #222;\n  --c: #333;\n  --d: #444;\n}\n');
   const result = await apply([
-    { type: 'delete', file, line: 2, before: '', after: '', reason: 't1', findingId: 'orphan' },
-    { type: 'delete', file, line: 4, before: '', after: '', reason: 't2', findingId: 'orphan' }
+    { type: 'delete', file, line: 2, before: '  --a: #111;', after: '', reason: 't1', findingId: 'orphan' },
+    { type: 'delete', file, line: 4, before: '  --c: #333;', after: '', reason: 't2', findingId: 'orphan' }
   ], TMP_DIR);
   assert.equal(result.applied.length, 2);
   assert.equal(result.failed.length, 0);
@@ -357,13 +357,16 @@ test('delete patch rejects when the line content has changed (stale)', async () 
   cleanup();
 });
 
-test('delete patch without before still applies (backward compatible)', async () => {
+test('delete patch without before is rejected (blind delete never applies)', async () => {
   const file = makeTempCss(':root {\n  --unused: #ffffff;\n  --primary: #4f46e5;\n}\n');
   const result = await apply([
     { type: 'delete', file, line: 2, reason: 'delete orphan', findingId: 'orphan' }
   ], TMP_DIR);
-  assert.equal(result.applied.length, 1, 'delete without before should still apply');
-  assert.equal(result.failed.length, 0);
+  assert.equal(result.applied.length, 0, 'delete without before must not apply');
+  assert.equal(result.failed.length, 1, 'delete without before should be recorded as failed');
+  assert.ok(result.failed[0].error.includes('before'), 'failure should explain the missing before text');
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(content.includes('--unused'), 'file must be unchanged');
   cleanup();
 });
 

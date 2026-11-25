@@ -421,8 +421,8 @@ Files inside `node_modules`, `dist`, `build`, `.git`, `.next`, `.cache`, and oth
 
 All 8 MCP tools accept and return JSON. Key parameters:
 
-- **`polish_extract`** — `{ target: string, ignore?: string }` → `DeclarationGraph`
-- **`polish_audit`** — `{ target: string, ignore?: string, observation?: object }` → `{ findings, summary, graphSummary, observation }`
+- **`polish_extract`** — `{ target: string, ignore?: string[] }` → `DeclarationGraph`
+- **`polish_audit`** — `{ target: string, ignore?: string[], observation?: object }` → `{ findings, summary, graphSummary, observation }`
 - **`polish_measure`** — `{ documents: unknown[] }` → `RuntimeObservation`
 - **`polish_plan`** — `{ findings: Finding[] }` → `{ plan, summary }`
 - **`polish_diff`** — `{ plan: PlanAction[], target?: string }` → `{ patches, preview }`

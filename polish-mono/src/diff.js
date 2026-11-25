@@ -79,7 +79,7 @@ export function generateDiffs(planItems) {
 
       case 'namespace': {
         patches.push({
-          type: 'rename',
+          type: 'rewrite',
           file: firstLoc.file || null,
           line: firstLoc.line || null,
           before: '',

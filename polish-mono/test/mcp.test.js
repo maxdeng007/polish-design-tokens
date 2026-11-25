@@ -66,7 +66,7 @@ test('MCP polish_apply executes a delete patch end-to-end', () => {
         name: 'polish_apply',
         arguments: {
           target: dir,
-          patches: [{ file: 'tokens.css', type: 'delete', line: 2, findingId: 'orphan' }]
+          patches: [{ file: 'tokens.css', type: 'delete', line: 2, before: '  --unused: #fff;', findingId: 'orphan' }]
         }
       }
     }
@@ -196,6 +196,65 @@ test('MCP wire-level round trip applies mechanical patches chained from audit', 
 
   const content = fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8');
   assert.ok(content.includes('var(--bg)'), 'secondary token should be aliased to the primary');
+  cleanup();
+});
+
+test('polish_apply schema uses the documented patch vocabulary (no rename)', () => {
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/list' }
+  ]);
+  const tools = responses.get(2).result.tools;
+  const applyTool = tools.find(t => t.name === 'polish_apply');
+  const typeEnum = applyTool.inputSchema.properties.patches.items.properties.type.enum;
+  assert.deepEqual(typeEnum.sort(), ['add', 'delete', 'replace', 'rewrite'],
+    `patch vocabulary must be replace/add/delete/rewrite, got ${JSON.stringify(typeEnum)}`);
+});
+
+test('MCP polish_apply rejects a delete patch without before', () => {
+  const dir = makeProject(':root {\n  --unused: #fff;\n  --primary: #4f46e5;\n}\n');
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    {
+      jsonrpc: '2.0', id: 2, method: 'tools/call',
+      params: {
+        name: 'polish_apply',
+        arguments: {
+          target: dir,
+          patches: [{ file: 'tokens.css', type: 'delete', line: 2, findingId: 'orphan' }]
+        }
+      }
+    }
+  ]);
+  const call = responses.get(2);
+  const report = JSON.parse(call.result.content[0].text);
+  assert.equal(report.applied.length, 0, 'delete without before must not apply');
+  assert.equal(report.failed.length, 1, 'delete without before should be recorded as failed');
+  assert.ok(report.failed[0].error.includes('before'), 'failure should explain the missing before text');
+  const content = fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8');
+  assert.ok(content.includes('--unused'), 'file must be unchanged');
+  cleanup();
+});
+
+test('MCP polish_audit echoes the observation it received', () => {
+  const dir = makeProject(':root {\n  --primary: #4f46e5;\n}\n.card {\n  color: var(--primary);\n}\n');
+  const observation = {
+    documents: [
+      { label: 'page-a', theme: 'light', variables: { '--primary': '#4f46e5' } },
+      { label: 'page-b', theme: 'light', variables: { '--primary': '#ff0000' } }
+    ]
+  };
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    {
+      jsonrpc: '2.0', id: 2, method: 'tools/call',
+      params: { name: 'polish_audit', arguments: { target: dir, observation } }
+    }
+  ]);
+  const call = responses.get(2);
+  const audit = JSON.parse(call.result.content[0].text);
+  assert.deepEqual(audit.observation, observation, 'audit should echo the observation data');
+  assert.ok(audit.findings.some(f => f.id === 'runtime-drift'), 'runtime-drift should be detected');
   cleanup();
 });
 

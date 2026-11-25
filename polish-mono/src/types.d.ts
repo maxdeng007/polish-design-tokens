@@ -209,7 +209,7 @@ export interface PlanAction {
 
 /** A concrete patch generated for a mechanical finding or confirmed decision. */
 export interface Patch {
-  type: 'replace' | 'add' | 'delete' | 'rename' | 'rewrite';
+  type: 'replace' | 'add' | 'delete' | 'rewrite';
   file: string | null;
   line: number | null;
   before: string;
