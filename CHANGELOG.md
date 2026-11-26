@@ -8,6 +8,8 @@ new capabilities bump the minor version, fixes and polish bump the patch version
 
 ## [Unreleased]
 
+## [1.9.2] - 2026-11-26
+
 ### Fixed
 
 - **No false green light on token-less projects** — auditing a project
