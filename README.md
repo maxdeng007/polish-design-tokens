@@ -459,12 +459,12 @@ For most use cases — auditing a project's source, fixing mechanical issues, an
 **Judgmental (flagged for human review, no auto-patch):**
 
 - **`dangling`** — A token is referenced but never declared. Requires supplying a canonical value — auto-inserting `inherit` can produce invalid or broken CSS.
-- **`hardcoded`** — Raw color or space values used directly instead of token references. Requires choosing the right token to map to.
+- **`hardcoded`** — Raw color or space values used directly instead of token references. Requires choosing the right token to map to. Detected only with runtime measurement (`measure()`); static scans won't produce it.
 - **`conflict`** — Same token name declared with different values. Requires choosing a canonical value.
 - **`cascade-override`** — Normal CSS cascading produces unintended value variation. Requires deciding whether to refactor or accept.
 - **`namespace`** — Multiple naming conventions coexist (e.g. `--color-*` and `--bg-*`). Requires unifying naming.
 - **`orphan`** — Declared but never referenced. Requires deciding to remove or keep.
-- **`runtime-drift`** — Token values differ across pages when measured at runtime. Requires investigating the source.
+- **`runtime-drift`** — Token values differ across pages when measured at runtime. Requires investigating the source. Detected only with runtime measurement (`measure()`); static scans won't produce it.
 - **`state-variation`** — Token values differ across component states (e.g., `:hover`, `:focus`). Requires deciding whether to split into separate tokens or accept the variation.
 - **`theme-variation`** — Token values differ across themes (e.g., dark/light). Requires deciding whether to formalize the theme structure.
 - **`dynamic-variable`** — Tokens with dynamic (non-static) values, such as those computed at runtime. Requires deciding how to handle the dynamic behavior.

@@ -123,3 +123,20 @@ test('cross duplicate-value evidence covers all secondary names, not just the fi
   }
   fs.rmSync(TMP_DIR, { recursive: true, force: true });
 });
+
+test('cross adds a no-tokens note to the summary when the project has no tokens', () => {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  fs.writeFileSync(
+    path.join(TMP_DIR, 'page.css'),
+    'body {\n  color: #3B82F6;\n  padding: 8px;\n}\n',
+    'utf8'
+  );
+  const report = cross(scan(TMP_DIR));
+  assert.equal(report.findings.length, 0, 'a token-less project should produce no findings');
+  assert.equal(report.summary.declarations, 0);
+  assert.ok(
+    report.summary.notes.some(n => n.includes('No design tokens found')),
+    'summary.notes should carry the no-tokens warning'
+  );
+  fs.rmSync(TMP_DIR, { recursive: true, force: true });
+});

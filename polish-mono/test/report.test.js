@@ -244,3 +244,13 @@ test('polish report filter script scopes decisions to visible cards', () => {
   );
   cleanup();
 });
+
+test('polish report shows a no-tokens warning banner instead of a clean banner', () => {
+  const dir = makeProject('body {\n  color: #3B82F6;\n}\n');
+  const result = runCli(['report', dir]);
+  assert.equal(result.status, 0, `CLI should succeed: ${result.stderr}`);
+  const html = fs.readFileSync(path.join(dir, 'polish-report.html'), 'utf8');
+  assert.ok(html.includes('No design tokens found'), 'should show the no-tokens warning');
+  assert.ok(!html.includes('Your tokens are healthy'), 'must not show the clean banner when there are no tokens');
+  cleanup();
+});

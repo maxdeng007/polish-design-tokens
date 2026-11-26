@@ -70,3 +70,21 @@ test('polish check does not modify any files', () => {
   assert.equal(before, after, 'check should not modify files');
   cleanup();
 });
+
+test('polish check warns about missing tokens instead of a false green', () => {
+  const dir = makeProject('body {\n  color: #3B82F6;\n}\n');
+  const result = runCli(['check', dir, '--summary']);
+  assert.equal(result.status, 0, 'missing tokens is not an error — exit code stays 0');
+  assert.ok(result.stdout.includes('No design tokens found'), 'should warn that no tokens were found');
+  assert.ok(!result.stdout.includes('healthy'), 'must not claim healthy when there are no tokens');
+  cleanup();
+});
+
+test('polish check on a token-less project shows 0 declarations with the warning', () => {
+  const dir = makeProject('body {\n  color: #3B82F6;\n}\n');
+  const result = runCli(['check', dir]);
+  assert.equal(result.status, 0, `should exit 0: ${result.stderr}`);
+  assert.ok(result.stdout.includes('0 declarations'), 'should report the declaration count');
+  assert.ok(result.stdout.includes('No design tokens found'), 'should carry the no-tokens warning');
+  cleanup();
+});

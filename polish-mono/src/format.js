@@ -68,7 +68,8 @@ export function formatAudit(report) {
 
   const findings = report.findings || [];
   if (findings.length === 0) {
-    lines.push(c(ANSI.green, 'No issues found. Your tokens look clean.'));
+    const note = (s.notes || [])[0];
+    lines.push(note ? c(ANSI.yellow, note) : c(ANSI.green, 'No issues found. Your tokens look clean.'));
     return lines.join('\n');
   }
 
@@ -299,7 +300,8 @@ export function formatCheck(report) {
   const findings = report.findings || [];
   if (findings.length === 0) {
     lines.push('');
-    lines.push(c(ANSI.green, 'No issues found. Your tokens are healthy.'));
+    const note = (s.notes || [])[0];
+    lines.push(note ? c(ANSI.yellow, note) : c(ANSI.green, 'No issues found. Your tokens are healthy.'));
     return lines.join('\n');
   }
 
@@ -347,7 +349,8 @@ export function formatFix(report, result) {
   const findings = report.findings || [];
   if (findings.length === 0) {
     lines.push('');
-    lines.push(c(ANSI.green, 'No issues found. Your tokens are healthy.'));
+    const note = (s.notes || [])[0];
+    lines.push(note ? c(ANSI.yellow, note) : c(ANSI.green, 'No issues found. Your tokens are healthy.'));
     return lines.join('\n');
   }
 
@@ -360,22 +363,27 @@ export function formatFix(report, result) {
 
   const mechanicalCount = findings.filter(f => MECHANICAL_IDS.has(f.id)).length;
   if (mechanicalCount > 0) {
-    lines.push(`Applying ${mechanicalCount} mechanical patch${mechanicalCount === 1 ? '' : 'es'}...`);
-    lines.push('');
-
-    const applied = (result.applied || []).length;
-    const failed = (result.failed || []).length;
-    const backups = result.backupCount || 0;
-    lines.push(`  ${c(ANSI.green, `Applied: ${applied}`)}  ${failed > 0 ? c(ANSI.red, `Failed: ${failed}`) : `Failed: ${failed}`}  ${c(ANSI.blue, `Backups: ${backups}`)}`);
-    if (failed === 0) {
-      lines.push(c(ANSI.green, '  All patches applied successfully.'));
+    if (result.dryRun) {
+      lines.push(c(ANSI.yellow, `Preview: ${mechanicalCount} mechanical patch${mechanicalCount === 1 ? '' : 'es'} would be applied — no files modified. Re-run without --dry-run to apply.`));
+      lines.push('');
     } else {
-      for (const f of result.failed) {
-        const file = f.file || '?';
-        lines.push(`  ${c(ANSI.red, file)}: ${f.error}`);
+      lines.push(`Applying ${mechanicalCount} mechanical patch${mechanicalCount === 1 ? '' : 'es'}...`);
+      lines.push('');
+
+      const applied = (result.applied || []).length;
+      const failed = (result.failed || []).length;
+      const backups = result.backupCount || 0;
+      lines.push(`  ${c(ANSI.green, `Applied: ${applied}`)}  ${failed > 0 ? c(ANSI.red, `Failed: ${failed}`) : `Failed: ${failed}`}  ${c(ANSI.blue, `Backups: ${backups}`)}`);
+      if (failed === 0) {
+        lines.push(c(ANSI.green, '  All patches applied successfully.'));
+      } else {
+        for (const f of result.failed) {
+          const file = f.file || '?';
+          lines.push(`  ${c(ANSI.red, file)}: ${f.error}`);
+        }
       }
+      lines.push('');
     }
-    lines.push('');
   }
 
   const judgmental = findings.filter(f => !MECHANICAL_IDS.has(f.id));

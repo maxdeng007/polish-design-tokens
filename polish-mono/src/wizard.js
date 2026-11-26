@@ -140,8 +140,9 @@ export async function runWizard(opts = {}) {
     result.findings = (report.findings || []).length;
 
     if (result.findings === 0) {
+      const note = (report.summary && report.summary.notes || [])[0];
       out('');
-      out(c(ANSI.green, 'Your tokens are clean — nothing to fix.'));
+      out(note ? c(ANSI.yellow, note) : c(ANSI.green, 'Your tokens are clean — nothing to fix.'));
       result.status = 'clean';
       return result;
     }

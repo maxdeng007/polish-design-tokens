@@ -196,6 +196,7 @@ export interface AuditReport {
     runtimeDocuments: number;
     findings: number;
     bySeverity: { error?: number; warn?: number; info?: number };
+    notes: string[];
   };
   findings: Finding[];
 }

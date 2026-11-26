@@ -437,7 +437,10 @@ function cross(graph, observation) {
       runtimeVariables: observation ? observation.documents.reduce((a, d) => a + Object.keys(d.variables || {}).length, 0) : 0,
       runtimeDocuments: observation ? observation.documents.length : 0,
       findings: findings.length,
-      bySeverity
+      bySeverity,
+      notes: (graph.declarations || []).length === 0
+        ? ['No design tokens found — polish audits token relationships and cannot detect hardcoded values without tokens. Define tokens first, then re-run.']
+        : []
     },
     findings
   };

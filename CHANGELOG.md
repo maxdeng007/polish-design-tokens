@@ -8,6 +8,29 @@ new capabilities bump the minor version, fixes and polish bump the patch version
 
 ## [Unreleased]
 
+### Fixed
+
+- **No false green light on token-less projects** — auditing a project
+  with no design tokens now surfaces a warning note ("No design tokens
+  found — polish audits token relationships and cannot detect hardcoded
+  values without tokens") instead of "No issues found. Your tokens look
+  clean." The note flows through `audit`, `check`, `fix`, the HTML
+  report banner, and the wizard; `check` still exits 0, since a missing
+  token system is not an error. `AuditReport.summary` gains a `notes`
+  field.
+- **`polish fix --dry-run --summary` no longer claims patches were
+  applied** — dry runs now print a preview line ("Preview: N mechanical
+  patches would be applied — no files modified") instead of the
+  misleading "Applying N patches… Applied: 0… All patches applied
+  successfully."
+
+### Documentation
+
+- **Runtime-only findings annotated in the READMEs** — the `hardcoded`
+  and `runtime-drift` entries in the "What it can find" lists now state
+  they are detected only with runtime measurement (`measure()`), not by
+  static scans.
+
 ## [1.9.1] - 2026-11-26
 
 ### Fixed

@@ -5,6 +5,8 @@ import {
   formatPlan,
   formatDiff,
   formatApply,
+  formatCheck,
+  formatFix,
   formatDoctor
 } from '../src/format.js';
 
@@ -98,6 +100,82 @@ test('formatAudit uses singular/plural correctly', () => {
     ]
   });
   assert.ok(two.includes('Found 2 issues:'));
+});
+
+test('formatAudit warns about missing tokens instead of claiming clean', () => {
+  const report = {
+    target: { value: '/test' },
+    summary: {
+      declarations: 0,
+      uniqueTokens: 0,
+      notes: ['No design tokens found — polish audits token relationships and cannot detect hardcoded values without tokens.']
+    },
+    findings: []
+  };
+  const out = formatAudit(report);
+  assert.ok(out.includes('No design tokens found'));
+  assert.ok(!out.includes('look clean'), 'must not claim clean when there are no tokens');
+});
+
+// --- formatCheck ---
+
+test('formatCheck warns about missing tokens instead of claiming healthy', () => {
+  const report = {
+    target: { value: '/test' },
+    summary: {
+      declarations: 0,
+      uniqueTokens: 0,
+      notes: ['No design tokens found — polish audits token relationships and cannot detect hardcoded values without tokens.']
+    },
+    findings: []
+  };
+  const out = formatCheck(report);
+  assert.ok(out.includes('No design tokens found'));
+  assert.ok(!out.includes('healthy'), 'must not claim healthy when there are no tokens');
+});
+
+// --- formatFix ---
+
+test('formatFix warns about missing tokens instead of claiming healthy', () => {
+  const report = {
+    target: { value: '/test' },
+    summary: {
+      declarations: 0,
+      uniqueTokens: 0,
+      notes: ['No design tokens found — polish audits token relationships and cannot detect hardcoded values without tokens.']
+    },
+    findings: []
+  };
+  const out = formatFix(report, { applied: [], failed: [], backupCount: 0 });
+  assert.ok(out.includes('No design tokens found'));
+  assert.ok(!out.includes('healthy'), 'must not claim healthy when there are no tokens');
+});
+
+test('formatFix uses preview wording for dry-run results', () => {
+  const report = {
+    target: { value: '/test' },
+    summary: { declarations: 2, uniqueTokens: 2 },
+    findings: [{ id: 'duplicate-value', severity: 'warn', title: 'Dup' }]
+  };
+  const result = { applied: [], failed: [], backupCount: 0, dryRun: true, patches: [{}] };
+  const out = formatFix(report, result);
+  assert.ok(out.includes('Preview:'), 'dry-run should say preview');
+  assert.ok(out.includes('would be applied'), 'dry-run should say what would happen');
+  assert.ok(out.includes('no files modified'), 'dry-run should say nothing was touched');
+  assert.ok(!out.includes('All patches applied successfully'), 'dry-run must not claim patches were applied');
+});
+
+test('formatFix keeps apply wording when not a dry-run', () => {
+  const report = {
+    target: { value: '/test' },
+    summary: { declarations: 2, uniqueTokens: 2 },
+    findings: [{ id: 'duplicate-value', severity: 'warn', title: 'Dup' }]
+  };
+  const result = { applied: [{ file: 'a.css' }], failed: [], backupCount: 1 };
+  const out = formatFix(report, result);
+  assert.ok(out.includes('Applying 1 mechanical patch'), 'normal run should say applying');
+  assert.ok(out.includes('Applied: 1'), 'normal run should report applied count');
+  assert.ok(out.includes('All patches applied successfully'));
 });
 
 // --- formatPlan ---

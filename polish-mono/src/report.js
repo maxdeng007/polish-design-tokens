@@ -172,7 +172,9 @@ export function generateReport(report) {
     .join('\n');
 
   const cleanMessage = findings.length === 0
-    ? `<div class="clean-banner">✓ No issues found. Your tokens are healthy.</div>`
+    ? (s.notes || []).length > 0
+      ? `<div class="clean-banner warn">⚠ ${esc(s.notes[0])}</div>`
+      : `<div class="clean-banner">✓ No issues found. Your tokens are healthy.</div>`
     : '';
 
   const hasDecisions = findings.some(f => (f.evidence || []).some(ev => decisionFor(f, ev)));
@@ -225,6 +227,11 @@ export function generateReport(report) {
     font-size: 1.1rem;
     color: #166534;
     margin-bottom: 2rem;
+  }
+  .clean-banner.warn {
+    background: var(--warn-bg);
+    border-color: var(--warn-border);
+    color: #92400e;
   }
   .severity-section {
     margin-bottom: 2rem;
