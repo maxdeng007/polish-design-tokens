@@ -8,6 +8,11 @@
  * Safety:
  * - Only files inside the target directory are restored; other entries are
  *   refused.
+ * - Only server-generated backup paths are accepted: the `backup` must be
+ *   the canonical sibling of the file — `<file>.backup` (no runId) or
+ *   `<file>.backup.<runId>` matching the entry's runId. Arbitrary paths are
+ *   refused, so an external file can never be used to write content into
+ *   the target.
  * - Restore is atomic (temp file + rename), so a failed restore never leaves
  *   a half-written file.
  * - A missing backup is reported as failed and the file is left untouched.
@@ -31,7 +36,7 @@ function realpathSafe(p) {
 
 /**
  * Restore files from backup entries.
- * @param {Array} entries — [{file, backup}] from an apply() manifest
+ * @param {Array} entries — [{file, backup, runId?}] from an apply() manifest
  * @param {string} [target] — Directory that files must stay within.
  *   Defaults to `process.cwd()`.
  * @returns {Promise<{restored: Array, failed: Array}>}
@@ -58,7 +63,26 @@ export async function rollback(entries, target = process.cwd()) {
       }
     }
 
-    const backupPath = entry.backup || absFile + '.backup';
+    // Only accept backup paths this server generated: the canonical sibling
+    // of the file — `<file>.backup` or, when the entry carries a runId,
+    // `<file>.backup.<runId>`. Legacy manifests without runId may only use
+    // `<file>.backup`. Anything else is refused so an arbitrary external
+    // file can't be written into the target.
+    const canonicalBackups = entry.runId
+      ? [`${absFile}.backup.${entry.runId}`, absFile + '.backup']
+      : [absFile + '.backup'];
+    const givenBackup = entry.backup
+      ? (path.isAbsolute(entry.backup) ? entry.backup : path.resolve(resolvedTarget, entry.backup))
+      : canonicalBackups[0];
+    if (!canonicalBackups.some(c => realpathSafe(givenBackup) === realpathSafe(c))) {
+      failed.push({
+        file: absFile,
+        error: `backup path is not a server-generated backup for this file: ${givenBackup}`
+      });
+      continue;
+    }
+    const backupPath = givenBackup;
+
     try {
       await fs.access(backupPath);
     } catch {

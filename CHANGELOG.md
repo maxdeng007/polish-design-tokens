@@ -8,6 +8,50 @@ new capabilities bump the minor version, fixes and polish bump the patch version
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-11-26
+
+### Fixed
+
+- **`apply()` is now strictly all-or-nothing** — any patch failing
+  pre-validation aborts the entire run before anything is written
+  (`status: "aborted"`); an execution-time failure rolls back every file
+  written by the run (`status: "rolledBack"`). The result now carries a
+  `status` field and a run-scoped backup manifest (`backups` entries with
+  `runId`; later runs snapshot to `<file>.backup.<runId>` without
+  overwriting the original `<file>.backup`), so callers no longer need to
+  merge applied/failed state themselves.
+- **`rollback()` path validation (security)** — only server-generated
+  canonical backup paths are accepted (`<file>.backup` or
+  `<file>.backup.<runId>` matching the entry's `runId`); arbitrary paths
+  are refused, closing an injection path that could have restored foreign
+  file content into a target directory.
+
+### Changed
+
+- **Formal MCP contract** — every tool in `tools/list` now carries an
+  `outputSchema`, and every `tools/call` result includes a machine-readable
+  `structuredContent` alongside the text payload. `polish_apply` now
+  requires `target`, and `delete`/`rewrite` patches require `before`
+  (enforced by conditional schema rules).
+- **Docs/types/examples unified to the real contract** — patch vocabulary
+  is `replace`/`add`/`delete`/`rewrite` (no `rename` as a patch type;
+  `rename` remains a `polish confirm` decision action), `ignore` is an
+  array in MCP examples, `scan(target, opts)` signature corrected, and all
+  apply examples now pass an explicit `target`.
+- **Release package QA** — CI and release workflows run the test suite and
+  typecheck via direct commands (the tarball ships no `test/` or
+  `tsconfig.json`, so `npm test`/`npm run typecheck` scripts were removed
+  to avoid false-green post-install failures); the pack smoke test now
+  installs the tarball like a real user, imports all 13 export subpaths,
+  and performs a full MCP handshake (initialize → tools/list →
+  tools/call); the release workflow verifies tag/package.json/
+  package-lock/CHANGELOG version consistency and that npm's `gitHead`
+  matches the release commit.
+- **README AI install wording** — the AI install path now correctly
+  states it requires an AI coding agent with terminal access (not a plain
+  chat window), and adds safety notes for apply, backups, and
+  `doctor --install`.
+
 ## [1.9.0] - 2026-11-25
 
 ### Added

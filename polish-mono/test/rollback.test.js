@@ -119,9 +119,73 @@ test('rollback reports missing backups without touching the file', async () => {
     const result = await rollback([{ file: 'a.css', backup: path.join(dir, 'missing.backup') }], dir);
     assert.equal(result.restored.length, 0);
     assert.equal(result.failed.length, 1);
-    assert.ok(result.failed[0].error.includes('backup'));
+    assert.ok(result.failed[0].error.includes('backup'), 'failure should mention the backup');
     const content = fs.readFileSync(path.join(dir, 'a.css'), 'utf8');
     assert.ok(content.includes('--a: #111;'), 'file untouched');
+  } finally {
+    cleanup(dir);
+  }
+});
+
+test('rollback rejects backup paths that are not server-generated siblings', async () => {
+  // A manifest entry pointing `backup` at an arbitrary file would let an
+  // external file's content be written into the target. Only the canonical
+  // sibling paths produced by apply() are accepted.
+  const dir = makeTmp();
+  const other = makeTmp();
+  try {
+    fs.writeFileSync(path.join(dir, 'a.css'), ':root {\n  --a: #111;\n}\n');
+    fs.writeFileSync(path.join(other, 'evil.txt'), 'PWNED\n');
+    const result = await rollback([{ file: 'a.css', backup: path.join(other, 'evil.txt') }], dir);
+    assert.equal(result.restored.length, 0);
+    assert.equal(result.failed.length, 1);
+    assert.ok(result.failed[0].error.includes('backup'), 'failure should mention the backup');
+    const content = fs.readFileSync(path.join(dir, 'a.css'), 'utf8');
+    assert.ok(content.includes('--a: #111;'), 'file must not be overwritten by an arbitrary backup');
+  } finally {
+    cleanup(dir);
+    cleanup(other);
+  }
+});
+
+test('rollback rejects a run-scoped backup whose runId does not match', async () => {
+  const dir = makeTmp();
+  try {
+    fs.writeFileSync(path.join(dir, 'a.css'), ':root {\n  --a: #111;\n}\n');
+    fs.writeFileSync(path.join(dir, 'a.css.backup.run-wrong'), ':root {\n  --a: #999;\n}\n');
+    const result = await rollback([{ file: 'a.css', runId: 'run-right', backup: path.join(dir, 'a.css.backup.run-wrong') }], dir);
+    assert.equal(result.restored.length, 0);
+    assert.equal(result.failed.length, 1);
+    assert.ok(result.failed[0].error.includes('backup'), 'failure should mention the backup');
+    const content = fs.readFileSync(path.join(dir, 'a.css'), 'utf8');
+    assert.ok(content.includes('#111'), 'file must be untouched on a runId mismatch');
+  } finally {
+    cleanup(dir);
+  }
+});
+
+test('rollback restores run-scoped backups produced by apply', async () => {
+  const dir = makeTmp();
+  try {
+    fs.writeFileSync(path.join(dir, 'a.css'), ':root {\n  --a: #111;\n}\n');
+    const first = await apply([
+      { type: 'replace', file: 'a.css', line: 2, before: '#111', after: '#222', reason: 't1', findingId: 'conflict' }
+    ], dir);
+    const second = await apply([
+      { type: 'replace', file: 'a.css', line: 2, before: '#222', after: '#333', reason: 't2', findingId: 'conflict' }
+    ], dir);
+    assert.equal(second.status, 'applied');
+
+    const result = await rollback(second.backups, dir);
+    assert.equal(result.restored.length, 1);
+    assert.equal(result.failed.length, 0);
+    const content = fs.readFileSync(path.join(dir, 'a.css'), 'utf8');
+    assert.ok(content.includes('#222'), 'second run should restore to its pre-run content');
+    assert.ok(!content.includes('#333'), 'second run change must be gone');
+
+    // The original .backup is still intact for a full restore.
+    const firstBackup = fs.readFileSync(path.join(dir, 'a.css.backup'), 'utf8');
+    assert.ok(firstBackup.includes('#111'), 'original backup must survive');
   } finally {
     cleanup(dir);
   }

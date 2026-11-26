@@ -123,7 +123,7 @@ git push -u origin fix/esm-sources
 **修复：** 使用 `ignore` 选项排除不包含令牌的目录：
 
 ```json
-{ "target": ".", "ignore": "node_modules,dist,build,.next,test" }
+{ "target": ".", "ignore": ["node_modules", "dist", "build", ".next", "test"] }
 ```
 
 扫描器已自动跳过二进制文件（通过空字节检测）和常见构建/依赖目录（`node_modules`、`dist`、`build`、`.git`、`.next`、`.cache` 等）。

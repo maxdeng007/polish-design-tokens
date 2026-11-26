@@ -7,10 +7,15 @@
  *
  * Safety:
  * - Every patch is pre-validated against the current file contents before
- *   any write happens. Invalid patches (out of range, stale delete, missing
- *   `before`) are rejected up front and excluded from the run.
- * - Each file is backed up once (before the first patch touches it).
- *   Backups are never overwritten by subsequent apply calls.
+ *   any write happens. The run is strictly all-or-nothing: if ANY patch
+ *   fails pre-validation (out of range, stale delete, missing `before`,
+ *   unreadable or out-of-bounds file), the whole run is aborted before a
+ *   single write and `status` is `'aborted'`.
+ * - Each run gets a unique `runId`. Every file written by the run is
+ *   backed up under a manifest entry `{ runId, file, backup }`: the first
+ *   run to touch a file creates `<file>.backup` (the original content);
+ *   later runs snapshot their pre-run content to `<file>.backup.<runId>`.
+ *   The original `.backup` is never overwritten.
  * - Patches targeting files outside the target directory are rejected.
  *   The target defaults to `process.cwd()`; pass a different directory to
  *   allow writes elsewhere.
@@ -22,14 +27,17 @@
  *   never lose the wrong line. A delete without `before` is rejected —
  *   blind line-number deletion is never performed.
  * - If any file fails at execution time (I/O error), every file written by
- *   this run is rolled back from its backup and the rollback is reported in
- *   `rolledBack`. The run's backups manifest (`backups`) can be passed to
- *   `rollback()` for a later manual restore.
+ *   this run is rolled back from its backup, `status` is `'rolledBack'`, and
+ *   the rollback is reported in `rolledBack`. The run's backups manifest
+ *   (`backups`) can be passed to `rollback()` for a later manual restore.
  * - Files are written atomically (temp file + rename), so a failed write can
  *   never leave a half-written file behind.
  *
- * Failed patches don't abort the batch — they're recorded and the rest
- * proceed.
+ * The returned `status` is the machine-readable final state of the run:
+ * `'applied'` (everything written), `'aborted'` (pre-validation failure,
+ * nothing written), or `'rolledBack'` (execution failure, writes undone).
+ * Callers should branch on `status` rather than merging `applied` and
+ * `rolledBack` themselves.
  */
 
 import fs from 'fs/promises';
@@ -98,7 +106,7 @@ function validatePatch(patch, lines) {
  * @param {string} [target] — Directory that patches must stay within.
  *   Defaults to `process.cwd()` so the boundary check always applies.
  *   Pass a different directory to allow writes elsewhere.
- * @returns {Promise<{applied: Array, failed: Array, backupCount: number, backups: Array, rolledBack: Array}>}
+ * @returns {Promise<{status: 'applied'|'aborted'|'rolledBack', applied: Array, failed: Array, backupCount: number, backups: Array, rolledBack: Array}>}
  */
 export async function apply(patches, target = process.cwd()) {
   const applied = [];
@@ -107,6 +115,7 @@ export async function apply(patches, target = process.cwd()) {
   let backupCount = 0;
   const backups = [];
   const rolledBack = [];
+  const runId = 'run-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
 
   const resolvedTarget = realpathSafe(target);
 
@@ -167,22 +176,36 @@ export async function apply(patches, target = process.cwd()) {
 
   // Phase 2 — execute the valid patches. If any file fails at execution
   // time, roll back every file written by this run from its backup.
+  //
+  // The run is strictly all-or-nothing: any pre-validation failure above
+  // aborts the whole run before a single write happens.
+  if (failed.length) {
+    return { status: 'aborted', applied, failed, backupCount, backups, rolledBack };
+  }
+
   const writtenThisRun = [];
   for (const state of fileStates) {
     const { relFile, absFile, valid } = state;
     let { lines } = state;
     try {
-      // Back up once per file. If a backup already exists (from a previous
-      // apply call), keep it — it holds the original pre-modification content.
+      // Back up once per file for this run. The first run to touch a file
+      // creates `<file>.backup` (the original content). Later runs snapshot
+      // their pre-run content to `<file>.backup.<runId>` — the original
+      // `.backup` is never overwritten, and every run stays independently
+      // rollback-able via its own manifest entry.
       let backupPath = absFile + '.backup';
+      let backupExists = false;
+      try {
+        await fs.access(backupPath);
+        backupExists = true;
+      } catch {}
       if (!backedUp.has(absFile)) {
-        try {
-          await fs.access(backupPath);
-        } catch {
-          await fs.copyFile(absFile, backupPath);
-          backupCount++;
-          backups.push({ file: relFile, backup: backupPath });
+        if (backupExists) {
+          backupPath = `${absFile}.backup.${runId}`;
         }
+        await fs.copyFile(absFile, backupPath);
+        backupCount++;
+        backups.push({ runId, file: relFile, backup: backupPath });
         backedUp.add(absFile);
       }
 
@@ -247,7 +270,7 @@ export async function apply(patches, target = process.cwd()) {
         await fs.rm(tmpFile, { force: true }).catch(() => {});
         throw e;
       }
-      writtenThisRun.push({ file: absFile, backup: backupPath });
+      writtenThisRun.push({ file: absFile, runId, backup: backupPath });
     } catch (e) {
       // Execution-time failure: undo every file this run already wrote.
       if (writtenThisRun.length) {
@@ -259,5 +282,6 @@ export async function apply(patches, target = process.cwd()) {
     }
   }
 
-  return { applied, failed, backupCount, backups, rolledBack };
+  const status = failed.length ? 'rolledBack' : 'applied';
+  return { status, applied, failed, backupCount, backups, rolledBack };
 }

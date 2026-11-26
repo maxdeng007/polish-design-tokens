@@ -280,7 +280,7 @@ Pass the patches to `polish_apply`. Each file is backed up before modification.
 **CLI:**
 
 ```bash
-polish apply demo-patches.json
+polish apply demo-patches.json --target=examples/walkthrough/demo-project
 ```
 
 **Result** — `src/tokens.css` is modified. A backup `src/tokens.css.backup` is created automatically.
@@ -338,9 +338,9 @@ polish plan demo-findings.json > demo-plan.json
 # 4. Diff
 polish diff demo-plan.json > demo-patches.json
 
-# 5. Apply (creates .backup files; target defaults to the current directory)
+# 5. Apply (creates .backup files; --target bounds the patch paths)
 cd demo-project
-polish apply ../demo-patches.json
+polish apply ../demo-patches.json --target=.
 
 # 6. Verify
 cat src/tokens.css        # see the changes
@@ -355,8 +355,8 @@ import { runPipeline, apply } from 'polish-design-tokens';
 const { findings, plan, patches } = runPipeline('./demo-project');
 console.log(`${findings.length} findings, ${patches.length} patches`);
 
-const result = await apply(patches);
-console.log(`Applied: ${result.applied.length}, Failed: ${result.failed.length}`);
+const result = await apply(patches, './demo-project');
+console.log(`Applied: ${result.applied.length}, Failed: ${result.failed.length}, Status: ${result.status}`);
 ```
 
 ## What the AI Agent Workflow Looks Like

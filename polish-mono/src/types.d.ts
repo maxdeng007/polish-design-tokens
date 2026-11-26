@@ -243,11 +243,23 @@ export interface Decision {
 
 /** Result of applying patches. */
 export interface ApplyResult {
+  /**
+   * Machine-readable final state of the run. Branch on this instead of
+   * merging `applied` and `rolledBack` yourself:
+   * - 'applied': every patch was written
+   * - 'aborted': a pre-validation failure stopped the run before any write
+   * - 'rolledBack': an execution failure undid every file written this run
+   */
+  status: 'applied' | 'aborted' | 'rolledBack';
   applied: Array<{ file: string; line: number | string }>;
   failed: Array<{ file: string | null; line?: number; error: string }>;
   backupCount: number;
-  /** Run-level backup manifest: [{file, backup}] for restore via rollback(). */
-  backups: Array<{ file: string; backup: string }>;
+  /**
+   * Run-level backup manifest for restore via rollback(). Each entry carries
+   * the run's `runId`; the `backup` is the canonical sibling path the run
+   * wrote (`<file>.backup` on the first run, `<file>.backup.<runId>` after).
+   */
+  backups: Array<{ file: string; backup: string; runId: string }>;
   /** Files auto-restored when a later patch failed at execution time. */
   rolledBack: Array<{ file: string }>;
 }

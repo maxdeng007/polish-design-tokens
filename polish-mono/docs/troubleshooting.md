@@ -123,7 +123,7 @@ Verify Node.js version: `node --version` (must be ≥ 18).
 **Fix:** Use the `ignore` option to exclude directories that don't contain tokens:
 
 ```json
-{ "target": ".", "ignore": "node_modules,dist,build,.next,test" }
+{ "target": ".", "ignore": ["node_modules", "dist", "build", ".next", "test"] }
 ```
 
 The scanner already skips binary files (detected by null bytes) and common build/dependency directories (`node_modules`, `dist`, `build`, `.git`, `.next`, `.cache`, etc.).

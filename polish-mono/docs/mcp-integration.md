@@ -2,7 +2,7 @@
 
 # MCP Integration Guide
 
-polish exposes 8 tools via the Model Context Protocol (JSON-RPC 2.0 over stdin/stdout). Any AI coding agent that supports MCP can drive the full audit → fix pipeline.
+polish exposes 9 tools via the Model Context Protocol (JSON-RPC 2.0 over stdin/stdout). Any AI coding agent that supports MCP can drive the full audit → fix pipeline.
 
 ## Setup
 
@@ -40,7 +40,7 @@ Extract token declarations from a directory.
 
 **Input:**
 ```json
-{ "target": "./src/styles", "ignore": "vendor" }
+{ "target": "./src/styles", "ignore": ["vendor"] }
 ```
 
 **Output:** `DeclarationGraph` — declarations, references, conflicts, dangling, orphans, summary.
@@ -55,7 +55,7 @@ Scan + cross-reference to produce findings.
 
 **Input:**
 ```json
-{ "target": "./src/styles", "ignore": "vendor" }
+{ "target": "./src/styles", "ignore": ["vendor"] }
 ```
 
 With runtime observation:
@@ -128,18 +128,43 @@ Generate mechanical patches from a plan.
 
 ### `polish_apply`
 
-Execute patches with backup protection.
+Execute patches with backup protection. **Target is required** — patches outside it are rejected.
 
 **Input:**
 ```json
-{ "patches": [ { "type": "replace", "file": "src/tokens.css", "line": 12, "before": "#1a1a2e", "after": "var(--bg)", "reason": "...", "findingId": "duplicate-value" } ] }
+{
+  "patches": [ { "type": "replace", "file": "src/tokens.css", "line": 12, "before": "#1a1a2e", "after": "var(--bg)", "reason": "...", "findingId": "duplicate-value" } ],
+  "target": "./src/styles"
+}
 ```
 
-**Output:** `ApplyResult` — `{ applied: [...], failed: [...], backupCount: N }`
+`delete` and `rewrite` patches must carry `before` (the expected original line text, or the token name to replace).
 
-**Safety:** Each file is backed up as `file.backup` before the first patch touches it. Failed patches don't abort the batch.
+**Output:** `ApplyResult` — `{ status, applied: [...], failed: [...], backupCount: N, backups: [{ file, backup, runId }], rolledBack: [...] }`
+
+**Safety:** The run is strictly all-or-nothing. If any patch fails pre-validation, nothing is written and `status` is `"aborted"`. If a patch fails at execution time, every file written by the run is restored from its backup and `status` is `"rolledBack"`. Each file is backed up before the first patch touches it: the first run creates `file.backup`, later runs snapshot to `file.backup.<runId>` (the original backup is never overwritten).
 
 **Use when:** After `polish_diff`, to apply the generated patches. This is the only phase that modifies files.
+
+---
+
+### `polish_rollback`
+
+Restore files from an `polish_apply` backup manifest.
+
+**Input:**
+```json
+{
+  "backups": [ { "file": "src/tokens.css", "backup": "/abs/path/src/tokens.css.backup", "runId": "run-xxxx" } ],
+  "target": "./src/styles"
+}
+```
+
+**Output:** `{ restored: [...], failed: [...] }`
+
+**Safety:** **Target is required.** Only server-generated canonical backups are accepted — `<file>.backup` or `<file>.backup.<runId>` matching the entry's `runId`. Arbitrary paths are refused, so an untrusted manifest cannot inject foreign file content into your project.
+
+**Use when:** An apply run went wrong (`status: "rolledBack"`, or you changed your mind after a clean apply) and you want to restore the pre-apply state.
 
 ---
 
@@ -173,6 +198,10 @@ Find design tokens by brand name or pattern.
 
 **Use when:** You need design token references for a specific brand to guide your token naming or values. Works without any external skill installed — falls back to bundled data automatically.
 
+## Contract
+
+Every tool in `tools/list` carries a formal JSON Schema `outputSchema`, and every `tools/call` result includes both a text payload (`content[0].text`) and a machine-readable `structuredContent` object with the same data. Validate against `outputSchema` or consume `structuredContent` directly — both are guaranteed present.
+
 ## Typical Workflow
 
 ```
@@ -186,10 +215,13 @@ Note how each stage unwraps the previous stage's response: `polish_plan` takes `
 
 For runtime-aware audits, insert `polish_measure` between step 1 and 2 to provide observation data.
 
+If an apply run misbehaves, feed its `backups` manifest to `polish_rollback` to restore the pre-apply state.
+
 ## Error Handling
 
 All tools return structured results rather than throwing:
 
-- **`polish_apply`** returns `failed` array for patches that couldn't be applied (e.g. `before` text not found, line out of range).
+- **`polish_apply`** returns `status: "aborted"` when a patch fails pre-validation (nothing is written) and `status: "rolledBack"` when an execution-time failure rolls the whole run back; patch-level details are in `failed`.
+- **`polish_rollback`** restores files from an apply run's `backups` manifest; entries whose backup path is not a canonical server-generated sibling are refused and reported in `failed`.
 - **`polish_style_lookup`** returns `{ found: false, available: true, availableBrands: [...] }` when the brand isn't found but bundled data is available.
 - **`polish_measure`** filters out invalid documents (non-objects) and defaults missing fields (`theme` → `"default"`, `label` → `"unknown"`).

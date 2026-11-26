@@ -156,7 +156,7 @@ export function formatDiff(patches) {
   }
 
   lines.push('');
-  lines.push(c(ANSI.cyan, 'Run `polish apply patches.json` to apply with backup.'));
+  lines.push(c(ANSI.cyan, 'Run `polish apply patches.json --target=<dir>` to apply with backup.'));
 
   return lines.join('\n');
 }
@@ -172,6 +172,13 @@ export function formatApply(result) {
   const failed = (result.failed || []).length;
   const backups = result.backupCount || 0;
 
+  const status = result.status || (failed > 0 ? 'aborted' : 'applied');
+  const statusLine = status === 'applied'
+    ? c(ANSI.green, `Status:  ${status}`)
+    : status === 'aborted'
+      ? c(ANSI.red, `Status:  ${status} (nothing was written)`)
+      : c(ANSI.yellow, `Status:  ${status}`);
+  lines.push(statusLine);
   lines.push(`${c(ANSI.green, 'Applied:')}  ${applied} patches`);
   lines.push(`${failed > 0 ? c(ANSI.red, 'Failed:') : 'Failed:'}   ${failed} patches`);
   lines.push(`${c(ANSI.blue, 'Backups:')}  ${backups} files`);
@@ -181,10 +188,19 @@ export function formatApply(result) {
   }
   lines.push('');
 
-  if (failed === 0) {
+  if (status === 'applied') {
     lines.push(c(ANSI.green, 'All patches applied successfully.'));
+  } else if (status === 'aborted') {
+    lines.push(c(ANSI.red, 'Run aborted during pre-validation — no files were written.'));
+    lines.push('');
+    lines.push(c(ANSI.red, 'Fix the errors below and re-run to apply anything:'));
+    lines.push('');
+    for (const f of result.failed) {
+      const file = f.file || '?';
+      lines.push(`  ${c(ANSI.red, file)}: ${f.error}`);
+    }
   } else {
-    lines.push(c(ANSI.red, 'Some patches failed. Review the errors below:'));
+    lines.push(c(ANSI.red, 'Execution failed and the run was rolled back. Review the errors below:'));
     lines.push('');
     for (const f of result.failed) {
       const file = f.file || '?';

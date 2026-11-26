@@ -71,8 +71,8 @@ Full pipeline: extract → audit → plan → diff. Does **not** apply patches (
 import { runPipeline, apply } from 'polish-design-tokens';
 
 const { graph, findings, plan, patches } = runPipeline('./src/styles');
-const result = await apply(patches);
-console.log(result.applied, result.failed, result.backupCount);
+const result = await apply(patches, './src/styles');
+console.log(result.status, result.applied, result.failed, result.backupCount);
 ```
 
 **Parameters:**
@@ -178,25 +178,26 @@ const patches = generateDiffs(actions);
 
 ---
 
-### `apply(patches)`
+### `apply(patches, target?)`
 
 Apply patches to files with automatic backup protection.
 
 ```typescript
 import { apply } from 'polish-design-tokens/apply';
 
-const result = await apply(patches);
-// { applied: [{ file, line }], failed: [{ file, error }], backupCount: 3,
-//   backups: [{ file, backup }], rolledBack: [{ file }] }
+const result = await apply(patches, './src');
+// { status: 'applied',
+//   applied: [{ file, line }], failed: [{ file, error }], backupCount: 3,
+//   backups: [{ file, backup, runId }], rolledBack: [{ file }] }
 ```
 
 **Parameters:**
 - `patches` (Patch[]): Output of `generateDiffs()`
-- `target` (string): Optional directory that patches must stay within. Defaults to `process.cwd()`.
+- `target` (string): Directory that patches must stay within. Defaults to `process.cwd()`.
 
-**Returns:** `Promise<ApplyResult>` — `{ applied, failed, backupCount, backups, rolledBack }`
+**Returns:** `Promise<ApplyResult>` — `{ status, applied, failed, backupCount, backups, rolledBack }`
 
-**Safety:** Every patch is pre-validated against the current file contents before any write. Each file is backed up as `file.backup` before the first patch touches it. If a patch fails at execution time, every file written by the run is automatically restored from its backup and reported in `rolledBack`. The `backups` manifest can be passed to `rollback()` for a later manual restore. Failed patches don't abort the batch.
+**Safety:** The run is strictly all-or-nothing. Every patch is pre-validated against the current file contents before any write; if any patch fails pre-validation, nothing is written and `status` is `"aborted"`. Each file is backed up before the first patch touches it: the first run creates `file.backup`, later runs snapshot to `file.backup.<runId>` (the original backup is never overwritten). If a patch fails at execution time, every file written by the run is automatically restored from its backup, reported in `rolledBack`, and `status` is `"rolledBack"`. The `backups` manifest can be passed to `rollback()` for a later manual restore.
 
 ---
 
@@ -213,12 +214,12 @@ const result = await rollback(backups, './src');
 ```
 
 **Parameters:**
-- `backups` (Array<{ file: string; backup: string }>): The `backups` array from an `apply()` result
+- `backups` (Array<{ file: string; backup: string; runId?: string }>): The `backups` array from an `apply()` result
 - `target` (string): Directory that files must stay within. Defaults to `process.cwd()`.
 
 **Returns:** `Promise<RollbackResult>` — `{ restored, failed }`
 
-**Safety:** Only files inside the target directory are restored; other entries are refused. A missing backup is reported as failed and the file is left untouched. Backups themselves are never modified or deleted.
+**Safety:** Only files inside the target directory are restored; other entries are refused. Backups must be server-generated canonical siblings — `<file>.backup` or `<file>.backup.<runId>` matching the entry's `runId`; anything else is refused so an untrusted manifest cannot inject foreign file content into the project. A missing backup is reported as failed and the file is left untouched. Backups themselves are never modified or deleted.
 
 ## Types
 
@@ -297,10 +298,11 @@ Result of applying patches:
 
 ```typescript
 interface ApplyResult {
+  status: 'applied' | 'aborted' | 'rolledBack';
   applied: Array<{ file: string; line: number | string }>;
   failed: Array<{ file: string | null; line?: number; error: string }>;
   backupCount: number;
-  backups: Array<{ file: string; backup: string }>;
+  backups: Array<{ file: string; backup: string; runId: string }>;
   rolledBack: Array<{ file: string }>;
 }
 

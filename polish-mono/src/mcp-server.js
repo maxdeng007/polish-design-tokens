@@ -53,6 +53,23 @@ const toolDefinitions = [
         }
       },
       required: ['target']
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        version: { type: 'string' },
+        root: { type: 'string' },
+        target: { type: 'string' },
+        files: { type: 'array', items: { type: 'string' } },
+        themes: { type: 'array', items: { type: 'string' } },
+        declarations: { type: 'array' },
+        references: { type: 'array' },
+        conflicts: { type: 'array' },
+        dangling: { type: 'array' },
+        orphans: { type: 'array' },
+        summary: { type: 'object' }
+      },
+      required: ['declarations', 'references', 'summary']
     }
   },
   {
@@ -91,6 +108,16 @@ const toolDefinitions = [
         }
       },
       required: ['target']
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        findings: { type: 'array' },
+        summary: { type: 'object' },
+        graphSummary: { type: 'object' },
+        observation: { type: ['object', 'null'] }
+      },
+      required: ['findings', 'summary', 'graphSummary', 'observation']
     }
   },
   {
@@ -115,6 +142,13 @@ const toolDefinitions = [
             }
           }
         }
+      },
+      required: ['documents']
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        documents: { type: 'array' }
       },
       required: ['documents']
     }
@@ -154,6 +188,14 @@ const toolDefinitions = [
         }
       },
       required: ['findings']
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        plan: { type: 'array' },
+        summary: { type: 'object' }
+      },
+      required: ['plan', 'summary']
     }
   },
   {
@@ -181,11 +223,19 @@ const toolDefinitions = [
         target: { type: 'string', description: 'Target directory to resolve relative file paths in patches' }
       },
       required: ['plan']
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        patches: { type: 'array' },
+        preview: { type: 'string' }
+      },
+      required: ['patches', 'preview']
     }
   },
   {
     name: 'polish_apply',
-    description: 'Execute mechanical patches on files with backup protection. Each file is backed up with .backup extension before modification. Target is required to enforce file-path boundaries.',
+    description: 'Execute mechanical patches on files with backup protection. Each file is backed up before modification. Target is required to enforce file-path boundaries. The run is strictly all-or-nothing: if any patch fails pre-validation, nothing is written and status is "aborted"; an execution-time failure rolls back every file written this run ("rolledBack").',
     inputSchema: {
       type: 'object',
       properties: {
@@ -198,17 +248,50 @@ const toolDefinitions = [
               type: { type: 'string', enum: ['replace', 'add', 'delete', 'rewrite'] },
               file: { type: 'string' },
               line: { type: 'number' },
-              before: { type: 'string' },
+              before: { type: 'string', description: 'Expected original text. Required for delete (the expected original line text) and rewrite (the token name to replace).' },
               after: { type: 'string' },
               reason: { type: 'string' },
               findingId: { type: 'string' }
             },
-            required: ['file', 'type']
+            required: ['file', 'type'],
+            allOf: [
+              {
+                if: { properties: { type: { const: 'delete' } }, required: ['type'] },
+                then: { required: ['before'] }
+              },
+              {
+                if: { properties: { type: { const: 'rewrite' } }, required: ['type'] },
+                then: { required: ['before'] }
+              }
+            ]
           }
         },
         target: { type: 'string', description: 'Target directory to resolve and bound relative file paths. Required — patches outside this directory are rejected.' }
       },
       required: ['patches', 'target']
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string', enum: ['applied', 'aborted', 'rolledBack'] },
+        applied: { type: 'array' },
+        failed: { type: 'array' },
+        backupCount: { type: 'number' },
+        backups: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              file: { type: 'string' },
+              backup: { type: 'string' },
+              runId: { type: 'string' }
+            },
+            required: ['file', 'backup']
+          }
+        },
+        rolledBack: { type: 'array' }
+      },
+      required: ['status', 'applied', 'failed', 'backupCount', 'backups', 'rolledBack']
     }
   },
   {
@@ -232,6 +315,14 @@ const toolDefinitions = [
         target: { type: 'string', description: 'Target directory to bound the restore. Required — files outside this directory are refused.' }
       },
       required: ['backups', 'target']
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        restored: { type: 'array' },
+        failed: { type: 'array' }
+      },
+      required: ['restored', 'failed']
     }
   },
   {
@@ -245,6 +336,15 @@ const toolDefinitions = [
           description: 'If true, install missing optional dependencies automatically'
         }
       }
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string' },
+        dependencies: { type: 'array' },
+        message: { type: 'string' }
+      },
+      required: ['status', 'dependencies', 'message']
     }
   },
   {
@@ -255,6 +355,22 @@ const toolDefinitions = [
       properties: {
         brand: { type: 'string', description: 'Brand name to look up (e.g. "vercel", "stripe", "linear")' }
       }
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        found: { type: 'boolean' },
+        available: { type: 'boolean' },
+        source: { type: 'string' },
+        brand: { type: 'string' },
+        path: { type: 'string' },
+        content: { type: 'string' },
+        error: { type: 'string' },
+        note: { type: 'string' },
+        skillDir: { type: 'string' },
+        availableBrands: { type: 'array', items: { type: 'string' } }
+      },
+      required: ['found', 'available', 'source']
     }
   }
 ];
@@ -297,7 +413,10 @@ async function handleMessage(msg) {
     }
     try {
       const result = await handler(args);
-      sendResult(id, { content: [{ type: 'text', text: JSON.stringify(result, null, 2) }] });
+      sendResult(id, {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+        structuredContent: result
+      });
     } catch (err) {
       sendError(id, -32603, err.message || String(err));
     }

@@ -42,6 +42,20 @@ node --test test/*.test.js
 node --test test/report.test.js
 ```
 
+## Typechecking
+
+Type declarations (`.d.ts`) are checked directly with the bundled TypeScript
+devDependency:
+
+```bash
+npx tsc
+```
+
+These are direct commands, not npm scripts: the published tarball ships
+`src/`, `bin/`, and `docs/` only — it does not include `test/` or
+`tsconfig.json`, so `npm test` / `npm run typecheck` would not exist (and
+would fail) in an installed copy. CI runs the same direct commands.
+
 All tests must pass before a change is considered complete.
 
 ## Development workflow
@@ -68,7 +82,11 @@ All tests must pass before a change is considered complete.
   `export interface` / `export type` — never `export function` in `.d.ts`.
 - **apply safety.** Boundary checks must use `fs.realpathSync()` (symlink-
   resolving), never `path.resolve()` alone. Backups (`<file>.backup`) are
-  created before modification and never overwritten.
+  created before modification and never overwritten; later runs snapshot
+  to `<file>.backup.<runId>`. `apply()` is strictly all-or-nothing: any
+  pre-validation failure aborts the run before writes, and an execution
+  failure rolls every written file back. Always pass a `target` to bound
+  patch paths.
 - **Version bumps.** New feature → minor bump; fix/polish → patch bump.
   See [Version bumps and release](#version-bumps-and-release) for the full
   release process.

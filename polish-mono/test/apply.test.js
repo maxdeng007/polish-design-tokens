@@ -383,3 +383,93 @@ test('apply writes atomically and leaves no temp files', async () => {
   assert.ok(content.includes('--background: var(--bg);'));
   cleanup();
 });
+
+test('apply returns status applied on a clean run', async () => {
+  const file = makeTempCss(':root {\n  --bg: #1a1a2e;\n}\n');
+  const result = await apply([
+    { type: 'replace', file, line: 2, before: '#1a1a2e', after: 'var(--bg)', reason: 'test', findingId: 'duplicate-value' }
+  ], TMP_DIR);
+  assert.equal(result.status, 'applied');
+  cleanup();
+});
+
+test('apply aborts the entire run when any patch fails pre-validation', async () => {
+  // a.css holds a valid patch; b.css holds a stale delete. Pre-validation
+  // must reject the stale delete BEFORE any write happens, so a.css keeps
+  // its original content and no backups are created.
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  const aFile = path.join(TMP_DIR, 'a.css');
+  const bFile = path.join(TMP_DIR, 'b.css');
+  fs.writeFileSync(aFile, ':root {\n  --a: #111;\n}\n', 'utf8');
+  fs.writeFileSync(bFile, ':root {\n  --b: #222;\n}\n', 'utf8');
+
+  const result = await apply([
+    { type: 'replace', file: aFile, line: 2, before: '#111', after: 'var(--a)', reason: 't1', findingId: 'duplicate-value' },
+    { type: 'delete', file: bFile, line: 2, before: '  --b: #999;', reason: 't2', findingId: 'orphan' }
+  ], TMP_DIR);
+
+  assert.equal(result.status, 'aborted');
+  assert.equal(result.applied.length, 0, 'no patch may apply when any patch fails pre-validation');
+  assert.equal(result.failed.length, 1);
+  assert.equal(result.backups.length, 0, 'no backups for an aborted run');
+  assert.deepEqual(result.rolledBack, []);
+
+  const a = fs.readFileSync(aFile, 'utf8');
+  assert.ok(a.includes('--a: #111;'), 'a.css must be unchanged');
+  assert.ok(!fs.existsSync(aFile + '.backup'), 'no backup created for a.css');
+  assert.ok(!fs.existsSync(bFile + '.backup'), 'no backup created for b.css');
+  cleanup();
+});
+
+test('apply manifest entries carry a runId and a run-scoped backup on a second run', async () => {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  const file = path.join(TMP_DIR, 'a.css');
+  fs.writeFileSync(file, ':root {\n  --a: #111;\n}\n', 'utf8');
+
+  const first = await apply([
+    { type: 'replace', file, line: 2, before: '#111', after: '#222', reason: 't1', findingId: 'conflict' }
+  ], TMP_DIR);
+  assert.equal(first.status, 'applied');
+  assert.ok(first.backups[0].runId, 'manifest entry should carry a runId');
+  assert.ok(fs.existsSync(file + '.backup'), 'first run creates the original .backup');
+
+  // Second run against the already-modified file: the pre-this-run content
+  // must be snapshotted to a run-scoped backup, and the manifest must point
+  // at it (never overwriting the original .backup).
+  const second = await apply([
+    { type: 'replace', file, line: 2, before: '#222', after: '#333', reason: 't2', findingId: 'conflict' }
+  ], TMP_DIR);
+  assert.equal(second.status, 'applied');
+  assert.ok(second.backups[0].runId, 'second run manifest carries its own runId');
+  assert.notEqual(second.backups[0].runId, first.backups[0].runId, 'each run gets its own runId');
+  assert.equal(second.backups[0].backup, file + '.backup.' + second.backups[0].runId);
+  assert.ok(fs.existsSync(second.backups[0].backup), 'run-scoped backup should exist');
+  assert.ok(fs.existsSync(file + '.backup'), 'original .backup must not be overwritten');
+
+  const beforeSecondRun = fs.readFileSync(second.backups[0].backup, 'utf8');
+  assert.ok(beforeSecondRun.includes('#222'), 'run-scoped backup holds the pre-second-run content');
+
+  const content = fs.readFileSync(file, 'utf8');
+  assert.ok(content.includes('#333'), 'second run applied');
+  cleanup();
+});
+
+test('apply returns status rolledBack when an execution failure rolls back the run', async () => {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  const aFile = path.join(TMP_DIR, 'a.css');
+  const bFile = path.join(TMP_DIR, 'b.css');
+  fs.writeFileSync(aFile, ':root {\n  --a: #111;\n}\n', 'utf8');
+  fs.writeFileSync(bFile, ':root {\n  --b: #333;\n}\n', 'utf8');
+
+  const result = await apply([
+    { type: 'replace', file: aFile, line: 2, before: '#111', after: '#222', reason: 't1', findingId: 'conflict' },
+    { type: 'delete', file: bFile, line: 2, before: '  --b: #333;', reason: 't2', findingId: 'orphan' },
+    { type: 'delete', file: bFile, line: 2, before: '  --b: #333;', reason: 't3', findingId: 'orphan' }
+  ], TMP_DIR);
+
+  assert.equal(result.status, 'rolledBack');
+  assert.ok(result.rolledBack.some(r => r.file.endsWith('a.css')), 'a.css should have been rolled back');
+  const a = fs.readFileSync(aFile, 'utf8');
+  assert.ok(a.includes('#111'), 'a.css must be restored to its original content');
+  cleanup();
+});

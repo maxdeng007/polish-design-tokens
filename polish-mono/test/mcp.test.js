@@ -156,10 +156,11 @@ test('MCP tools return the documented wrapper shapes', () => {
   assert.equal(typeof diff.preview, 'string', 'diff should include a preview');
 
   const apply = unwrap(5);
-  assert.deepEqual(Object.keys(apply).sort(), ['applied', 'backupCount', 'backups', 'failed', 'rolledBack'],
-    'apply must return { applied, failed, backupCount, backups, rolledBack }');
+  assert.deepEqual(Object.keys(apply).sort(), ['applied', 'backupCount', 'backups', 'failed', 'rolledBack', 'status'],
+    'apply must return { status, applied, failed, backupCount, backups, rolledBack }');
   assert.ok(Array.isArray(apply.backups), 'apply should return a backups manifest');
   assert.ok(Array.isArray(apply.rolledBack), 'apply should report auto-rolled-back files');
+  assert.ok(['applied', 'aborted', 'rolledBack'].includes(apply.status), 'apply should report a final run status');
 
   cleanup();
 });
@@ -321,5 +322,67 @@ test('MCP polish_audit echoes the observation it received', () => {
   assert.deepEqual(audit.observation, observation, 'audit should echo the observation data');
   assert.ok(audit.findings.some(f => f.id === 'runtime-drift'), 'runtime-drift should be detected');
   cleanup();
+});
+
+test('MCP tools/list advertises an outputSchema for every tool', () => {
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/list' }
+  ]);
+  const tools = responses.get(2).result.tools;
+  assert.equal(tools.length, 9, `expected 9 tools, got ${tools.length}`);
+  for (const t of tools) {
+    assert.ok(t.outputSchema, `${t.name} should carry an outputSchema`);
+    assert.equal(t.outputSchema.type, 'object', `${t.name} outputSchema should be an object`);
+  }
+});
+
+test('MCP tools/call returns structuredContent that matches the text payload', () => {
+  const dir = makeProject(':root {\n  --bg: #ffffff;\n  --background: #ffffff;\n}\n');
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'polish_audit', arguments: { target: dir } } },
+    {
+      jsonrpc: '2.0', id: 3, method: 'tools/call',
+      params: { name: 'polish_extract', arguments: { target: dir } }
+    }
+  ]);
+  for (const id of [2, 3]) {
+    const call = responses.get(id);
+    assert.ok(call.result.structuredContent, `call ${id} should include structuredContent`);
+    const fromText = JSON.parse(call.result.content[0].text);
+    assert.deepEqual(call.result.structuredContent, fromText,
+      `structuredContent should equal the parsed text content for call ${id}`);
+  }
+  cleanup();
+});
+
+test('MCP polish_apply schema requires before for delete and rewrite patch types', () => {
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/list' }
+  ]);
+  const tools = responses.get(2).result.tools;
+  const applyTool = tools.find(t => t.name === 'polish_apply');
+  const conditionals = applyTool.inputSchema.properties.patches.items.allOf;
+  assert.ok(conditionals, 'patches items should carry conditional allOf rules');
+  for (const rule of conditionals) {
+    const typeConst = rule.if.properties.type.const;
+    assert.ok(['delete', 'rewrite'].includes(typeConst), `unexpected conditional type ${typeConst}`);
+    assert.ok(rule.then.required.includes('before'), `${typeConst} must require before`);
+  }
+});
+
+test('MCP polish_apply outputSchema documents the transactional status field', () => {
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/list' }
+  ]);
+  const tools = responses.get(2).result.tools;
+  const applyTool = tools.find(t => t.name === 'polish_apply');
+  assert.deepEqual(applyTool.outputSchema.properties.status.enum.sort(),
+    ['aborted', 'applied', 'rolledBack']);
+  assert.ok(applyTool.outputSchema.required.includes('status'), 'status is required in the apply output');
+  assert.ok(applyTool.outputSchema.required.includes('backups'), 'backups is required in the apply output');
 });
 

@@ -24,24 +24,56 @@ jobs:
 
       - name: Typecheck declarations
         working-directory: polish-mono
-        run: npm run typecheck
+        run: npx tsc
 
       - name: Run test suite
         working-directory: polish-mono
-        run: npm test
+        run: node --test test/*.test.js
 
-      - name: Pack smoke test (tarball install + CLI run)
+      - name: Pack smoke test (tarball install + exports + MCP handshake + CLI)
         working-directory: polish-mono
         run: |
           set -e
           tarball="$(npm pack --silent)"
-          mkdir -p "$RUNNER_TEMP/unpacked"
-          tar -xzf "$tarball" -C "$RUNNER_TEMP/unpacked"
-          pkg="$RUNNER_TEMP/unpacked/package"
-          node "$pkg/bin/polish.mjs" --help > /dev/null
-          # The demo project is intentionally flawed, so check exits 1 —
-          # assert the report output instead of the exit code.
-          node "$pkg/bin/polish.mjs" check "$GITHUB_WORKSPACE/examples/walkthrough/demo-project" --summary | grep -q "Token Health Check"
+          prefix="$RUNNER_TEMP/smoke"
+          # Install the tarball the way a real user would
+          npm install --silent "$tarball" --prefix "$prefix"
+          pkgdir="$prefix/node_modules/polish-design-tokens"
+
+          # 1. Every exported subpath (root + 12 subpaths) imports from the installed package
+          (cd "$prefix" && node -e "
+            (async () => {
+              for (const sub of ['', 'scan', 'cross', 'parse', 'measure', 'diff', 'confirm', 'apply', 'plan', 'wizard', 'report', 'mcp', 'rollback']) {
+                await import('polish-design-tokens' + (sub ? '/' + sub : ''));
+              }
+              console.log('All 13 export subpaths import OK');
+            })().catch((e) => { console.error(e); process.exit(1); });
+          ")
+
+          # 2. MCP handshake: initialize → tools/list → tools/call
+          printf '%s\n' \
+            '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' \
+            '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' \
+            "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"polish_audit\",\"arguments\":{\"target\":\"$GITHUB_WORKSPACE/examples/walkthrough/demo-project\"}}}" \
+            | node "$pkgdir/src/mcp-server.js" > "$prefix/mcp.out"
+          node -e "
+            const fs = require('fs');
+            const lines = fs.readFileSync('$prefix/mcp.out', 'utf8').trim().split('\n').map((l) => JSON.parse(l));
+            if (!lines.find((m) => m.id === 1).result.serverInfo) { console.error('initialize did not return serverInfo'); process.exit(1); }
+            const tools = lines.find((m) => m.id === 2).result.tools;
+            if (tools.length !== 9) { console.error('Expected 9 tools, got ' + tools.length); process.exit(1); }
+            for (const t of tools) {
+              if (!t.outputSchema) { console.error('Tool ' + t.name + ' missing outputSchema'); process.exit(1); }
+            }
+            const call = lines.find((m) => m.id === 3).result;
+            if (!call.structuredContent || !call.structuredContent.findings) { console.error('tools/call missing structuredContent.findings'); process.exit(1); }
+            console.log('MCP handshake OK: 9 tools, outputSchema + structuredContent present');
+          "
+
+          # 3. CLI from the installed package (demo project is intentionally flawed,
+          #    so check exits 1 — assert the report output instead of the exit code)
+          node "$pkgdir/bin/polish.mjs" --help > /dev/null
+          node "$pkgdir/bin/polish.mjs" check "$GITHUB_WORKSPACE/examples/walkthrough/demo-project" --summary | grep -q "Token Health Check"
           echo "Pack smoke OK"
 
   publish:
@@ -55,7 +87,7 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org
 
-      - name: Verify tag matches package version
+      - name: Verify version consistency (tag, package.json, lockfile, CHANGELOG)
         working-directory: polish-mono
         run: |
           tag="${GITHUB_REF#refs/tags/}"
@@ -64,6 +96,16 @@ jobs:
             echo "Tag $tag does not match package version v$version"
             exit 1
           fi
+          lock_version="$(node -p "require('./package-lock.json').version")"
+          if [ "$lock_version" != "$version" ]; then
+            echo "package-lock.json root version $lock_version does not match package.json $version"
+            exit 1
+          fi
+          if ! grep -q "## \[${version}\]" CHANGELOG.md; then
+            echo "CHANGELOG.md has no entry for version $version"
+            exit 1
+          fi
+          echo "Version consistency OK: tag $tag, package.json $version, lockfile $lock_version, CHANGELOG entry present"
 
       - name: Publish to npm (idempotent — skips already-published versions)
         working-directory: polish-mono
@@ -76,6 +118,19 @@ jobs:
           else
             npm publish --access public
           fi
+
+      - name: Verify npm gitHead matches the release commit
+        working-directory: polish-mono
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          git_head="$(npm view "polish-design-tokens@$version" gitHead)"
+          if [ "$git_head" != "$GITHUB_SHA" ]; then
+            echo "npm gitHead '$git_head' does not match release commit '$GITHUB_SHA'"
+            exit 1
+          fi
+          echo "npm gitHead matches release commit $GITHUB_SHA"
 
       - name: Create GitHub release (idempotent — skips existing releases)
         env:

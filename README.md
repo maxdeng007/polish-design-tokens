@@ -56,9 +56,9 @@ npm install -g .
 
 Requires Node.js ≥ 18.
 
-## Install via AI (No Coding Required)
+## Install via an AI Coding Agent
 
-**For non-technical users.** If you're not comfortable with the command line above, you can skip it entirely. Copy the prompt below, paste it into any AI chat (ChatGPT, Claude, etc.), and the AI will install polish and audit your project for you — no coding required.
+**For non-technical users.** This path requires an AI coding agent with terminal access — an AI coding CLI or an IDE agent that can run commands on your machine. A plain chat window can't execute anything locally, so paste the prompt below into your agent, not a chat box; the agent will install polish, audit your project, and report back. No coding required.
 
 ```text
 Please help me audit the design tokens in my project using the "polish" tool.
@@ -79,6 +79,12 @@ Do NOT apply any fixes or modify any files. Install, audit, and report only.
 ```
 
 **What's next:** polish stays installed on your system after the audit — no reinstall needed. If you want to apply the mechanical fixes (duplicate values), just give your AI a follow-up prompt like: *"Now apply the mechanical fixes to my project with backups."* The AI will re-run the audit, generate patches, and apply them with automatic backups.
+
+**Safety notes:**
+
+- `polish audit` and `polish check` are strictly read-only — they never modify files.
+- `polish fix`, `polish apply`, and the wizard's apply step modify files. Every apply run is strictly all-or-nothing with automatic backups (`<file>.backup`, later runs snapshot to `<file>.backup.<runId>`); a failed pre-validation writes nothing. Still, review the generated patches or the HTML report before applying, and work on a clean branch you can discard if anything goes wrong.
+- `polish doctor --install` executes shell commands and accesses the network to install optional skills — run it only if you're comfortable with that.
 
 ## Optional Skills
 
@@ -140,7 +146,7 @@ polish report ./my-project
 3. Use `polish_audit` to scan the target project
 4. Use `polish_plan` → `polish_diff` → `polish_apply` to fix mechanical issues
 
-All `polish apply` operations create `.backup` files before modifying any file. Failed patches are recorded and do not abort the batch — review the apply report for failures.
+All `polish apply` operations create `.backup` files before modifying any file. The run is strictly all-or-nothing: if a patch fails pre-validation nothing is written (status `aborted`), and an execution-time failure rolls every written file back from its backup (status `rolledBack`) — review the apply report and use `polish rollback` to restore.
 
 ## The Pipeline
 
@@ -180,7 +186,7 @@ Only **mechanical** findings (`duplicate-value`) produce patches in the next pha
 
 Reads the plan and generates concrete patches for mechanical items only. Each patch specifies:
 
-- **type**: `replace` (before → after), `add` (insert new declaration), `rename`, or `rewrite`
+- **type**: `replace` (before → after), `add` (insert new declaration), `delete`, or `rewrite`
 - **file** / **line**: exact location
 - **before** / **after**: the exact text change
 - **reason**: human-readable explanation
@@ -210,7 +216,7 @@ polish fix    <target> [--ignore=a,b] [--dry-run]  # One-shot fix: apply mechani
 polish report <target> [--ignore=a,b] [--output=f] # Generate interactive HTML report
 polish plan  <findings.json> [--summary]   # Convert findings to an ordered action list
 polish diff  <plan.json> [--summary]       # Generate mechanical patches from a plan
-polish apply <patches.json> [--summary]    # Apply patches (creates .backup files)
+polish apply <patches.json> [--target=dir] [--summary]    # Apply patches (creates .backup files)
 polish rollback <backups.json> [--target=dir] [--summary]  # Restore files from an apply run backup manifest
 polish confirm <decisions.json> [--target=dir] [--summary]  # Apply designer-confirmed judgmental decisions
 polish doctor [--install] [--summary]      # Check optional deps; --install auto-installs missing ones
@@ -384,7 +390,7 @@ const graph = extract('./my-project');
 const report = audit('./my-project');
 const actions = plan(report.findings);
 const patches = generateDiffs(actions);
-const result = await apply(patches);
+const result = await apply(patches, './my-project');
 ```
 
 ### API Reference
@@ -394,7 +400,7 @@ const result = await apply(patches);
 | `extract` | `(target: string, ignore?: string[]) → DeclarationGraph` | Scan a directory for token declarations and references |
 | `audit` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → AuditReport` | Scan + cross-reference to produce findings |
 | `runPipeline` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → PipelineResult` | Full pipeline: extract → audit → plan → diff (no apply) |
-| `scan` | `(target: string, ignore?: string[]) → DeclarationGraph` | Low-level scan, same as `extract` |
+| `scan` | `(target: string, opts?: { ignore?: string[] }) → DeclarationGraph` | Low-level scan, same as `extract` |
 | `cross` | `(graph: DeclarationGraph, observation?: RuntimeObservation) → AuditReport` | Judge findings from a declaration graph |
 | `measure` | `(docs?: unknown[]) → RuntimeObservation` | Normalize runtime observation data for audit |
 | `plan` | `(findings: Finding[]) → PlanAction[]` | Rank and classify findings into an action queue |

@@ -236,13 +236,18 @@ export async function runWizard(opts = {}) {
     result.failed = applyResult.failed.length;
     result.backups = applyResult.backupCount;
 
-    if (applyResult.failed.length > 0) {
+    if (applyResult.status === 'aborted') {
       out('');
-      out(c(ANSI.yellow, 'Some patches failed. Check the errors above and re-run if needed.'));
-      result.status = 'partial';
+      out(c(ANSI.yellow, 'Run aborted during pre-validation — no files were modified.'));
+      result.status = 'aborted';
+    } else if (applyResult.status === 'rolledBack') {
+      out('');
+      out(c(ANSI.yellow, 'Execution failed and the run was rolled back — check the errors above.'));
+      result.status = 'rolledBack';
     } else {
       out('');
       out(c(ANSI.green, 'All patches applied. Backups are in place if you need to revert.'));
+      result.status = 'completed';
     }
     return result;
   } finally {

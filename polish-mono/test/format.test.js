@@ -196,7 +196,7 @@ test('formatApply shows error details for failed patches', () => {
     backupCount: 0
   };
   const out = formatApply(result);
-  assert.ok(out.includes('Some patches failed'));
+  assert.ok(out.includes('aborted'));
   assert.ok(out.includes('a.css: before text not found'));
 });
 

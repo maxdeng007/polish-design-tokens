@@ -56,9 +56,9 @@ npm install -g .
 
 需要 Node.js ≥ 18。
 
-## 通过 AI 安装（无需编程）
+## 通过 AI 编程代理安装
 
-**适合非技术用户。** 如果你对上面的命令行不太熟悉，可以直接跳过。复制下方提示词，粘贴到任意 AI 聊天工具（ChatGPT、Claude 等）中，AI 就会帮你安装 polish 并审计你的项目——无需编程。
+**适合非技术用户。** 此路径需要具备终端执行能力的 AI 编程代理——即 AI 编程命令行工具或能在本机运行命令的编辑器代理。普通聊天窗口无法在本地执行任何命令，因此请把下方提示词交给你的编程代理，而不是聊天框；代理会安装 polish、审计你的项目并汇报结果。无需编程。
 
 ```text
 请帮我用 "polish" 工具审计我项目中的设计令牌。
@@ -79,6 +79,12 @@ npm install -g .
 ```
 
 **下一步：** 审计完成后，polish 会持续保留在你的系统上——无需重新安装。如果你想应用机械性修复（重复值），只需给 AI 发送一条后续提示，例如：*"现在对我的项目应用机械性修复，带备份。"* AI 会重新运行审计、生成补丁，并自动带备份应用。
+
+**安全须知：**
+
+- `polish audit` 与 `polish check` 严格只读——绝不修改文件。
+- `polish fix`、`polish apply` 以及向导的 apply 步骤会修改文件。每次 apply 运行严格遵循全有或全无并自动备份（`<file>.backup`，后续运行快照到 `<file>.backup.<runId>`）；预检失败时不会写入任何内容。即便如此，应用前仍请审阅生成的补丁或 HTML 报告，并在可丢弃的干净分支上操作，以防万一。
+- `polish doctor --install` 会执行 shell 命令并访问网络来安装可选技能——仅在你接受这一点时才运行。
 
 ## 可选技能
 
@@ -140,7 +146,7 @@ polish report ./my-project
 3. 使用 `polish_audit` 扫描目标项目
 4. 使用 `polish_plan` → `polish_diff` → `polish_apply` 修复机械性问题
 
-所有 `polish apply` 操作在修改任何文件前都会创建 `.backup` 备份文件。失败的补丁会被记录且不会中断批量操作——请检查 apply 报告以查看失败项。
+所有 `polish apply` 操作在修改任何文件前都会创建 `.backup` 备份文件。运行严格遵循全有或全无：补丁预检失败时不写入任何内容（状态 `aborted`），执行时失败会把本次运行写入的所有文件从备份回滚（状态 `rolledBack`）——请检查 apply 报告，并可用 `polish rollback` 恢复。
 
 ## 流水线
 
@@ -180,7 +186,7 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 
 读取计划，仅为机械性条目生成具体补丁。每个补丁指定：
 
-- **type**：`replace`（前 → 后）、`add`（插入新声明）、`rename` 或 `rewrite`
+- **type**：`replace`（前 → 后）、`add`（插入新声明）、`delete` 或 `rewrite`
 - **file** / **line**：精确位置
 - **before** / **after**：精确的文本变更
 - **reason**：人类可读的解释
@@ -210,7 +216,7 @@ polish fix    <target> [--ignore=a,b] [--dry-run]  # 一键修复：自动应用
 polish report <target> [--ignore=a,b] [--output=f] # 生成交互式 HTML 报告
 polish plan  <findings.json> [--summary]   # 将发现转换为有序操作列表
 polish diff  <plan.json> [--summary]       # 从计划生成机械性补丁
-polish apply <patches.json> [--summary]    # 应用补丁（创建 .backup 文件）
+polish apply <patches.json> [--target=dir] [--summary]    # 应用补丁（创建 .backup 文件）
 polish rollback <backups.json> [--target=dir] [--summary]  # 从 apply 运行的备份清单恢复文件
 polish confirm <decisions.json> [--target=dir] [--summary]  # 应用设计师确认的判断性决策
 polish doctor [--install] [--summary]      # 检查可选依赖；--install 自动安装缺失项
@@ -384,7 +390,7 @@ const graph = extract('./my-project');
 const report = audit('./my-project');
 const actions = plan(report.findings);
 const patches = generateDiffs(actions);
-const result = await apply(patches);
+const result = await apply(patches, './my-project');
 ```
 
 ### API 参考
@@ -394,7 +400,7 @@ const result = await apply(patches);
 | `extract` | `(target: string, ignore?: string[]) → DeclarationGraph` | 扫描目录中的令牌声明和引用 |
 | `audit` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → AuditReport` | 扫描 + 交叉比对，生成发现 |
 | `runPipeline` | `(target: string, ignore?: string[], observation?: RuntimeObservation) → PipelineResult` | 完整流水线：提取 → 审计 → 计划 → 差异（不应用） |
-| `scan` | `(target: string, ignore?: string[]) → DeclarationGraph` | 底层扫描，与 `extract` 相同 |
+| `scan` | `(target: string, opts?: { ignore?: string[] }) → DeclarationGraph` | 底层扫描，与 `extract` 相同 |
 | `cross` | `(graph: DeclarationGraph, observation?: RuntimeObservation) → AuditReport` | 从声明图判定发现 |
 | `measure` | `(docs?: unknown[]) → RuntimeObservation` | 为审计规范化运行时观测数据 |
 | `plan` | `(findings: Finding[]) → PlanAction[]` | 将发现排序分类为操作队列 |

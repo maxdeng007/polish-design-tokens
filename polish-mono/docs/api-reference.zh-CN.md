@@ -71,8 +71,8 @@ console.log(report.summary.bySeverity); // { error: 2, warn: 5, info: 3 }
 import { runPipeline, apply } from 'polish-design-tokens';
 
 const { graph, findings, plan, patches } = runPipeline('./src/styles');
-const result = await apply(patches);
-console.log(result.applied, result.failed, result.backupCount);
+const result = await apply(patches, './src/styles');
+console.log(result.status, result.applied, result.failed, result.backupCount);
 ```
 
 **参数：**
@@ -178,25 +178,26 @@ const patches = generateDiffs(actions);
 
 ---
 
-### `apply(patches)`
+### `apply(patches, target?)`
 
 将补丁应用到文件，带自动备份保护。
 
 ```typescript
 import { apply } from 'polish-design-tokens/apply';
 
-const result = await apply(patches);
-// { applied: [{ file, line }], failed: [{ file, error }], backupCount: 3,
-//   backups: [{ file, backup }], rolledBack: [{ file }] }
+const result = await apply(patches, './src');
+// { status: 'applied',
+//   applied: [{ file, line }], failed: [{ file, error }], backupCount: 3,
+//   backups: [{ file, backup, runId }], rolledBack: [{ file }] }
 ```
 
 **参数：**
 - `patches` (Patch[])：`generateDiffs()` 的输出
-- `target` (string)：可选，补丁必须位于该目录内。默认为 `process.cwd()`。
+- `target` (string)：补丁必须位于该目录内。默认为 `process.cwd()`。
 
-**返回：** `Promise<ApplyResult>` — `{ applied, failed, backupCount, backups, rolledBack }`
+**返回：** `Promise<ApplyResult>` — `{ status, applied, failed, backupCount, backups, rolledBack }`
 
-**安全：** 任何写入前，每个补丁都会针对当前文件内容预先校验。每个文件在首次补丁触及前会备份为 `file.backup`。若某补丁在执行时失败，本次运行写入的所有文件都会自动从备份恢复并记录在 `rolledBack` 中。`backups` 清单可传给 `rollback()` 做后续手动恢复。失败的补丁不会中止批次。
+**安全：** 运行严格遵循全有或全无。任何写入前，每个补丁都会针对当前文件内容预先校验；若任一补丁预检失败，不会写入任何内容，`status` 为 `"aborted"`。每个文件在首次补丁触及前会备份：首次运行创建 `file.backup`，后续运行快照到 `file.backup.<runId>`（原始备份永不覆盖）。若某补丁在执行时失败，本次运行写入的所有文件都会自动从备份恢复，记录在 `rolledBack` 中，且 `status` 为 `"rolledBack"`。`backups` 清单可传给 `rollback()` 做后续手动恢复。
 
 ---
 
@@ -213,12 +214,12 @@ const result = await rollback(backups, './src');
 ```
 
 **参数：**
-- `backups` (Array<{ file: string; backup: string }>)：`apply()` 结果中的 `backups` 数组
+- `backups` (Array<{ file: string; backup: string; runId?: string }>)：`apply()` 结果中的 `backups` 数组
 - `target` (string)：文件必须位于该目录内。默认为 `process.cwd()`。
 
 **返回：** `Promise<RollbackResult>` — `{ restored, failed }`
 
-**安全：** 仅恢复目标目录内的文件，其余条目会被拒绝。备份缺失时记为失败且不改动原文件。备份文件本身永不被修改或删除。
+**安全：** 仅恢复目标目录内的文件，其余条目会被拒绝。备份必须是服务端生成的规范兄弟文件——`<file>.backup` 或与条目 `runId` 匹配的 `<file>.backup.<runId>`；其他路径一律拒绝，因此不可信的清单无法将外部文件内容注入项目。备份缺失时记为失败且不改动原文件。备份文件本身永不被修改或删除。
 
 ## 类型
 
@@ -297,10 +298,11 @@ interface Patch {
 
 ```typescript
 interface ApplyResult {
+  status: 'applied' | 'aborted' | 'rolledBack';
   applied: Array<{ file: string; line: number | string }>;
   failed: Array<{ file: string | null; line?: number; error: string }>;
   backupCount: number;
-  backups: Array<{ file: string; backup: string }>;
+  backups: Array<{ file: string; backup: string; runId: string }>;
   rolledBack: Array<{ file: string }>;
 }
 
