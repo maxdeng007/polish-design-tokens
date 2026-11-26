@@ -45,8 +45,7 @@ new capabilities bump the minor version, fixes and polish bump the patch version
   installs the tarball like a real user, imports all 13 export subpaths,
   and performs a full MCP handshake (initialize → tools/list →
   tools/call); the release workflow verifies tag/package.json/
-  package-lock/CHANGELOG version consistency and that npm's `gitHead`
-  matches the release commit.
+  package-lock/CHANGELOG version consistency.
 - **README AI install wording** — the AI install path now correctly
   states it requires an AI coding agent with terminal access (not a plain
   chat window), and adds safety notes for apply, backups, and

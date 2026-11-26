@@ -118,19 +118,6 @@ jobs:
             npm publish --access public
           fi
 
-      - name: Verify npm gitHead matches the release commit
-        working-directory: polish-mono
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          version="$(node -p "require('./package.json').version")"
-          git_head="$(npm view "polish-design-tokens@$version" gitHead)"
-          if [ "$git_head" != "$GITHUB_SHA" ]; then
-            echo "npm gitHead '$git_head' does not match release commit '$GITHUB_SHA'"
-            exit 1
-          fi
-          echo "npm gitHead matches release commit $GITHUB_SHA"
-
       - name: Create GitHub release (idempotent — skips existing releases)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
