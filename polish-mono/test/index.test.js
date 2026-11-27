@@ -64,3 +64,8 @@ test('extract without ignore scans all files', () => {
   assert.ok(files.some(f => f.includes('skipme')), 'without ignore, should scan skipme files');
   cleanup();
 });
+
+test('index exports seed', async () => {
+  const mod = await import('../src/index.js');
+  assert.equal(typeof mod.seed, 'function');
+});

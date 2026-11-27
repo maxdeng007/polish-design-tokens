@@ -20,6 +20,7 @@
     "./plan": "./src/plan.js",
     "./wizard": "./src/wizard.js",
     "./report": "./src/report.js",
+    "./seed": "./src/seed.js",
     "./mcp": "./src/mcp-server.js",
     "./rollback": "./src/rollback.js"
   },

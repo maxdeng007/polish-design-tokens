@@ -14,8 +14,9 @@ import { apply } from './apply.js';
 import { rollback } from './rollback.js';
 import { runWizard } from './wizard.js';
 import { generateReport } from './report.js';
+import { seed } from './seed.js';
 
-export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, confirm, apply, rollback, measure, runWizard, generateReport };
+export { plan, PRIORITY_ORDER, MECHANICAL_IDS, JUDGMENTAL_IDS, generateDiffs, confirm, apply, rollback, measure, runWizard, generateReport, seed };
 
 /**
  * Extract tokens from a directory.

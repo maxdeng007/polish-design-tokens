@@ -60,6 +60,53 @@ export { rollback } from './rollback.js';
 export { runWizard } from './wizard.js';
 
 /**
+ * A literal cluster detected by scan() + cross().
+ */
+export interface LiteralCluster {
+  value: string;
+  normalized: string;
+  kind: string;
+  count: number;
+  files: Array<{ file: string; lines: number[] }>;
+  suggestedName: string;
+}
+
+/**
+ * Result of seed(): a draft token system generated from literal clusters.
+ */
+export interface SeedResult {
+  /** Directory that was scanned (the raw target argument, as a string). */
+  target: string;
+  /** Resolved output directory the generated files were written to. */
+  output: string;
+  /** Absolute path of the derived tokens.css draft. */
+  tokensCss: string;
+  /** Absolute path of the authoritative tokens.seed.json. */
+  seedFile: string;
+  /** Both generated file paths. */
+  outputFiles: string[];
+  /** Number of tokens (one per literal cluster). */
+  tokenCount: number;
+  /** Number of detected literal clusters. */
+  clusterCount: number;
+  /** Decisions derived from chosenName, ready for polish confirm. */
+  decisions: Array<{ action: 'tokenize'; value: string; to: string }>;
+}
+
+/**
+ * Generate a draft token system (tokens.css + tokens.seed.json) from
+ * detected literal clusters.
+ * @param target - directory path to scan for literal clusters
+ * @param opts - { output?: string (redirect output directory), force?: boolean (overwrite existing files) }
+ * @throws Error with code 'SEED_EXISTS' and `conflicting` (paths) when
+ *   tokens.css/tokens.seed.json already exist and force is false.
+ */
+declare function seed(
+  target: string,
+  opts?: { output?: string; force?: boolean },
+): SeedResult;
+
+/**
  * Extract tokens from a directory (alias for scan).
  */
 declare function extract(target: string, ignore?: string[]): DeclarationGraph;
@@ -83,4 +130,4 @@ declare function runPipeline(
   observation?: RuntimeObservation | null,
 ): PipelineResult;
 
-export { extract, audit, runPipeline };
+export { extract, audit, runPipeline, seed };

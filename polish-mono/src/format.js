@@ -8,6 +8,8 @@
  * colors are automatically disabled.
  */
 
+import path from 'path';
+
 const MECHANICAL_IDS = new Set(['duplicate-value']);
 
 const ANSI = {
@@ -237,6 +239,19 @@ export function formatRollback(result) {
     }
   }
 
+  return lines.join('\n');
+}
+
+/** Format a seed result (output of seed()) as a plain-language summary. */
+export function formatSeed(result) {
+  const lines = [
+    `Seed complete — ${result.clusterCount} cluster(s), ${result.tokenCount} token(s).`,
+    `  ${result.tokensCss}`,
+    `  ${result.seedFile}`,
+    '',
+    `Edit names in ${path.basename(result.seedFile)}, then run:`,
+    `  polish confirm ${path.basename(result.seedFile)} --target=${result.target}`
+  ];
   return lines.join('\n');
 }
 

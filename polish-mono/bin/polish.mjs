@@ -13,6 +13,7 @@ import { generateDiffs } from '../src/diff.js';
 import { confirm as resolveDecisions } from '../src/confirm.js';
 import { apply } from '../src/apply.js';
 import { rollback } from '../src/rollback.js';
+import { seed as runSeed } from '../src/seed.js';
 
 const USAGE = `polish — Design token superpower tool
 
@@ -28,6 +29,7 @@ Usage:
   polish apply  <patches.json> [--target=dir] [--summary]   Execute patches with backup protection
   polish rollback <backups.json> [--target=dir] [--summary]  Restore files from an apply run's backup manifest
   polish confirm <decisions.json> [--target=dir] [--summary]  Apply designer-confirmed judgmental decisions
+  polish seed  <target> [--output=dir] [--force] [--summary]   Generate a draft tokens.css + tokens.seed.json from literal clusters
   polish doctor  [--install] [--summary]              Check dependencies, optionally install missing ones
   polish explain <finding-type>                      Explain what a finding type means
   polish mcp                                          Start MCP server (JSON-RPC over stdin/stdout)
@@ -35,6 +37,7 @@ Usage:
 Flags:
   --summary     Print human-readable summary instead of JSON
   --install     Install missing optional dependencies (doctor only)
+  --force       Overwrite existing files (seed only)
 
 Exit codes:
   0  success
@@ -69,6 +72,7 @@ async function main() {
   let installFlag = false;
   let dryRunFlag = false;
   let outputFlag = null;
+  let forceFlag = false;
   const positional = [];
   for (let i = 1; i < args.length; i++) {
     if (args[i].startsWith('--ignore=')) {
@@ -83,6 +87,8 @@ async function main() {
       installFlag = true;
     } else if (args[i] === '--dry-run') {
       dryRunFlag = true;
+    } else if (args[i] === '--force') {
+      forceFlag = true;
     } else {
       positional.push(args[i]);
     }
@@ -227,6 +233,27 @@ async function main() {
       console.log(JSON.stringify(result, null, 2));
     }
     process.exit(result.failed.length > 0 ? 1 : 0);
+  }
+
+  if (cmd === 'seed') {
+    const target = resolve(positional[0] || '.');
+    let result;
+    try {
+      result = runSeed(target, {
+        output: outputFlag ? resolve(outputFlag) : undefined,
+        force: forceFlag
+      });
+    } catch (e) {
+      console.error(`Error: ${e.message}`);
+      process.exit(1);
+    }
+    if (summaryFlag) {
+      const { formatSeed } = await import('../src/format.js');
+      console.log(formatSeed(result));
+    } else {
+      console.log(JSON.stringify(result, null, 2));
+    }
+    process.exit(0);
   }
 
   if (cmd === 'mcp') {
