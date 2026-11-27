@@ -1,9 +1,22 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 import { fileURLToPath } from 'url';
 import { scan } from '../src/scan.js';
 
 const DEMO = fileURLToPath(new URL('../../examples/walkthrough/demo-project/', import.meta.url));
+
+function makeDir(t, files) {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'polish-scan-'));
+  for (const [name, content] of Object.entries(files)) {
+    fs.mkdirSync(path.dirname(path.join(tmp, name)), { recursive: true });
+    fs.writeFileSync(path.join(tmp, name), content);
+  }
+  t.after(() => fs.rmSync(tmp, { recursive: true, force: true }));
+  return tmp;
+}
 
 test('scan finds declarations and references', () => {
   const graph = scan(DEMO);
@@ -50,4 +63,18 @@ test('scan resolves alias chains', () => {
 test('scan skips node_modules and binary files', () => {
   const graph = scan(DEMO);
   assert.ok(!graph.files.some(f => f.includes('node_modules')), 'should not scan node_modules');
+});
+
+test('scan collects literals into the graph with a summary count', async (t) => {
+  const dir = makeDir(t, {
+    'a.css': 'a{color:#fff}\nb{padding:8px 16px}',
+    'b.css': 'c{color:#fff}'
+  });
+  const graph = scan(dir);
+  assert.equal(graph.literals.length, 4);
+  assert.equal(graph.summary.literals, 4);
+  const fff = graph.literals.filter(l => l.normalized === '#ffffff');
+  assert.equal(fff.length, 2);
+  assert.deepEqual(fff.map(l => l.file).sort(), ['a.css', 'b.css']);
+  assert.equal(graph.literals.find(l => l.value === '8px').kind, 'space');
 });

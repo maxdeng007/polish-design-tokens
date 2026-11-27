@@ -60,6 +60,7 @@ function scan(target, opts) {
 
   const declarations = [];
   const references = [];
+  const literals = [];
   const fileList = [];
 
   for (const file of files) {
@@ -72,6 +73,7 @@ function scan(target, opts) {
     const parsed = parseSource(text, rel);
     declarations.push(...parsed.declarations);
     references.push(...parsed.references);
+    literals.push(...parsed.literals);
   }
 
   // Index by name for alias resolution.
@@ -163,6 +165,7 @@ function scan(target, opts) {
     themes: [...themes],
     declarations,
     references,
+    literals,
     conflicts,
     dangling,
     orphans,
@@ -171,6 +174,7 @@ function scan(target, opts) {
       declarations: declarations.length,
       uniqueTokens: byName.size,
       references: references.length,
+      literals: literals.length,
       conflicts: conflicts.length,
       dangling: dangling.length,
       orphans: orphans.length
