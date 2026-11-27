@@ -224,15 +224,28 @@ async function main() {
     const decisions = data.decisions || data;
     const target = resolve(targetFlag || process.cwd());
     const graph = scan(target);
-    const patches = resolveDecisions(decisions, graph, target);
+    let patches;
+    let unmatched = [];
+    try {
+      const resolved = resolveDecisions(decisions, graph, target);
+      patches = resolved.patches;
+      unmatched = resolved.unmatched;
+    } catch (e) {
+      console.error(`Error: ${e.message}`);
+      process.exit(1);
+    }
+    if (unmatched.length) {
+      console.log(`Unmatched decisions (${unmatched.length}):`);
+      for (const u of unmatched) console.log(`  - ${u.reason}`);
+    }
     const result = await apply(patches, target);
     if (summaryFlag) {
       const { formatApply } = await import('../src/format.js');
       console.log(formatApply(result));
     } else {
-      console.log(JSON.stringify(result, null, 2));
+      console.log(JSON.stringify({ ...result, unmatched }, null, 2));
     }
-    process.exit(result.failed.length > 0 ? 1 : 0);
+    process.exit(result.failed.length > 0 || unmatched.length > 0 ? 1 : 0);
   }
 
   if (cmd === 'seed') {

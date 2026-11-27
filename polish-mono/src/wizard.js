@@ -196,8 +196,12 @@ export async function runWizard(opts = {}) {
         out('');
         out(`Resolving ${decisions.length} decision(s) into patches...`);
         const resolved = resolveDecisions(decisions, graph, target);
-        confirmedPatches.push(...resolved);
-        out(c(ANSI.green, `  ${resolved.length} patch(es) from confirmed decisions`));
+        confirmedPatches.push(...resolved.patches);
+        out(c(ANSI.green, `  ${resolved.patches.length} patch(es) from confirmed decisions`));
+        if (resolved.unmatched.length) {
+          out(c(ANSI.yellow, `  ${resolved.unmatched.length} decision(s) could not be resolved:`));
+          for (const u of resolved.unmatched) out(`    - ${u.reason}`);
+        }
       }
     }
 
