@@ -12,3 +12,4 @@ dist/
 coverage/
 *.backup
 test/.apply-tmp/
+.worktrees/
