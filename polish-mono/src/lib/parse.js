@@ -89,6 +89,42 @@ const CSS_PROPS = new Set([
   'word-wrap', 'writing-mode', 'z-index', 'zoom'
 ]);
 
+/** Whitelisted standard properties carrying literal-value candidates, mapped
+ *  to their literal kind. Data-driven so extending is a one-line change. */
+const LITERAL_PROPS = new Map([
+  ['color', 'color'],
+  ['background', 'color'],
+  ['border-color', 'color'],
+  ['padding', 'space'],
+  ['gap', 'space'],
+  ['font-size', 'font-size'],
+  ['border-radius', 'radius']
+]);
+
+/** CSS named colors, matched as-is (never normalized — spec §6.2). */
+const NAMED_COLORS = new Set(('aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|' +
+  'blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|' +
+  'cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|' +
+  'darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|' +
+  'darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|' +
+  'deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|' +
+  'ghostwhite|gold|goldenrod|gray|green|greenyellow|grey|honeydew|hotpink|indianred|indigo|' +
+  'ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|' +
+  'lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|' +
+  'lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|lime|limegreen|linen|' +
+  'magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|' +
+  'mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|' +
+  'mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|' +
+  'palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|' +
+  'powderblue|purple|rebeccapurple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|' +
+  'seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|slategrey|snow|springgreen|' +
+  'steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen'
+).split('|'));
+
+const HEX_RE = /^#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
+const FUNC_COLOR_RE = /^(?:rgba?|hsla?)\([^)]*\)$/i;
+const DIMENSION_RE = /^-?\d*\.?\d+(?:px|rem|em|ex|ch|vw|vh|vmin|vmax|cm|mm|in|pt|pc|fr)$/i;
+
 function isCssLikeKey(key) {
   if (!key) return false;
   const k = key.toLowerCase();
@@ -377,6 +413,7 @@ function refsIn(value) {
 function parseCss(text, file) {
   const declarations = [];
   const references = [];
+  const literals = [];
   const stack = [];
   let buf = '';
   let bufLine = 1;
@@ -407,7 +444,13 @@ function parseCss(text, file) {
     buf = '';
     if (!raw) return;
     const m = DECL_RE.exec(raw);
-    if (!m) return;
+    if (!m) {
+      const std = /^([a-zA-Z][a-zA-Z0-9-]*)\s*:\s*([\s\S]*)$/.exec(raw);
+      if (std) {
+        literals.push(...extractLiterals(std[1], std[2], { file, line: bufLine }));
+      }
+      return;
+    }
     const name = m[1];
     const value = m[2].replace(/\s*!important\s*$/i, '').trim();
     const ctx = current();
@@ -506,13 +549,14 @@ function parseCss(text, file) {
     });
   }
 
-  return { declarations, references };
+  return { declarations, references, literals };
 }
 
 /** Pull out <style> blocks, inline style attributes and JS style objects. */
 function parseHtml(text, file) {
   const declarations = [];
   const references = [];
+  const literals = [];
 
   const styleRe = /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
   const styleLineAt = lineCounter(text);
@@ -521,6 +565,7 @@ function parseHtml(text, file) {
     const inner = parseCss(m[1], file);
     const shift = styleLineAt(m.index);
     inner.declarations.forEach(d => { d.line += shift; d.origin = 'style-block'; declarations.push(d); });
+    inner.literals.forEach(l => { l.line += shift; l.origin = 'style-block'; literals.push(l); });
     inner.references.forEach(r => { r.line += shift; references.push(r); });
   }
 
@@ -536,6 +581,7 @@ function parseHtml(text, file) {
       d.origin = 'inline-attribute';
       declarations.push(d);
     });
+    inner.literals.forEach(l => { l.line += shift; l.origin = 'inline-attribute'; literals.push(l); });
     inner.references.forEach(r => { r.line += shift; references.push(r); });
   }
 
@@ -584,7 +630,7 @@ function parseHtml(text, file) {
     }
   }
 
-  return { declarations, references };
+  return { declarations, references, literals };
 }
 
 /** Parse a JS/TS file for inline style objects. */
@@ -592,6 +638,7 @@ function parseJs(text, file, opts) {
   const jsx = !!(opts && opts.jsx);
   const declarations = [];
   const references = [];
+  const literals = [];
   // Declaration regexes need string literals intact (the values ARE strings),
   // so only comments are masked for them.
   const codeText = maskLexicalJs(text, false, jsx);
@@ -632,6 +679,19 @@ function parseJs(text, file, opts) {
       origin: 'js-setproperty'
     });
   }
+  // CSS-context literals (style-object keys and setProperty args), found on the
+  // same comments-only masked text: comments are gone, strings stay intact so
+  // quoted values are visible.
+  const litLineAt = lineCounter(text);
+  const litRe = /(?:^|[,{;\s])(color|background|border-color|padding|gap|font-size|border-radius)\s*:\s*(["'])([^"']*)\2/gi;
+  while ((m = litRe.exec(codeText))) {
+    literals.push(...extractLiterals(m[1], m[3], { file, line: litLineAt(m.index) + 1 }));
+  }
+  const litSpLineAt = lineCounter(text);
+  const litSpRe = /setProperty\(\s*(["'])(color|background|border-color|padding|gap|font-size|border-radius)\1\s*,\s*(["'])([^"']*)\3/gi;
+  while ((m = litSpRe.exec(codeText))) {
+    literals.push(...extractLiterals(m[2], m[4], { file, line: litSpLineAt(m.index) + 1 }));
+  }
   // Whole-file reference scan on a lexically masked copy: comments are gone,
   // and strings/templates survive only when they sit in a CSS context.
   const refText = maskLexicalJs(text, true, jsx);
@@ -640,19 +700,21 @@ function parseJs(text, file, opts) {
   while ((m = re.exec(refText))) {
     references.push({ name: m[1], file, line: refLineAt(m.index) + 1 });
   }
-  return { declarations, references };
+  return { declarations, references, literals };
 }
 
 /** Parse a Vue/Svelte single-file component: dispatch template, script, style. */
 function parseSfc(text, file) {
   const declarations = [];
   const references = [];
+  const literals = [];
   const lineAt = lineCounter(text);
   const blank = (s) => s.replace(/[^\n]/g, ' ');
   const blockShift = (match) =>
     lineAt(match.index) + countNewlines(match[0].slice(0, match[0].indexOf('>') + 1));
   const pushShifted = (parsed, shift) => {
     parsed.declarations.forEach(d => { d.line += shift; declarations.push(d); });
+    parsed.literals.forEach(l => { l.line += shift; literals.push(l); });
     parsed.references.forEach(r => { r.line += shift; references.push(r); });
   };
 
@@ -680,7 +742,7 @@ function parseSfc(text, file) {
     pushShifted(parseCss(m[1], file), blockShift(m));
   }
 
-  return { declarations, references };
+  return { declarations, references, literals };
 }
 
 function parseSource(text, file) {
@@ -848,6 +910,37 @@ function normalizeValue(value) {
   // 0.55 and .55 are the same number.
   lower = lower.replace(/,0\./g, ',.');
   return lower;
+}
+
+/**
+ * Extract literal occurrences from one declaration value. The value is split
+ * on whitespace; EVERY component must fully match a scalar pattern. If any
+ * component fails (url(), calc(), unitless numbers, keywords), the whole
+ * value is skipped — no partial collection. Values containing var() are
+ * skipped: they are references, not literals.
+ */
+function extractLiterals(prop, value, ctx) {
+  const kind = LITERAL_PROPS.get(String(prop || '').toLowerCase());
+  if (!kind) return [];
+  const raw = String(value || '').replace(/\s*!important\s*$/i, '').trim();
+  if (!raw || /\bvar\s*\(/i.test(raw)) return [];
+  const out = [];
+  for (const component of raw.split(/\s+/)) {
+    if (HEX_RE.test(component) || FUNC_COLOR_RE.test(component) ||
+        NAMED_COLORS.has(component.toLowerCase()) || DIMENSION_RE.test(component)) {
+      out.push({
+        value: component,
+        normalized: normalizeValue(component),
+        kind,
+        property: prop,
+        file: ctx.file,
+        line: ctx.line
+      });
+    } else {
+      return [];
+    }
+  }
+  return out;
 }
 
 /** Is this an integer used as a per-element index? */
