@@ -17,6 +17,7 @@ import { polish_apply } from './handlers/polish-apply.js';
 import { polish_rollback } from './handlers/polish-rollback.js';
 import { polish_doctor } from './handlers/polish-doctor.js';
 import { polish_style_lookup } from './handlers/polish-style-lookup.js';
+import { polish_seed } from './handlers/polish-seed.js';
 import { measure } from './measure.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -33,6 +34,7 @@ tools['polish_apply'] = async (args) => { return await polish_apply(args, {}); }
 tools['polish_rollback'] = async (args) => { return await polish_rollback(args, {}); };
 tools['polish_doctor'] = async (args) => { return await polish_doctor(args, {}); };
 tools['polish_style_lookup'] = async (args) => { return await polish_style_lookup(args, {}); };
+tools['polish_seed'] = async (args) => { return await polish_seed(args, {}); };
 tools['polish_measure'] = async (args) => {
   const docs = args.documents || [];
   return measure(docs);
@@ -372,6 +374,32 @@ const toolDefinitions = [
       },
       required: ['found', 'available', 'source']
     }
+  },
+  {
+    name: 'polish_seed',
+    description: 'Generate a draft tokens.css and tokens.seed.json from repeated literal values (literal clusters) in a directory. Edit names in tokens.seed.json, then run polish confirm to replace literals with var() references. Refuses to overwrite existing tokens.css or tokens.seed.json unless force is true.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        target: { type: 'string', description: 'Directory path to scan for literal clusters' },
+        output: { type: 'string', description: 'Directory to write tokens.css and tokens.seed.json (defaults to the target directory)' },
+        force: { type: 'boolean', description: 'Overwrite existing tokens.css / tokens.seed.json' }
+      },
+      required: ['target']
+    },
+    outputSchema: {
+      type: 'object',
+      properties: {
+        target: { type: 'string' },
+        output: { type: 'string' },
+        tokensCss: { type: 'string' },
+        seedFile: { type: 'string' },
+        outputFiles: { type: 'array', items: { type: 'string' } },
+        tokenCount: { type: 'number' },
+        clusterCount: { type: 'number' }
+      },
+      required: ['tokensCss', 'seedFile', 'outputFiles', 'tokenCount', 'clusterCount']
+    }
   }
 ];
 
@@ -413,10 +441,12 @@ async function handleMessage(msg) {
     }
     try {
       const result = await handler(args);
-      sendResult(id, {
+      const envelope = {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
         structuredContent: result
-      });
+      };
+      if (result && result.isError) envelope.isError = true;
+      sendResult(id, envelope);
     } catch (err) {
       sendError(id, -32603, err.message || String(err));
     }

@@ -330,7 +330,7 @@ test('MCP tools/list advertises an outputSchema for every tool', () => {
     { jsonrpc: '2.0', id: 2, method: 'tools/list' }
   ]);
   const tools = responses.get(2).result.tools;
-  assert.equal(tools.length, 9, `expected 9 tools, got ${tools.length}`);
+  assert.equal(tools.length, 10, `expected 10 tools, got ${tools.length}`);
   for (const t of tools) {
     assert.ok(t.outputSchema, `${t.name} should carry an outputSchema`);
     assert.equal(t.outputSchema.type, 'object', `${t.name} outputSchema should be an object`);
@@ -384,5 +384,52 @@ test('MCP polish_apply outputSchema documents the transactional status field', (
     ['aborted', 'applied', 'rolledBack']);
   assert.ok(applyTool.outputSchema.required.includes('status'), 'status is required in the apply output');
   assert.ok(applyTool.outputSchema.required.includes('backups'), 'backups is required in the apply output');
+});
+
+test('MCP polish_seed generates tokens.css and tokens.seed.json', () => {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  fs.writeFileSync(
+    path.join(TMP_DIR, 'a.css'),
+    'a { color: #fff; }\nb { color: #fff; }\nc { padding: 8px; }\nd { padding: 8px; }\n',
+    'utf8'
+  );
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'polish_seed', arguments: { target: TMP_DIR } } }
+  ]);
+  const call = responses.get(2);
+  assert.equal(call.result.isError, undefined);
+  const result = JSON.parse(call.result.content[0].text);
+  assert.equal(result.tokenCount, 2);
+  assert.equal(result.clusterCount, 2);
+  assert.equal(result.outputFiles.length, 2);
+  assert.ok(fs.existsSync(result.seedFile));
+  const seedJson = JSON.parse(fs.readFileSync(result.seedFile, 'utf8'));
+  assert.equal(seedJson.decisions.length, 2);
+  assert.ok(call.result.structuredContent, 'should carry structuredContent');
+  cleanup();
+});
+
+test('MCP polish_seed rejects a missing target', () => {
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'polish_seed', arguments: {} } }
+  ]);
+  const call = responses.get(2);
+  assert.equal(call.result.isError, true, 'missing target should be an error');
+  assert.match(call.result.content[0].text, /target is required/);
+});
+
+test('MCP polish_seed refuses existing files without force', () => {
+  const dir = makeProject(':root {\n  --x: #fff;\n}\n');
+  fs.writeFileSync(path.join(dir, 'a.css'), 'a { color: #fff; }\nb { color: #fff; }\n', 'utf8');
+  const responses = rpc([
+    { jsonrpc: '2.0', id: 1, method: 'initialize', params: {} },
+    { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'polish_seed', arguments: { target: dir } } }
+  ]);
+  const call = responses.get(2);
+  assert.equal(call.result.isError, true);
+  assert.match(call.result.content[0].text, /Refusing to overwrite/);
+  cleanup();
 });
 
