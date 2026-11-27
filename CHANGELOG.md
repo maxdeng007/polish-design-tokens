@@ -8,6 +8,20 @@ new capabilities bump the minor version, fixes and polish bump the patch version
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-11-27
+
+### Added
+
+- `literal-cluster` finding (info / judgmental / priority 13): repeated literal values (colors, spacing, radii, font sizes) are detected across CSS, HTML inline styles, and JS/JSX CSS-context style values.
+- `polish seed` command and `polish_seed` MCP tool (10th tool): generate a draft `tokens.css` and an authoritative `tokens.seed.json` (naming map + `tokenize` decisions) from literal clusters; refuses to overwrite existing files without `--force`.
+- `tokenize` decisions in `polish confirm`: literals are replaced with `var()` references, merged into one patch per file+line, flowing through the existing backup/rollback apply path.
+- Node API `seed(target, opts)` exported from the package root.
+
+### Changed
+
+- `confirm()` now returns `{ patches, unmatched }` instead of a bare patch array; decisions that cannot be fulfilled are reported, never silently skipped. `polish confirm` exits 1 when any decision is unmatched.
+- 0-token warning note now points at `:root` declarations and `polish seed`.
+
 ## [1.9.2] - 2026-11-26
 
 ### Fixed

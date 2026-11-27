@@ -24,7 +24,7 @@ Design tokens — CSS custom properties like `--color-primary` — are powerful 
 2. **Critique** — cross-reference declarations and references to find problems
 3. **Apply** — generate and execute patches for mechanical fixes, with backups
 
-**Important scope note:** of the 12 finding types polish detects, only `duplicate-value` is auto-fixed. The remaining 11 are flagged for human or agent review — polish tells you what's wrong, but the decision on how to fix it is yours.
+**Important scope note:** of the 13 finding types polish detects, only `duplicate-value` is auto-fixed. The remaining 12 are flagged for human or agent review — polish tells you what's wrong, but the decision on how to fix it is yours.
 
 ## Why Not Stylelint or ESLint?
 
@@ -219,6 +219,7 @@ polish diff  <plan.json> [--summary]       # Generate mechanical patches from a 
 polish apply <patches.json> [--target=dir] [--summary]    # Apply patches (creates .backup files)
 polish rollback <backups.json> [--target=dir] [--summary]  # Restore files from an apply run backup manifest
 polish confirm <decisions.json> [--target=dir] [--summary]  # Apply designer-confirmed judgmental decisions
+polish seed  <target> [--output=dir] [--force] [--summary]   # Generate a draft tokens.css + tokens.seed.json from literal clusters
 polish doctor [--install] [--summary]      # Check optional deps; --install auto-installs missing ones
 polish explain <finding-type>              # Explain what a finding type means and how to fix it
 polish mcp                       # Start MCP server (JSON-RPC over stdin/stdout)
@@ -331,7 +332,7 @@ Without `--summary`, all commands output raw JSON for piping and programmatic us
 
 ## MCP Server
 
-polish exposes 9 tools via the Model Context Protocol, so any AI coding agent (Qoder, Claude, etc.) can drive the full pipeline.
+polish exposes 10 tools via the Model Context Protocol, so any AI coding agent (Qoder, Claude, etc.) can drive the full pipeline.
 
 Add to your MCP config (`mcp.json`, `.mcp.json`, or your agent's config):
 
@@ -372,6 +373,7 @@ Available tools:
 | `polish_rollback` | Restore files from an apply run's backup manifest |
 | `polish_doctor` | Check optional dependencies and environment health |
 | `polish_style_lookup` | Query brand DESIGN.md design token data |
+| `polish_seed` | Generate a draft tokens.css + tokens.seed.json from repeated literal values |
 
 ## Node.js API
 
@@ -407,6 +409,7 @@ const result = await apply(patches, './my-project');
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | Generate mechanical patches from a plan |
 | `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | Apply patches with backup protection (target defaults to cwd) |
 | `confirm` | `(decisions: Decision[], graph: DeclarationGraph) → Patch[]` | Resolve designer-confirmed decisions into patches |
+| `seed` | `(target: string, opts?: { output?: string, force?: boolean }) → SeedResult` | Generate a draft token system (tokens.css + tokens.seed.json) from literal clusters |
 | `generateReport` | `(report: AuditReport) → string` | Generate a self-contained interactive HTML report |
 | `runWizard` | `(opts?: WizardOptions) → Promise<WizardResult>` | Interactive guided pipeline with confirmation prompts |
 
@@ -428,7 +431,7 @@ Files inside `node_modules`, `dist`, `build`, `.git`, `.next`, `.cache`, and oth
 
 ### MCP Integration Details
 
-All 9 MCP tools accept and return JSON. Key parameters:
+All 10 MCP tools accept and return JSON. Key parameters:
 
 - **`polish_extract`** — `{ target: string, ignore?: string[] }` → `DeclarationGraph`
 - **`polish_audit`** — `{ target: string, ignore?: string[], observation?: object }` → `{ findings, summary, graphSummary, observation }`
@@ -439,6 +442,7 @@ All 9 MCP tools accept and return JSON. Key parameters:
 - **`polish_rollback`** — `{ backups: { file, backup }[], target: string }` → `RollbackResult`
 - **`polish_doctor`** — `{}` → dependency health check
 - **`polish_style_lookup`** — `{ brand?: string }` → brand design token reference
+- **`polish_seed`** — `{ target: string, output?: string, force?: boolean }` → `{ tokensCss, seedFile, outputFiles, tokenCount, clusterCount }`
 
 The `polish_style_lookup` tool falls back to bundled brand data (Vercel, Stripe, Linear, Notion, Anthropic, GitHub, shadcn, Figma) when no external skill files are found, making it work on any machine without additional setup.
 
@@ -468,6 +472,17 @@ For most use cases — auditing a project's source, fixing mechanical issues, an
 - **`state-variation`** — Token values differ across component states (e.g., `:hover`, `:focus`). Requires deciding whether to split into separate tokens or accept the variation.
 - **`theme-variation`** — Token values differ across themes (e.g., dark/light). Requires deciding whether to formalize the theme structure.
 - **`dynamic-variable`** — Tokens with dynamic (non-static) values, such as those computed at runtime. Requires deciding how to handle the dynamic behavior.
+- **`literal-cluster`** (info / judgmental / priority 13) — The same literal value is used repeatedly across the project — a token candidate.
+
+### Bridge from no tokens
+
+Projects with no existing token system can still adopt polish. `literal-cluster` findings surface repeated literal values (colors, spacing, radii, font sizes) as token candidates. The flow:
+
+1. Run `polish seed <target>` to generate a draft `tokens.css` and an authoritative `tokens.seed.json` (naming map + `tokenize` decisions).
+2. Edit the token names in `tokens.seed.json` to match your conventions.
+3. Run `polish confirm tokens.seed.json --target=<target>` to replace the literals with `var()` references.
+
+Backups and rollback apply as usual — every `confirm` run is backed up before it writes, and a failed run is rolled back.
 
 ## Troubleshooting
 

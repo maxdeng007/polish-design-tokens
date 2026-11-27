@@ -2,7 +2,7 @@
 
 # MCP 集成指南
 
-polish 通过 Model Context Protocol 暴露 9 个工具（stdin/stdout 上的 JSON-RPC 2.0）。任何支持 MCP 的 AI 编程代理都能驱动完整的审计 → 修复流水线。
+polish 通过 Model Context Protocol 暴露 10 个工具（stdin/stdout 上的 JSON-RPC 2.0）。任何支持 MCP 的 AI 编程代理都能驱动完整的审计 → 修复流水线。
 
 ## 设置
 
@@ -197,6 +197,25 @@ polish 通过 Model Context Protocol 暴露 9 个工具（stdin/stdout 上的 JS
 **内置品牌：** vercel、stripe、linear、notion、anthropic、github、shadcn、figma。
 
 **使用时机：** 需要特定品牌的设计令牌参考以指导令牌命名或值时。无需安装任何外部 skill——自动回退到内置数据。
+
+---
+
+### `polish_seed`
+
+从目录中重复出现的字面值（字面簇）生成草稿 `tokens.css` 与权威的 `tokens.seed.json`。
+
+**输入：**
+```json
+{ "target": "./src/styles", "output": "./src/styles", "force": false }
+```
+
+`target` 为必填。`output` 默认为目标目录；`force` 用于覆盖已存在的 `tokens.css` / `tokens.seed.json`。
+
+**输出：** `{ target, output, tokensCss, seedFile, outputFiles, tokenCount, clusterCount }`——`tokensCss` 与 `seedFile` 为写入文件的绝对路径；`outputFiles` 列出两个文件；`tokenCount` 为生成的令牌数，`clusterCount` 为检测到的字面簇数。
+
+**安全：** 除非 `force` 为 `true`，否则拒绝覆盖已存在的 `tokens.css` 或 `tokens.seed.json`。
+
+**使用时机：** 项目尚无令牌系统、想将重复字面值转化为令牌时。编辑 `tokens.seed.json` 中的名称，再将其交给 `polish confirm`，即可把字面值替换为 `var()` 引用。
 
 ## 契约
 

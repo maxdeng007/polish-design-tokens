@@ -2,7 +2,7 @@
 
 # MCP Integration Guide
 
-polish exposes 9 tools via the Model Context Protocol (JSON-RPC 2.0 over stdin/stdout). Any AI coding agent that supports MCP can drive the full audit → fix pipeline.
+polish exposes 10 tools via the Model Context Protocol (JSON-RPC 2.0 over stdin/stdout). Any AI coding agent that supports MCP can drive the full audit → fix pipeline.
 
 ## Setup
 
@@ -197,6 +197,25 @@ Find design tokens by brand name or pattern.
 **Bundled brands:** vercel, stripe, linear, notion, anthropic, github, shadcn, figma.
 
 **Use when:** You need design token references for a specific brand to guide your token naming or values. Works without any external skill installed — falls back to bundled data automatically.
+
+---
+
+### `polish_seed`
+
+Generate a draft `tokens.css` and an authoritative `tokens.seed.json` from repeated literal values (literal clusters) in a directory.
+
+**Input:**
+```json
+{ "target": "./src/styles", "output": "./src/styles", "force": false }
+```
+
+`target` is required. `output` defaults to the target directory; `force` overwrites existing `tokens.css` / `tokens.seed.json`.
+
+**Output:** `{ target, output, tokensCss, seedFile, outputFiles, tokenCount, clusterCount }` — `tokensCss` and `seedFile` are the absolute paths written; `outputFiles` lists both files; `tokenCount` is the number of tokens generated and `clusterCount` the number of literal clusters detected.
+
+**Safety:** Refuses to overwrite an existing `tokens.css` or `tokens.seed.json` unless `force` is `true`.
+
+**Use when:** A project has no token system yet and you want to turn repeated literals into tokens. Edit the names in `tokens.seed.json`, then feed it to `polish confirm` to replace the literals with `var()` references.
 
 ## Contract
 

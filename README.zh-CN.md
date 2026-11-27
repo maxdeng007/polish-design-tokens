@@ -24,7 +24,7 @@
 2. **审查** — 交叉比对声明与引用，发现问题
 3. **应用** — 为机械性修复生成并执行补丁，附带备份
 
-**范围说明：** polish 检测的 12 类发现中，仅 `duplicate-value` 会被自动修复。其余 11 类会被标记，交由人工或 AI 代理审查——polish 告诉你哪里有问题，但如何修复的决定权在你。
+**范围说明：** polish 检测的 13 类发现中，仅 `duplicate-value` 会被自动修复。其余 12 类会被标记，交由人工或 AI 代理审查——polish 告诉你哪里有问题，但如何修复的决定权在你。
 
 ## 为什么不用 Stylelint 或 ESLint？
 
@@ -219,6 +219,7 @@ polish diff  <plan.json> [--summary]       # 从计划生成机械性补丁
 polish apply <patches.json> [--target=dir] [--summary]    # 应用补丁（创建 .backup 文件）
 polish rollback <backups.json> [--target=dir] [--summary]  # 从 apply 运行的备份清单恢复文件
 polish confirm <decisions.json> [--target=dir] [--summary]  # 应用设计师确认的判断性决策
+polish seed  <target> [--output=dir] [--force] [--summary]   # 从字面簇生成草稿 tokens.css + tokens.seed.json
 polish doctor [--install] [--summary]      # 检查可选依赖；--install 自动安装缺失项
 polish explain <finding-type>              # 解释某类发现的含义与修复方法
 polish mcp                     # 启动 MCP 服务器（stdin/stdout 上的 JSON-RPC）
@@ -331,7 +332,7 @@ polish
 
 ## MCP 服务器
 
-polish 通过 Model Context Protocol 暴露 9 个工具，因此任何 AI 编程代理（Qoder、Claude 等）都能驱动完整流水线。
+polish 通过 Model Context Protocol 暴露 10 个工具，因此任何 AI 编程代理（Qoder、Claude 等）都能驱动完整流水线。
 
 添加到你的 MCP 配置（`mcp.json`、`.mcp.json` 或你的代理配置）：
 
@@ -372,6 +373,7 @@ polish 通过 Model Context Protocol 暴露 9 个工具，因此任何 AI 编程
 | `polish_rollback` | 从 apply 运行的备份清单恢复文件 |
 | `polish_doctor` | 检查可选依赖和环境健康状态 |
 | `polish_style_lookup` | 查询品牌 DESIGN.md 设计令牌数据 |
+| `polish_seed` | 从重复字面值生成草稿 tokens.css + tokens.seed.json |
 
 ## Node.js API
 
@@ -407,6 +409,7 @@ const result = await apply(patches, './my-project');
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | 从计划生成机械性补丁 |
 | `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | 带备份保护应用补丁（target 默认为 cwd） |
 | `confirm` | `(decisions: Decision[], graph: DeclarationGraph) → Patch[]` | 将设计师确认的决策解析为补丁 |
+| `seed` | `(target: string, opts?: { output?: string, force?: boolean }) → SeedResult` | 从字面簇生成草稿令牌系统（tokens.css + tokens.seed.json） |
 | `generateReport` | `(report: AuditReport) → string` | 生成自包含的交互式 HTML 报告 |
 | `runWizard` | `(opts?: WizardOptions) → Promise<WizardResult>` | 交互式引导流水线，带确认提示 |
 
@@ -428,7 +431,7 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 
 ### MCP 集成详情
 
-所有 9 个 MCP 工具均接受和返回 JSON。关键参数：
+所有 10 个 MCP 工具均接受和返回 JSON。关键参数：
 
 - **`polish_extract`** — `{ target: string, ignore?: string[] }` → `DeclarationGraph`
 - **`polish_audit`** — `{ target: string, ignore?: string[], observation?: object }` → `{ findings, summary, graphSummary, observation }`
@@ -439,6 +442,7 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 - **`polish_rollback`** — `{ backups: { file, backup }[], target: string }` → `RollbackResult`
 - **`polish_doctor`** — `{}` → 依赖健康检查
 - **`polish_style_lookup`** — `{ brand?: string }` → 品牌设计令牌参考
+- **`polish_seed`** — `{ target: string, output?: string, force?: boolean }` → `{ tokensCss, seedFile, outputFiles, tokenCount, clusterCount }`
 
 当未找到外部 skill 文件时，`polish_style_lookup` 工具回退到内置品牌数据（Vercel、Stripe、Linear、Notion、Anthropic、GitHub、shadcn、Figma），使其在任何机器上无需额外设置即可工作。
 
@@ -468,6 +472,17 @@ polish 扫描以下文件类型。每种类型均解析 CSS 自定义属性声�
 - **`state-variation`** — 令牌值在不同组件状态间变化（如 `:hover`、`:focus`）。需要决定是否拆分为独立令牌还是接受变化。
 - **`theme-variation`** — 令牌值在不同主题间变化（如深色/浅色）。需要决定是否规范化主题结构。
 - **`dynamic-variable`** — 具有动态（非静态）值的令牌，如运行时计算的值。需要决定如何处理动态行为。
+- **`literal-cluster`**（信息 / 判断性 / 优先级 13）— 同一个字面值在项目中被反复使用——一个令牌候选。
+
+### 从无令牌到令牌的桥梁
+
+尚无令牌系统的项目同样可以采用 polish。`literal-cluster` 发现会将项目中重复出现的字面值（颜色、间距、圆角、字号）作为令牌候选呈现出来。流程如下：
+
+1. 运行 `polish seed <target>`，生成草稿 `tokens.css` 与权威的 `tokens.seed.json`（命名映射 + `tokenize` 决策）。
+2. 在 `tokens.seed.json` 中编辑令牌名称，使其符合你的命名规范。
+3. 运行 `polish confirm tokens.seed.json --target=<target>`，将字面值替换为 `var()` 引用。
+
+备份与回滚照常生效——每次 `confirm` 运行在写入前都会备份，运行失败时会自动回滚。
 
 ## 故障排查
 
