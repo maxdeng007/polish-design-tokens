@@ -248,3 +248,35 @@ test('confirm reports a tokenize decision as unmatched when tokens.css is missin
   assert.match(unmatched[0].reason, /tokens\.css not found/);
   cleanup();
 });
+
+test('tokenize patches apply end-to-end with backups', async () => {
+  const dir = makeProject(':root {\n  --color-1: #fff;\n}\n', {
+    'a.css': 'a { color: #fff; }\nb { color: #fff; }\n'
+  });
+  const graph = scan(dir);
+  const { patches } = confirm([{ action: 'tokenize', value: '#fff', to: '--color-1' }], graph, dir);
+  const result = await apply(patches, dir);
+  assert.equal(result.status, 'applied');
+  assert.equal(result.backupCount, 1);
+  const css = fs.readFileSync(path.join(dir, 'a.css'), 'utf8');
+  assert.match(css, /var\(--color-1\)/);
+  assert.ok(fs.existsSync(path.join(dir, 'tokens.css.backup')), 'tokens.css should be backed up');
+  cleanup();
+});
+
+test('tokenize patches roll back when a later file fails', async () => {
+  const dir = makeProject(':root {\n  --color-1: #fff;\n}\n', {
+    'a.css': 'a { color: #fff; }\n',
+    'b.css': 'b { color: #fff; }\n'
+  });
+  const graph = scan(dir);
+  const { patches } = confirm([{ action: 'tokenize', value: '#fff', to: '--color-1' }], graph, dir);
+  // Corrupt the second file after patch generation so the merged replace on
+  // it fails pre-validation — the whole run must abort before any write.
+  fs.writeFileSync(path.join(dir, 'b.css'), 'b { color: #000; }\n', 'utf8');
+  const result = await apply(patches, dir);
+  assert.equal(result.status, 'aborted');
+  const css = fs.readFileSync(path.join(dir, 'a.css'), 'utf8');
+  assert.match(css, /color: #fff;/, 'aborted run must not touch a.css');
+  cleanup();
+});
