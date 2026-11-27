@@ -93,6 +93,17 @@ export interface Orphan {
   scopes: string[];
 }
 
+/** A single literal value occurrence found during scan (spec §4.2). */
+export interface LiteralOccurrence {
+  value: string;
+  normalized: string;
+  kind: 'color' | 'space' | 'font-size' | 'radius';
+  property: string;
+  file: string;
+  line: number;
+  origin?: DeclarationOrigin;
+}
+
 /** Counts from the scan phase. */
 export interface ScanSummary {
   files: number;
@@ -102,6 +113,7 @@ export interface ScanSummary {
   conflicts: number;
   dangling: number;
   orphans: number;
+  literals: number;
 }
 
 /** The complete output of scan(). */
@@ -113,6 +125,7 @@ export interface DeclarationGraph {
   themes: string[];
   declarations: Declaration[];
   references: Reference[];
+  literals: LiteralOccurrence[];
   conflicts: Conflict[];
   dangling: DanglingRef[];
   orphans: Orphan[];
@@ -132,7 +145,8 @@ export type FindingId =
   | 'state-variation'
   | 'theme-variation'
   | 'dynamic-variable'
-  | 'tailwind-utility-var';
+  | 'tailwind-utility-var'
+  | 'literal-cluster';
 
 /** Severity level of a finding. */
 export type Severity = 'error' | 'warn' | 'info';
@@ -172,6 +186,9 @@ export interface FindingEvidence {
   values?: string[];
   family?: string;
   tokens?: string[];
+  normalized?: string;
+  files?: Array<{ file: string; lines: number[] }>;
+  suggestedName?: string;
 }
 
 /** A single audit finding. */
@@ -236,10 +253,18 @@ export interface Patch {
 
 /** A designer-confirmed judgmental decision for polish confirm(). */
 export interface Decision {
-  action: 'delete' | 'alias' | 'rename';
+  action: 'delete' | 'alias' | 'rename' | 'tokenize';
   token?: string;
   from?: string;
   to?: string;
+  value?: string;
+}
+
+/** Result of resolving decisions: patches plus decisions that could not be
+ *  fulfilled (never silently skipped). */
+export interface ConfirmResult {
+  patches: Patch[];
+  unmatched: Array<{ decision: Decision; reason: string }>;
 }
 
 /** Result of applying patches. */
