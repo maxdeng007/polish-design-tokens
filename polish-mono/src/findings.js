@@ -132,6 +132,16 @@ const FINDING_META = {
     summary: 'A token is a Tailwind v4 per-utility variable (--text-*, --spacing-*, …).',
     why: 'Tailwind v4 emits per-utility custom properties (e.g. --text-sm, --spacing-4) that shadow the token system at runtime. They look like design tokens to static analysis but are framework-generated, so treating them as design tokens leads to false positives.',
     fix: 'Exclude these from the design token system (they belong to Tailwind). If you reference them directly, alias to your own tokens so theme changes still propagate.'
+  },
+  'literal-cluster': {
+    id: 'literal-cluster',
+    severity: 'info',
+    priority: 13,
+    classification: 'judgmental',
+    title: 'Literal Cluster',
+    summary: 'The same literal value is used repeatedly across the project — a token candidate.',
+    why: 'Repeated literal values act as de-facto tokens: they will drift independently and cannot be updated by changing one definition. Collecting them into the token system makes the pattern explicit and maintainable.',
+    fix: 'Run `polish seed` to generate a draft tokens.css, edit the names in tokens.seed.json, then run `polish confirm` to replace the literals with var() references.'
   }
 };
 

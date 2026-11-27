@@ -37,9 +37,9 @@ test('explainFinding returns null for empty input', () => {
 
 // --- listFindingTypes ---
 
-test('listFindingTypes returns all 12 finding types', () => {
+test('listFindingTypes returns all 13 finding types', () => {
   const types = listFindingTypes();
-  assert.equal(types.length, 12);
+  assert.equal(types.length, 13);
   assert.ok(types.includes('conflict'));
   assert.ok(types.includes('dangling'));
   assert.ok(types.includes('hardcoded'));

@@ -23,9 +23,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const VALID_SEVERITIES = new Set(['error', 'warn', 'info']);
 const VALID_CLASSIFICATIONS = new Set(['mechanical', 'judgmental']);
 
-test('registry covers all 12 finding ids with complete metadata', () => {
+test('registry covers all 13 finding ids with complete metadata', () => {
   const ids = listFindingIds();
-  assert.equal(ids.length, 12);
+  assert.equal(ids.length, 13);
   for (const id of ids) {
     const meta = FINDING_META[id];
     assert.ok(meta, `${id} should have registry entry`);
@@ -105,4 +105,20 @@ test('registry severities match what cross() actually produces', () => {
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('literal-cluster is info/judgmental at priority 13', () => {
+  assert.equal(severityOf('literal-cluster'), 'info');
+  assert.equal(priorityOf('literal-cluster'), 13);
+  assert.equal(classificationOf('literal-cluster'), 'judgmental');
+  assert.equal(isJudgmental('literal-cluster'), true);
+  assert.equal(isMechanical('literal-cluster'), false);
+});
+
+test('literal-cluster sorts last and does not shift existing priorities', () => {
+  const last = PRIORITY_ORDER[PRIORITY_ORDER.length - 1];
+  assert.deepEqual(last, ['literal-cluster', 13]);
+  const byId = new Map(PRIORITY_ORDER);
+  assert.equal(byId.get('conflict'), 1);
+  assert.equal(byId.get('tailwind-utility-var'), 12);
 });
