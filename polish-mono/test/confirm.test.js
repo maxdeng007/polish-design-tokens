@@ -214,6 +214,21 @@ test('confirm refuses the whole run on ambiguous tokenize decisions', () => {
   cleanup();
 });
 
+test('confirm refuses the whole run when two values map to the same token', () => {
+  const dir = makeProject(':root {\n  --a: #fff;\n}\n', {
+    'a.css': 'a { color: #fff; }\nb { color: #000; }\n'
+  });
+  const graph = scan(dir);
+  assert.throws(
+    () => confirm([
+      { action: 'tokenize', value: '#fff', to: '--x' },
+      { action: 'tokenize', value: '#000', to: '--x' }
+    ], graph, dir),
+    /Ambiguous/
+  );
+  cleanup();
+});
+
 test('confirm reports a tokenize decision whose value is gone as unmatched', () => {
   const dir = makeProject(':root {\n  --color-1: #fff;\n}\n', {
     'a.css': 'a { color: #000; }\n'

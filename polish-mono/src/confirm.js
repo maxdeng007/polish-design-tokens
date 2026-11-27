@@ -21,8 +21,9 @@
  * are merged into ONE replace patch per line, so apply() never sees two
  * patches whose `before` is identical. One `add` patch is appended per
  * undeclared `to` target in tokens.css. Two decisions mapping the same
- * normalized value to different token names are ambiguous and refuse the
- * whole run.
+ * normalized value to different token names, or two decisions with
+ * different values mapping to the same token name, are ambiguous and
+ * refuse the whole run.
  */
 
 import fsSync from 'fs';
@@ -85,8 +86,13 @@ export function confirm(decisions, graph, target = process.cwd()) {
   const declared = new Set(decls.map(d => d.name));
 
   // Ambiguity pre-check (spec §4.5.3): two decisions mapping the same
-  // normalized value to different names refuse the entire run.
+  // normalized value to different names refuse the entire run. The reverse
+  // — two decisions with different values mapping to the same name — is
+  // equally ambiguous: the declaration can only hold one value, so the
+  // other literal's var() references would silently resolve to the wrong
+  // value. Refuse the whole run in that case too.
   const tokenTargetByValue = new Map();
+  const valueByTokenTarget = new Map();
   for (const d of decisions) {
     if (d.action !== 'tokenize') continue;
     if (typeof d.to !== 'string' || !d.to.startsWith('--')) {
@@ -101,6 +107,13 @@ export function confirm(decisions, graph, target = process.cwd()) {
       );
     }
     tokenTargetByValue.set(key, d.to);
+    if (valueByTokenTarget.has(d.to) && valueByTokenTarget.get(d.to) !== key) {
+      throw new Error(
+        `Ambiguous tokenize decisions: token ${d.to} maps to both ` +
+        `${valueByTokenTarget.get(d.to)} and ${key} — refusing the run`
+      );
+    }
+    valueByTokenTarget.set(d.to, key);
   }
   const needsAdd = new Set(
     [...tokenTargetByValue.values()].filter(to => !declared.has(to))

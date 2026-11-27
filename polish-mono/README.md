@@ -173,6 +173,7 @@ Findings are ranked by priority:
 | 10 | `theme-variation` | Token values differ across themes | Judgmental |
 | 11 | `dynamic-variable` | Tokens with dynamic (non-static) values | Judgmental |
 | 12 | `tailwind-utility-var` | Tailwind v4 per-utility variables | Judgmental |
+| 13 | `literal-cluster` | The same literal value is used repeatedly across the project — a token candidate. | Judgmental |
 
 Only **mechanical** findings (`duplicate-value`) produce patches in the next phase.
 

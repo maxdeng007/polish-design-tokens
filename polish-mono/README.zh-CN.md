@@ -173,6 +173,7 @@ findings.json → [polish plan] → plan.json → [polish diff] → patches.json
 | 10 | `theme-variation` | 令牌值在不同主题间变化 | 判断性 |
 | 11 | `dynamic-variable` | 具有动态（非静态）值的令牌 | 判断性 |
 | 12 | `tailwind-utility-var` | Tailwind v4 单工具变量 | 判断性 |
+| 13 | `literal-cluster` | 同一个字面值在项目中被反复使用——一个令牌候选。 | 判断性 |
 
 只有**机械性**发现（`duplicate-value`）会在下一阶段生成补丁。
 
