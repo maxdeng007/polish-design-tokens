@@ -408,7 +408,7 @@ const result = await apply(patches, './my-project');
 | `plan` | `(findings: Finding[]) → PlanAction[]` | 将发现排序分类为操作队列 |
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | 从计划生成机械性补丁 |
 | `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | 带备份保护应用补丁（target 默认为 cwd） |
-| `confirm` | `(decisions: Decision[], graph: DeclarationGraph) → Patch[]` | 将设计师确认的决策解析为补丁 |
+| `confirm` | `(decisions: Decision[], graph: DeclarationGraph) → { patches: Patch[], unmatched: Array<{ decision: Decision; reason: string }> }` | 将设计师确认的决策解析为补丁 |
 | `seed` | `(target: string, opts?: { output?: string, force?: boolean }) → SeedResult` | 从字面簇生成草稿令牌系统（tokens.css + tokens.seed.json） |
 | `generateReport` | `(report: AuditReport) → string` | 生成自包含的交互式 HTML 报告 |
 | `runWizard` | `(opts?: WizardOptions) → Promise<WizardResult>` | 交互式引导流水线，带确认提示 |

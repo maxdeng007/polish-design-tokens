@@ -402,7 +402,7 @@ const result = await apply(patches);
 | `plan` | `(findings: Finding[]) → PlanAction[]` | Rank and classify findings into an action queue |
 | `generateDiffs` | `(planItems: PlanAction[]) → Patch[]` | Generate mechanical patches from a plan |
 | `apply` | `(patches: Patch[], target?: string) → Promise<ApplyResult>` | Apply patches with backup protection (target defaults to cwd) |
-| `confirm` | `(decisions: Decision[], graph: DeclarationGraph) → Patch[]` | Resolve designer-confirmed decisions into patches |
+| `confirm` | `(decisions: Decision[], graph: DeclarationGraph) → { patches: Patch[], unmatched: Array<{ decision: Decision; reason: string }> }` | Resolve designer-confirmed decisions into patches |
 | `seed` | `(target: string, opts?: { output?: string, force?: boolean }) → SeedResult` | Generate a draft token system (tokens.css + tokens.seed.json) from literal clusters |
 | `generateReport` | `(report: AuditReport) → string` | Generate a self-contained interactive HTML report |
 | `runWizard` | `(opts?: WizardOptions) → Promise<WizardResult>` | Interactive guided pipeline with confirmation prompts |
