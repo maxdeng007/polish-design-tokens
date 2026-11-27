@@ -184,7 +184,8 @@ test('confirm adds a declaration patch when the token is undeclared', () => {
   const add = patches.find(p => p.type === 'add');
   assert.ok(add, 'should add the declaration to tokens.css');
   assert.equal(add.file, 'tokens.css');
-  assert.equal(add.after, '--color-1: #fff;');
+  assert.equal(add.after, '  --color-1: #fff;');
+  assert.equal(add.line, 2, 'add must land inside the :root block, before its closing brace');
   cleanup();
 });
 
@@ -196,6 +197,47 @@ test('confirm does not add a declaration patch when the token is declared', () =
   const { patches } = confirm([{ action: 'tokenize', value: '#fff', to: '--color-1' }], graph, dir);
   assert.equal(patches.some(p => p.type === 'add'), false);
   assert.equal(patches.filter(p => p.type === 'replace').length, 2);
+  cleanup();
+});
+
+test('confirm renames the provisional declaration instead of adding a duplicate', async () => {
+  const dir = makeProject(':root {\n  --color-1: #fff;\n}\n', {
+    'a.css': 'a { color: #fff; }\nb { color: #fff; }\n'
+  });
+  const graph = scan(dir);
+  const { patches, unmatched } = confirm(
+    [{ action: 'tokenize', value: '#fff', to: '--color-canvas' }], graph, dir
+  );
+  assert.equal(unmatched.length, 0);
+  assert.equal(patches.some(p => p.type === 'add'), false, 'no duplicate add for a renamed provisional');
+  const rename = patches.find(p => p.type === 'rewrite');
+  assert.ok(rename, 'should rename the provisional declaration');
+  assert.equal(rename.file, 'tokens.css');
+  assert.equal(rename.before, '--color-1');
+  assert.equal(rename.after, '--color-canvas');
+  const result = await apply(patches, dir);
+  assert.equal(result.failed.length, 0);
+  const css = fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8');
+  assert.ok(css.includes('--color-canvas: #fff;'), 'provisional renamed in place');
+  assert.ok(!css.includes('--color-1'), 'old name gone from tokens.css');
+  assert.ok(css.indexOf('--color-canvas') < css.lastIndexOf('}'), 'declaration stays inside :root');
+  const a = fs.readFileSync(path.join(dir, 'a.css'), 'utf8');
+  assert.ok(a.includes('var(--color-canvas)'), 'source literal tokenized');
+  cleanup();
+});
+
+test('confirm places a genuine add inside the :root block end-to-end', async () => {
+  const dir = makeProject(':root {\n  --keep: #000;\n}\n', {
+    'a.css': 'a { color: #fff; }\nb { color: #fff; }\n'
+  });
+  const graph = scan(dir);
+  const { patches } = confirm([{ action: 'tokenize', value: '#fff', to: '--color-1' }], graph, dir);
+  const result = await apply(patches, dir);
+  assert.equal(result.failed.length, 0);
+  const css = fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8');
+  assert.ok(css.includes('  --color-1: #fff;'), 'new declaration present');
+  assert.ok(css.indexOf('--color-1') < css.lastIndexOf('}'), 'new declaration inside :root, not at EOF');
+  assert.ok(css.includes('--keep: #000;'), 'existing declaration untouched');
   cleanup();
 });
 

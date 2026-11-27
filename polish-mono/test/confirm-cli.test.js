@@ -95,3 +95,44 @@ test('polish confirm errors on missing decisions file', () => {
   assert.ok(result.stderr.includes('not found'), 'should report file not found');
   cleanup();
 });
+
+test('polish confirm honors the edited chosenName from a seed file end-to-end', () => {
+  // Seed scans the target for literal clusters — no tokens.css yet, so the
+  // project is just a source file with a repeated literal.
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  fs.writeFileSync(path.join(TMP_DIR, 'a.css'), 'a { color: #fff; }\nb { color: #fff; }\n', 'utf8');
+  const dir = TMP_DIR;
+  const seedResult = runCli(['seed', dir, '--summary']);
+  assert.equal(seedResult.status, 0, `seed should succeed: ${seedResult.stderr}`);
+
+  const seedFile = path.join(dir, 'tokens.seed.json');
+  const seedData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
+  assert.ok(seedData.map.length > 0, 'seed should produce at least one cluster');
+  seedData.map[0].chosenName = '--color-canvas';
+  fs.writeFileSync(seedFile, JSON.stringify(seedData, null, 2), 'utf8');
+
+  const result = runCli(['confirm', seedFile, `--target=${dir}`, '--summary']);
+  assert.equal(result.status, 0, `confirm should succeed: ${result.stderr}${result.stdout}`);
+  const css = fs.readFileSync(path.join(dir, 'a.css'), 'utf8');
+  assert.ok(css.includes('var(--color-canvas)'), 'source literal replaced with chosen name');
+  const tokens = fs.readFileSync(path.join(dir, 'tokens.css'), 'utf8');
+  assert.ok(tokens.includes('--color-canvas: #fff;'), 'provisional renamed to chosen name');
+  assert.ok(!tokens.includes('--color-1'), 'old provisional name gone');
+  assert.ok(tokens.indexOf('--color-canvas') < tokens.lastIndexOf('}'), 'declaration stays inside :root');
+  assert.ok(result.stdout.includes('Status:  applied'), 'summary reports full success');
+  assert.ok(result.stdout.includes('All patches applied successfully'), 'no false green suppressed');
+  cleanup();
+});
+
+test('polish confirm summary does not claim full success when decisions are unmatched', () => {
+  const dir = makeProject('a { color: #fff; }\nb { color: #fff; }\n');
+  const decisionsFile = writeDecisions([
+    { action: 'tokenize', value: '#fff', to: '--color-1' },
+    { action: 'tokenize', value: '#000', to: '--color-2' }
+  ]);
+  const result = runCli(['confirm', decisionsFile, `--target=${dir}`, '--summary']);
+  assert.equal(result.status, 1, 'unmatched decisions must fail the run');
+  assert.ok(result.stdout.includes('Status:  partial'), 'summary reports partial, not applied');
+  assert.ok(!result.stdout.includes('All patches applied successfully'), 'partial run must not claim success');
+  cleanup();
+});

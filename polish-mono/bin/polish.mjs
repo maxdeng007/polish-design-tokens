@@ -221,7 +221,18 @@ async function main() {
 
   if (cmd === 'confirm') {
     const data = loadJson(file);
-    const decisions = data.decisions || data;
+    // Seed files carry the naming map, and the CLI prompt tells the user to
+    // edit map[].chosenName — so that field is authoritative. Rebuild the
+    // tokenize decisions from the map; keep any hand-written non-tokenize
+    // decisions from the cached `decisions` array.
+    const decisions = Array.isArray(data.map)
+      ? [
+          ...data.map.map(m => ({ action: 'tokenize', value: m.value, to: m.chosenName })),
+          ...(Array.isArray(data.decisions)
+            ? data.decisions.filter(d => d.action !== 'tokenize')
+            : [])
+        ]
+      : data.decisions || data;
     const target = resolve(targetFlag || process.cwd());
     const graph = scan(target);
     let patches;
@@ -241,7 +252,7 @@ async function main() {
     const result = await apply(patches, target);
     if (summaryFlag) {
       const { formatApply } = await import('../src/format.js');
-      console.log(formatApply(result));
+      console.log(formatApply(result, { unmatched: unmatched.length }));
     } else {
       console.log(JSON.stringify({ ...result, unmatched }, null, 2));
     }

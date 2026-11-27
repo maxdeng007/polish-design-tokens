@@ -61,6 +61,20 @@ function readLineText(file, line, target) {
   }
 }
 
+/** 1-based line of the closing brace of the :root block in tokens.css, or
+ *  null when the file or the block can't be found (caller falls back to EOF). */
+function findRootCloseLine(target) {
+  try {
+    const lines = fsSync.readFileSync(path.join(target, 'tokens.css'), 'utf8').split('\n');
+    const open = lines.findIndex(l => /^\s*:root\s*\{/.test(l));
+    if (open === -1) return null;
+    for (let i = open + 1; i < lines.length; i++) {
+      if (/^\s*\}/.test(lines[i])) return i + 1;
+    }
+  } catch {}
+  return null;
+}
+
 /** Escape regex metacharacters in a literal string. */
 function escapeRegex(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -257,11 +271,32 @@ export function confirm(decisions, graph, target = process.cwd()) {
     });
   }
   for (const [to, value] of pendingAdds) {
+    // Seed flow: tokens.css already carries a provisional declaration
+    // (--{kind}-{n}) for this value. Rename it to the chosen name instead of
+    // appending a duplicate — the old name would linger in the :root block
+    // and an EOF append would put the new one outside any block (invalid CSS).
+    const provisional = decls.find(
+      d => d.file === 'tokens.css' &&
+        /^--(color|space|radius|font-size)-\d+$/.test(d.name) &&
+        normalizeValue(d.raw) === normalizeValue(value)
+    );
+    if (provisional) {
+      patches.push({
+        type: 'rewrite',
+        file: 'tokens.css',
+        line: null,
+        before: provisional.name,
+        after: to,
+        reason: `rename provisional ${provisional.name} → ${to}`,
+        findingId: 'literal-cluster'
+      });
+      continue;
+    }
     patches.push({
       type: 'add',
       file: 'tokens.css',
-      line: null,
-      after: `${to}: ${value};`,
+      line: findRootCloseLine(target),
+      after: `  ${to}: ${value};`,
       reason: `declare ${to}`,
       findingId: 'literal-cluster'
     });

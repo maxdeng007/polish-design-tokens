@@ -352,6 +352,9 @@ Values containing `var()` are skipped (they are references, not literals).
   patch fails — an unmatched decision is unfulfilled user intent.
 - `--summary` output lists unmatched decisions explicitly before the
   apply report.
+- When patches were applied but some decisions were unmatched, the apply
+  report's status is `partial` — never `applied` — so the summary never
+  claims a full success for a half-fulfilled run.
 
 ## 7. Error Handling
 

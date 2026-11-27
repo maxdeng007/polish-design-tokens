@@ -94,6 +94,7 @@ const CSS_PROPS = new Set([
 const LITERAL_PROPS = new Map([
   ['color', 'color'],
   ['background', 'color'],
+  ['background-color', 'color'],
   ['border-color', 'color'],
   ['padding', 'space'],
   ['gap', 'space'],
@@ -519,7 +520,7 @@ function parseCss(text, file) {
     }
     if (ch === ';') {
       flush();
-      bufLine = line + 1;
+      bufLine = line;
       i++;
       continue;
     }

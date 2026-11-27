@@ -164,8 +164,10 @@ export function formatDiff(patches) {
   return lines.join('\n');
 }
 
-/** Format an apply result (output of apply()) as a plain-language summary. */
-export function formatApply(result) {
+/** Format an apply result (output of apply()) as a plain-language summary.
+ *  `opts.unmatched` marks a confirm run where some decisions could not be
+ *  resolved: patches were applied, but the run is partial, not a full success. */
+export function formatApply(result, opts = {}) {
   const lines = [];
   lines.push(c(ANSI.bold, 'Apply Results'));
   lines.push('=============');
@@ -174,8 +176,11 @@ export function formatApply(result) {
   const applied = (result.applied || []).length;
   const failed = (result.failed || []).length;
   const backups = result.backupCount || 0;
+  const unmatched = opts.unmatched || 0;
 
-  const status = result.status || (failed > 0 ? 'aborted' : 'applied');
+  const status = unmatched > 0 && result.status === 'applied' ? 'partial'
+    : result.status || (failed > 0 ? 'aborted'
+      : unmatched > 0 ? 'partial' : 'applied');
   const statusLine = status === 'applied'
     ? c(ANSI.green, `Status:  ${status}`)
     : status === 'aborted'
@@ -202,6 +207,8 @@ export function formatApply(result) {
       const file = f.file || '?';
       lines.push(`  ${c(ANSI.red, file)}: ${f.error}`);
     }
+  } else if (status === 'partial') {
+    lines.push(c(ANSI.yellow, `Patches applied, but ${unmatched} decision(s) were unmatched — review the list above and re-run to fulfill them.`));
   } else {
     lines.push(c(ANSI.red, 'Execution failed and the run was rolled back. Review the errors below:'));
     lines.push('');

@@ -54,6 +54,17 @@ test('parseCss: line numbers follow the declaration', () => {
   assert.equal(r.literals[0].line, 2);
 });
 
+test('parseCss: multiple declarations on one physical line keep that line', () => {
+  const r = parseSource('a{color:#fff;background:#fff;border-radius:8px}', 'a.css');
+  assert.equal(r.literals.length, 3);
+  for (const l of r.literals) {
+    assert.equal(l.line, 1, `declaration on the same line must report line 1, got ${l.line}`);
+  }
+  const r2 = parseSource('a{color:#fff}\nb{background:#fff}\n', 'a.css');
+  assert.equal(r2.literals[0].line, 1);
+  assert.equal(r2.literals[1].line, 2);
+});
+
 test('parseHtml: inline style attribute is collected', () => {
   const r = parseSource('<div style="padding:8px 16px">x</div>', 'a.html');
   assert.equal(r.literals.length, 2);

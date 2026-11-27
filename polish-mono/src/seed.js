@@ -1,8 +1,9 @@
 /**
  * seed.js — generate a draft token system from detected literal clusters.
  *
- * tokens.seed.json is the single source of truth: it carries the naming map
- * plus a `decisions` array generated from chosenName, so the file can be
+ * tokens.seed.json is the single source of truth: map[].chosenName is the
+ * field the user edits and `polish confirm` rebuilds its decisions from. The
+ * `decisions` array is a generated cache of that map, so the file can be
  * edited and fed straight to `polish confirm`. tokens.css is a derived
  * draft. Refuses to overwrite existing files without --force.
  */

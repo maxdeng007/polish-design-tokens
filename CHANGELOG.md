@@ -8,6 +8,32 @@ new capabilities bump the minor version, fixes and polish bump the patch version
 
 ## [Unreleased]
 
+## [1.10.1] - 2026-11-27
+
+### Fixed
+
+- **Line-number drift in `parseCss`** — multiple declarations on one physical
+  line were all recorded on the following line from the second declaration
+  onward, corrupting delete/alias/rename and tokenize patch targets.
+- **`map[].chosenName` was a dead field** — `polish confirm` read the cached
+  `decisions` array and ignored the edited `chosenName`. The CLI now rebuilds
+  tokenize decisions from the naming map (`decisions` is a generated cache);
+  `seed.js` docs and the MCP tool description corrected to match.
+- **`add` patch landed outside the `:root` block** — declaration patches are
+  now inserted before the `:root` closing brace with proper indentation, and
+  the seed flow renames the provisional declaration instead of appending a
+  duplicate declaration with the same value.
+- **Half-applied runs reported full success** — `polish confirm --summary`
+  now reports status `partial` (and never "All patches applied successfully")
+  when some decisions were unmatched, even when the remaining patches applied.
+- `LITERAL_PROPS` whitelist now includes `background-color` (was missing,
+  so the common spelling was not tokenized).
+
+### Added
+
+- End-to-end smoke test pinned in the suite: single-line CSS → `polish seed`
+  → edited `chosenName` → `polish confirm` → re-audit reports zero findings.
+
 ## [1.10.0] - 2026-11-27
 
 ### Added
