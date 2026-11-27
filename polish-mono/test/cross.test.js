@@ -140,3 +140,81 @@ test('cross adds a no-tokens note to the summary when the project has no tokens'
   );
   fs.rmSync(TMP_DIR, { recursive: true, force: true });
 });
+
+test('cross reports literal-cluster for values used 2+ times', () => {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  fs.writeFileSync(
+    path.join(TMP_DIR, 'a.css'),
+    'a { color: #fff; }\nb { color: #fff; }\n',
+    'utf8'
+  );
+  const report = cross(scan(TMP_DIR));
+  const lit = report.findings.filter(f => f.id === 'literal-cluster');
+  assert.equal(lit.length, 1, 'should report one cluster');
+  const f = lit[0];
+  assert.equal(f.severity, 'info');
+  assert.equal(f.evidence.length, 1);
+  assert.equal(f.evidence[0].value, '#fff');
+  assert.equal(f.evidence[0].count, 2);
+  assert.equal(f.evidence[0].files.length, 1);
+  assert.deepEqual(f.evidence[0].files[0], { file: 'a.css', lines: [1, 2] });
+  assert.match(f.evidence[0].suggestedName, /^--color-\d+$/);
+  fs.rmSync(TMP_DIR, { recursive: true, force: true });
+});
+
+test('cross does not report literals used only once', () => {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  fs.writeFileSync(
+    path.join(TMP_DIR, 'a.css'),
+    'a { color: #fff; }\n',
+    'utf8'
+  );
+  const report = cross(scan(TMP_DIR));
+  assert.equal(report.findings.filter(f => f.id === 'literal-cluster').length, 0);
+  fs.rmSync(TMP_DIR, { recursive: true, force: true });
+});
+
+test('cross does not normalize named colors into one cluster', () => {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  fs.writeFileSync(
+    path.join(TMP_DIR, 'a.css'),
+    'a { color: white; }\nb { color: white; }\nc { color: #fff; }\nd { color: #fff; }\n',
+    'utf8'
+  );
+  const report = cross(scan(TMP_DIR));
+  const lit = report.findings.filter(f => f.id === 'literal-cluster');
+  assert.equal(lit.length, 2, 'white and #fff stay separate clusters');
+  fs.rmSync(TMP_DIR, { recursive: true, force: true });
+});
+
+test('cross suggested names are deterministic ordinals per kind', () => {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  fs.writeFileSync(
+    path.join(TMP_DIR, 'a.css'),
+    'a { color: #111; color: #222; color: #333; padding: 8px; padding: 16px; }\n',
+    'utf8'
+  );
+  fs.writeFileSync(
+    path.join(TMP_DIR, 'b.css'),
+    'b { color: #111; color: #222; color: #333; padding: 8px; padding: 16px; }\n',
+    'utf8'
+  );
+  const report = cross(scan(TMP_DIR));
+  const names = report.findings
+    .filter(f => f.id === 'literal-cluster')
+    .map(f => f.evidence[0].suggestedName)
+    .sort();
+  assert.deepEqual(names, ['--color-1', '--color-2', '--color-3', '--space-1', '--space-2']);
+  fs.rmSync(TMP_DIR, { recursive: true, force: true });
+});
+
+test('cross 0-token note points at polish seed', () => {
+  fs.mkdirSync(TMP_DIR, { recursive: true });
+  fs.writeFileSync(path.join(TMP_DIR, 'page.css'), 'body { color: #3B82F6; }\n', 'utf8');
+  const report = cross(scan(TMP_DIR));
+  const note = report.summary.notes.find(n => n.includes('No design tokens found'));
+  assert.ok(note, 'note should still exist');
+  assert.match(note, /polish seed/);
+  assert.match(note, /:root/);
+  fs.rmSync(TMP_DIR, { recursive: true, force: true });
+});

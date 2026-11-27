@@ -42,6 +42,42 @@ function familyOf(name) {
   return parts.length ? parts[0] : '';
 }
 
+/**
+ * Cluster literal occurrences by normalized value (spec §6.3).
+ * Reports clusters with a total count >= 2. Suggested names are
+ * `--{kind}-{ordinal}`: clusters of the same kind are sorted by normalized
+ * value and numbered from 1, so ordinals are deterministic across runs.
+ * Names are provisional — values are never baked into them.
+ */
+function clusterLiterals(literals) {
+  const byKey = new Map();
+  for (const l of literals || []) {
+    if (!l || !l.normalized) continue;
+    if (!byKey.has(l.normalized)) {
+      byKey.set(l.normalized, { value: l.value, normalized: l.normalized, kind: l.kind, occurrences: [] });
+    }
+    byKey.get(l.normalized).occurrences.push(l);
+  }
+  const clusters = [...byKey.values()].filter(c => c.occurrences.length >= 2);
+  clusters.sort((a, b) => a.kind.localeCompare(b.kind) || a.normalized.localeCompare(b.normalized));
+  const byKind = new Map();
+  for (const c of clusters) {
+    const n = (byKind.get(c.kind) || 0) + 1;
+    byKind.set(c.kind, n);
+    const files = new Map();
+    for (const o of c.occurrences.slice(0, 8)) {   // cap the location listing at 8
+      if (!files.has(o.file)) files.set(o.file, []);
+      files.get(o.file).push(o.line);
+    }
+    c.count = c.occurrences.length;
+    c.files = [...files.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([file, lines]) => ({ file, lines: [...new Set(lines)].sort((x, y) => x - y) }));
+    c.suggestedName = `--${c.kind}-${n}`;
+  }
+  return clusters;
+}
+
 function sevRank(s) { return { error: 3, warn: 2, info: 1 }[s] || 0; }
 
 /** First reference location for each token name, from graph.references. */
@@ -350,6 +386,24 @@ function cross(graph, observation) {
     });
   }
 
+  /* -------------------------------------------------- literal clusters */
+  for (const c of clusterLiterals(graph.literals || [])) {
+    push({
+      id: 'literal-cluster',
+      severity: severityOf('literal-cluster'),
+      title: `${c.count} uses of literal ${c.value}`,
+      detail: `${c.count} occurrences across ${c.files.length} file(s) — a token candidate. Suggested provisional name: ${c.suggestedName}.`,
+      evidence: [{
+        value: c.value,
+        normalized: c.normalized,
+        count: c.count,
+        files: c.files,
+        suggestedName: c.suggestedName
+      }],
+      suggestion: 'Run `polish seed` to generate a draft tokens.css, edit the names in tokens.seed.json, then run `polish confirm` to replace the literals with var() references.'
+    });
+  }
+
   /* -------------------------------------------------------- hardcoded */
   if (observation && observation.documents) {
     // Compare within one theme: a value that differs between light and dark is
@@ -439,11 +493,11 @@ function cross(graph, observation) {
       findings: findings.length,
       bySeverity,
       notes: (graph.declarations || []).length === 0
-        ? ['No design tokens found — polish audits token relationships and cannot detect hardcoded values without tokens. Define tokens first, then re-run.']
+        ? ['No design tokens found — polish audits token relationships and cannot detect hardcoded values without tokens. Declare a few in a `:root` block, or run `polish seed` to generate a starter `tokens.css`, then re-run.']
         : []
     },
     findings
   };
 }
 
-export { cross, familyOf, isStateVariant, selectorClasses };
+export { cross, familyOf, isStateVariant, selectorClasses, clusterLiterals };
